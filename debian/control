@@ -14,7 +14,7 @@ Standards-Version: 3.9.4
 
 Package: control-port-filter-python
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}
+Depends: ${misc:Depends}, ${python:Depends}, anon-shared-helper-scripts
 Description: Control Port Filter Proxy
  A port from bash to Python of tor control port filter proxy (cpfp-tcpserver)
  developed in Whonix by Patrick Schleizer. The original Python code was
