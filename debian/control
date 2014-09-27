@@ -14,9 +14,9 @@ Standards-Version: 3.9.4
 
 Package: control-port-filter-python
 Architecture: all
-Depends: ${python:Depends}
-Description: Control Port Filter Proxy
- A port from bash to Python of tor control port filter proxy (cpfp-tcpserver)
+Depends: ${misc:Depends}, ${python:Depends},
+Description: Control Port Filter Proxy (Python)
+ A port from bash to Python of tor 'control port filter proxy' (cpfp-tcpserver)
  developed in Whonix by Patrick Schleizer. The original Python code was
  forked from the Tails version of control port filter.
  https://git-tails.immerda.ch/tails/plain/config/ chroot_local-includes
