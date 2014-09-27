@@ -1,0 +1,94 @@
+#!/bin/bash
+
+## This file is part of Whonix.
+## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
+## See the file COPYING for copying conditions.
+
+set -x
+set -o pipefail
+
+ID="$(uuidgen -r)"
+LOG="/var/log/controlportfilt.log"
+OWN_PID="$$"
+
+echo "$ID $BASH_SOURCE INFO: Starting... pid: $OWN_PID" >> "$LOG"
+
+echo "$OWN_PID" > "/var/run/controlportfilt/own_pid"
+rm --force "/var/run/controlportfilt/error"
+
+ex_funct() {
+   /sbin/start-stop-daemon \
+      --stop \
+      --quiet \
+      --pidfile "/var/run/controlportfilt/tcpserver_pid" \
+      --signal TERM \
+      --retry 2
+
+   rm --force "/var/run/controlportfilt/ownrunning"
+   rm --force "/var/run/controlportfilt/tcpserver_pid"
+   rm --force "/var/run/controlportfilt/own_pid"
+}
+
+error_handler() {
+   local exit_code="$?"
+   local bash_command="$BASH_COMMAND"
+   if [ "$ID" = "" ] ; then
+      ID="No_ID"
+   fi
+   echo "$ID $BASH_SOURCE ERROR: exit_code: $exit_code | bash_command: $bash_command" >> "$LOG"
+
+   ex_funct
+   touch "/var/run/controlportfilt/error"
+   exit 1
+}
+
+trap "error_handler" ERR
+
+trap_sigint() {
+   echo "$ID $BASH_SOURCE INFO: SIGINT received. Exiting." >> "$LOG"
+   ex_funct
+   exit 0
+}
+
+trap "trap_sigint" SIGINT
+
+trap_sigterm() {
+   echo "$ID $BASH_SOURCE INFO: SIGTERM received. Exiting." >> "$LOG"
+   ex_funct
+   exit 0
+}
+
+trap "trap_sigterm" SIGTERM
+
+/usr/lib/cpfp.py &
+#tcpserver \
+#   -v \
+#   -1 \
+#   -l host \
+#   -H \
+#   0 \
+#   9052 \
+#   /bin/bash -x -c /usr/lib/cpf-tcpserver &
+
+tcpserver_pid="$!"
+
+echo "$ID $BASH_SOURCE INFO: Started. | tcpserver_pid: $tcpserver_pid | LD_PRELOAD: $LD_PRELOAD | Waiting for connections..." >> "$LOG"
+
+touch "/var/run/controlportfilt/ownrunning"
+
+echo "$tcpserver_pid" > "/var/run/controlportfilt/tcpserver_pid"
+
+tcpserver_exit_code="0"
+wait "$tcpserver_pid" || { tcpserver_exit_code="$?" ; true; };
+
+rm --force "/var/run/controlportfilt/ownrunning"
+rm --force "/var/run/controlportfilt/tcpserver_pid"
+rm --force "/var/run/controlportfilt/own_pid"
+
+if [ "$tcpserver_exit_code" = "0" ]; then
+   echo "$ID $BASH_SOURCE INFO: End with exit code (0): $tcpserver_exit_code" >> "$LOG"
+   exit "0"
+else
+   echo "$ID $BASH_SOURCE ERROR: End with exit code (x): $tcpserver_exit_code" >> "$LOG"
+   exit "$tcpserver_exit_code"
+fi

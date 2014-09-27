@@ -1,0 +1,26 @@
+## This file is part of Whonix.
+## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
+## See the file COPYING for copying conditions.
+
+Source: control-port-filter-python
+Section: misc
+Priority: optional
+Maintainer: troubadour <trobador@riseup.net>
+Build-Depends: debhelper (>= 8), config-package-dev (>=5)
+Homepage: https://www.whonix.org/wiki/
+Vcs-Browser: https://github.com/troubadoour/control-port-filter-python
+Vcs-Git: https://github.com/troubadoour/control-port-filter-python.git
+Standards-Version: 3.9.4
+
+Package: control-port-filter-python
+Architecture: all
+Depends: ${misc:Depends}
+Description: Control Port Filter Proxy
+ A port from bash to Python of tor control port filter proxy (cpfp-tcpserver)
+ developed in Whonix by Patrick Schleizer. The original Python code was
+ forked from the Tails version of control port filter.
+ https://git-tails.immerda.ch/tails/plain/config/ chroot_local-includes
+ /usr/local/sbin/tor-controlport-filter
+ 
+ This package is developed by the Whonix team.
+
