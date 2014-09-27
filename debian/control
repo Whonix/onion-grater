@@ -23,4 +23,3 @@ Description: Control Port Filter Proxy
  /usr/local/sbin/tor-controlport-filter
  
  This package is developed by the Whonix team.
-
