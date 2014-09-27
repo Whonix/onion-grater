@@ -1,0 +1,37 @@
+controlportfilt(8) -- Control Port Filter Proxy
+=============================================
+
+<span class="comment">
+# This file is part of Whonix.
+# Copyright (C) 2012 - 2014 Patrick Schleizer adrelanos@riseup.net
+# See the file COPYING for copying conditions.
+
+# Not using angle brackets in copyright notice for e-mail address, because
+# angle brackets would result in this file being non-deterministic. (There
+# must be a bug in Debian wheezy in ruby-ronn.)
+
+# Not using "##", because for some reason this comment would be visible in the
+# resulting man page.
+</span>
+
+## SYNOPSIS
+
+`controlportfilt`
+
+## DESCRIPTION
+
+White list which accepts safe commands for Tor Control Port, such as
+"SIGNAL NEWNYM", which enables using Tor Browsers New Identity feature in
+Whonix-Workstation. Everything else, therefore also unsafe commands such as
+"GETINFO address" get filtered out.
+
+## CONFIG FILE
+
+Read the comments in `/etc/controlportfilt.d/30_controlportfilt_default`.
+
+## WWW
+
+https://www.whonix.org/wiki/Dev/Control_Port_Filter_Proxy
+## AUTHOR
+
+This man page has been written by Patrick Schleizer (adrelanos@riseup.net).
