@@ -21,5 +21,5 @@ Description: Control Port Filter Proxy
  forked from the Tails version of control port filter.
  https://git-tails.immerda.ch/tails/plain/config/ chroot_local-includes
  /usr/local/sbin/tor-controlport-filter
- 
+ .
  This package is developed by the Whonix team.
