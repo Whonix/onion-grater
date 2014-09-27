@@ -1,9 +1,13 @@
-# AppArmor profile for Icedove (Thunderbird for Debian) with Enigmail #
+# Control Port Filter Proxy #
 
-An AppArmor profile to confine Icedove (Thunderbird for Debian) with Enigmail.
-This profile is developed by the Whonix team. Thunderbird is developed by
-mozilla.org.
-
+ A port from bash to Python of tor control port filter proxy (cpfp-tcpserver)
+ developed in Whonix by Patrick Schleizer. The original Python code was
+ forked from the Tails version of control port filter.
+ https://git-tails.immerda.ch/tails/plain/config/ chroot_local-includes
+ /usr/local/sbin/tor-controlport-filter
+ .
+ This package is developed by the Whonix team.
+ 
 (This package description has been [automatically](https://github.com/Whonix/whonix-developer-meta-files/blob/master/debug-steps/packaging-helper-script) extracted and mirrored from `debian/control`.)
 
 # Generic Readme #

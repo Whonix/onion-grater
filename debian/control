@@ -7,7 +7,7 @@ Section: misc
 Priority: optional
 Maintainer: troubadour <trobador@riseup.net>
 Build-Depends: debhelper (>= 8), config-package-dev (>=5), python (>= 2.6)
-Homepage: https://www.whonix.org/wiki/
+Homepage: https://www.whonix.org/wiki/control-port-filter
 Vcs-Browser: https://github.com/troubadoour/control-port-filter-python
 Vcs-Git: https://github.com/troubadoour/control-port-filter-python.git
 Standards-Version: 3.9.4
