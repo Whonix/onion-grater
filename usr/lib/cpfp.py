@@ -1,5 +1,10 @@
 #!/usr/bin/python
 
+## Copyright (C) Amnesia <amnesia at boum dot org>
+## Copyright (C) 2014 troubadour <trobador@riseup.net>
+## Copyright (C) 2014 Patrick Schleizer <adrelanos@riseup.net>
+## See the file COPYING for copying conditions.
+
 # This filter proxy should allow Torbutton to request a
 # new Tor circuit, without exposing dangerous control requests
 # like "GETINFO address" to applications running as a local user.
