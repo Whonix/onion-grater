@@ -21,10 +21,10 @@ class UnexpectedAnswer(Exception):
 
     def __init__(self, msg):
         self.msg = msg
-    
+
     def __str__(self):
         return "[UnexpectedAnswer] " + self.msg
-        
+
 CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS = True
 CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH = True
 CONTROL_PORT_FILTER_EXCESSIVE_STRING_LENGTH = 128
@@ -58,7 +58,7 @@ def do_request_real(request):
         reply = "255 tor is not running"
         print "tor is not running"
         return reply + '\r\n'
-        
+
     # Read authentication cookie
     with open("/var/run/tor/control.authcookie", "rb") as f:
         rawcookie = f.read(32)
@@ -109,7 +109,7 @@ def do_request_real(request):
         reply =reply + answer
 
         sock.close()
-        
+
         return reply
 
 
@@ -146,12 +146,12 @@ def handle_connection(sock):
             # Don't check authentication, since only
             # safe requests are allowed
             writeh.write("250 OK\n")
-            
+
         elif request in CONTROL_PORT_FILTER_WHITELIST:
             # Perform a real request)
             answer = do_request(request)
             writeh.write(answer)
-            
+
         elif request == "QUIT":
             # Quit session
             writeh.write("250 Closing connection\n")
