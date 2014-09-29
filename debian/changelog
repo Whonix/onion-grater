@@ -1,5 +1,11 @@
-control-port-filter-python (3:0.0-1) unstable; urgency=low
+control-port-filter-python (3:0.2-1) unstable; urgency=low
 
-  * Initial release.
+  * New upstream version.
 
- -- troubadour <trobador@riseup.net>  Sat, 27 Sep 2014 12:56:21 +0000
+ -- Patrick Schleizer <adrelanos@riseup.net>  Mon, 29 Sep 2014 23:02:46 +0000
+
+control-port-filter-python (3:0.1-1) unstable; urgency=low
+
+  * New upstream version.
+
+ -- Patrick Schleizer <adrelanos@riseup.net>  Mon, 29 Sep 2014 23:02:13 +0000
