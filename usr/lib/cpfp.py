@@ -43,7 +43,7 @@ else:
     # In my tests, the answer from "net_listeners_socks" was 1849 bytes long.
     MAX_LINESIZE = 2048
 
-# This configuration would truncate "net_listeners_socks" answer and raise an execption,
+# This configuration would truncate "net_listeners_socks" answer and raise an exception,
 # Tor Button will be disabled.
 if  CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH and \
     not CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS:
