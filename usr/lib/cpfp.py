@@ -1,10 +1,5 @@
 #!/usr/bin/python
 
-## Copyright (C) Amnesia <amnesia at boum dot org>
-## Copyright (C) 2014 troubadour <trobador@riseup.net>
-## Copyright (C) 2014 Patrick Schleizer <adrelanos@riseup.net>
-## See the file COPYING for copying conditions.
-
 # This filter proxy should allow Torbutton to request a
 # new Tor circuit, without exposing dangerous control requests
 # like "GETINFO address" to applications running as a local user.
@@ -21,33 +16,70 @@
 import socket
 import binascii
 import os
+import glob
 
 class UnexpectedAnswer(Exception):
 
     def __init__(self, msg):
         self.msg = msg
-
+    
     def __str__(self):
         return "[UnexpectedAnswer] " + self.msg
+        
 
-CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS = True
-CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH = True
-CONTROL_PORT_FILTER_EXCESSIVE_STRING_LENGTH = 128
-CONTROL_PORT_FILTER_WHITELIST  = ['GETINFO net/listeners/socks', 'SIGNAL NEWNYM',
-                                                              'GETINFO status/bootstrap-phase', 'GETINFO status/circuit-established']
+files = glob.glob('/etc/controlportfilt.d/*')
+WHITELIST = []
 
-if  CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH:
+for conf in files:
+    if not conf.endswith('~') and conf.count('.dpkg-') == 0:
+        with open(conf) as f: 
+            for line in f:
+                if line.startswith('CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS'):
+                    k, value = line.split('=')
+                    LIMIT_GETINFO_NET_LISTENERS_SOCKS = value.strip() == 'true'
+                if line.startswith('CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH'):
+                    k, value = line.split('=')
+                    LIMIT_STRING_LENGTH = value.strip() == 'true'
+                if line.startswith('CONTROL_PORT_FILTER_EXCESSIVE_STRING_LENGTH'):
+                    k, value = line.split('=')
+                    EXCESSIVE_STRING_LENGTH = int(value.strip())
+                if line.startswith('CONTROL_PORT_FILTER_WHITELIST'):
+                    k, value = line.split('=')
+                    RequestList = value.strip()
+    
+WHITELIST = RequestList.split(',')
+
+print LIMIT_GETINFO_NET_LISTENERS_SOCKS
+print LIMIT_STRING_LENGTH
+print EXCESSIVE_STRING_LENGTH
+print WHITELIST
+
+if  LIMIT_STRING_LENGTH:
     # used in check_answer()
-    MAX_LINESIZE = CONTROL_PORT_FILTER_EXCESSIVE_STRING_LENGTH
+    MAX_LINESIZE = EXCESSIVE_STRING_LENGTH
 else:
     # In my tests, the answer from "net_listeners_socks" was 1849 bytes long.
     MAX_LINESIZE = 2048
 
-# This configuration would truncate "net_listeners_socks" answer and raise an exception,
+print MAX_LINESIZE
+
+# This configuration would truncate "net_listeners_socks" answer and raise an execption,
+# Tor Button will be disabled.
+if  LIMIT_STRING_LENGTH and \
+    not LIMIT_GETINFO_NET_LISTENERS_SOCKS:
+        raise UnexpectedAnswer("Invalid configuration")
+      
+"""
+    # In my tests, the answer from "net_listeners_socks" was 1849 bytes long.
+    MAX_LINESIZE = 2048
+
+# This configuration would truncate "net_listeners_socks" answer and raise an execption,
 # Tor Button will be disabled.
 if  CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH and \
     not CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS:
         raise UnexpectedAnswer("Invalid configuration")
+"""
+
 
 def check_answer(answer):
     # Check length only. Could be refined later.
@@ -63,7 +95,7 @@ def do_request_real(request):
         reply = "255 tor is not running"
         print "tor is not running"
         return reply + '\r\n'
-
+        
     # Read authentication cookie
     with open("/var/run/tor/control.authcookie", "rb") as f:
         rawcookie = f.read(32)
@@ -88,7 +120,7 @@ def do_request_real(request):
 
         # The "lie" implemented in cpfp-tcpserver
         if request == 'GETINFO net/listeners/socks' and \
-            CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS:
+            LIMIT_GETINFO_NET_LISTENERS_SOCKS:
                 return('250-net/listeners/socks="127.0.0.1:9150"\n')
 
         # Send the request
@@ -114,7 +146,7 @@ def do_request_real(request):
         reply =reply + answer
 
         sock.close()
-
+        
         return reply
 
 
@@ -151,12 +183,12 @@ def handle_connection(sock):
             # Don't check authentication, since only
             # safe requests are allowed
             writeh.write("250 OK\n")
-
-        elif request in CONTROL_PORT_FILTER_WHITELIST:
+            
+        elif request in WHITELIST:
             # Perform a real request)
             answer = do_request(request)
             writeh.write(answer)
-
+            
         elif request == "QUIT":
             # Quit session
             writeh.write("250 Closing connection\n")
