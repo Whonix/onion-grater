@@ -32,7 +32,7 @@ class UnexpectedAnswer(Exception):
         return "[UnexpectedAnswer] " + self.msg
 
 
-files = sorted(glob.glob('/etc/controlportfilt.d/*'))
+files = sorted(glob.glob('/etc/cpfpy.d/*'))
 WHITELIST = []
 
 for conf in files:
