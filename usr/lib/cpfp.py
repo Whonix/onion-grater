@@ -22,17 +22,17 @@ class UnexpectedAnswer(Exception):
 
     def __init__(self, msg):
         self.msg = msg
-    
+
     def __str__(self):
         return "[UnexpectedAnswer] " + self.msg
-        
+
 
 files = glob.glob('/etc/controlportfilt.d/*')
 WHITELIST = []
 
 for conf in files:
     if not conf.endswith('~') and conf.count('.dpkg-') == 0:
-        with open(conf) as f: 
+        with open(conf) as f:
             for line in f:
                 if line.startswith('CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS'):
                     k, value = line.split('=')
@@ -46,7 +46,7 @@ for conf in files:
                 if line.startswith('CONTROL_PORT_FILTER_WHITELIST'):
                     k, value = line.split('=')
                     RequestList = value.strip()
-    
+
 WHITELIST = RequestList.split(',')
 
 print LIMIT_GETINFO_NET_LISTENERS_SOCKS
@@ -68,7 +68,7 @@ print MAX_LINESIZE
 if  LIMIT_STRING_LENGTH and \
     not LIMIT_GETINFO_NET_LISTENERS_SOCKS:
         raise UnexpectedAnswer("Invalid configuration")
-      
+
 """
     # In my tests, the answer from "net_listeners_socks" was 1849 bytes long.
     MAX_LINESIZE = 2048
@@ -95,7 +95,7 @@ def do_request_real(request):
         reply = "255 tor is not running"
         print "tor is not running"
         return reply + '\r\n'
-        
+
     # Read authentication cookie
     with open("/var/run/tor/control.authcookie", "rb") as f:
         rawcookie = f.read(32)
@@ -146,7 +146,7 @@ def do_request_real(request):
         reply =reply + answer
 
         sock.close()
-        
+
         return reply
 
 
@@ -183,12 +183,12 @@ def handle_connection(sock):
             # Don't check authentication, since only
             # safe requests are allowed
             writeh.write("250 OK\n")
-            
+
         elif request in WHITELIST:
             # Perform a real request)
             answer = do_request(request)
             writeh.write(answer)
-            
+
         elif request == "QUIT":
             # Quit session
             writeh.write("250 Closing connection\n")
