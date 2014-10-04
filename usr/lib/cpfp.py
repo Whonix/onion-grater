@@ -52,6 +52,12 @@ for conf in files:
                     k, value = line.split('=')
                     # concatenate values from files, add a comma
                     RequestList = RequestList + value.strip() + ','
+                if line.startswith('CONTROL_PORT_FILTER_PORT'):
+                    k, value = line.split('=')
+                    PORT = int(value.strip())
+                if line.startswith('CONTROL_PORT_FILTER_IP'):
+                    k, value = line.split('=')
+                    IP = str(value.strip())
 
 WHITELIST = RequestList.split(',')
 # remove last element (comma)
@@ -212,10 +218,10 @@ def main():
     # Listen on port 9052 (we cannot use 9051 as Tor uses that one)
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server.bind(("10.152.152.10", 9052))
+    server.bind((IP, PORT))
     server.listen(4)
 
-    print "Tor control port filter started, listening on 9052"
+    print "Tor control port filter started, listening on IP %s port %s" % (IP, PORT)
     # Accept and handle connections one after one,
     # sessions are short enough that the added complexity of
     # simultaneous connections are unnecessary (in absence of attacks)

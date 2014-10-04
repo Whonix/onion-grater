@@ -15,6 +15,18 @@
 ## it only prevents starting Control Port Filter Proxy.
 CONTROL_PORT_FILTER_PROXY=1
 
+##############################
+## CONTROL_PORT_FILTER_IP    #
+##############################
+
+CONTROL_PORT_FILTER_IP=10.152.152.10
+
+##############################
+## CONTROL_PORT_FILTER_PORT  #
+##############################
+
+CONTROL_PORT_FILTER_PORT=9052
+
 ################################
 ## CONTROL_PORT_FILTER_VERBOSE #
 ################################
