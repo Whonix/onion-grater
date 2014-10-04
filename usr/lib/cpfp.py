@@ -62,6 +62,8 @@ for conf in files:
 WHITELIST = RequestList.split(',')
 # remove last element (comma)
 WHITELIST.pop()
+# remove duplicates
+WHITELIST = list(set(WHITELIST))
 
 if  LIMIT_STRING_LENGTH:
     # used in check_answer()
