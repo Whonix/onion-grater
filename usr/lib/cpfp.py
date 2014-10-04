@@ -66,7 +66,7 @@ else:
 
 #print MAX_LINESIZE
 
-# This configuration would truncate "net_listeners_socks" answer and raise an execption,
+# This configuration would truncate "net_listeners_socks" answer and raise an exception,
 # Tor Button will be disabled.
 if  LIMIT_STRING_LENGTH and \
     not LIMIT_GETINFO_NET_LISTENERS_SOCKS:
@@ -76,7 +76,7 @@ if  LIMIT_STRING_LENGTH and \
     # In my tests, the answer from "net_listeners_socks" was 1849 bytes long.
     MAX_LINESIZE = 2048
 
-# This configuration would truncate "net_listeners_socks" answer and raise an execption,
+# This configuration would truncate "net_listeners_socks" answer and raise an exception,
 # Tor Button will be disabled.
 if  CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH and \
     not CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS:
@@ -180,7 +180,7 @@ def handle_connection(sock):
         # Strip escaped chars and white spaces at beginning and end of string
         request = line.strip()
 
-        # Authentification request from Tor Browser.
+        # Authentication request from Tor Browser.
         # Strict check. '==' instead of '.startwith()'
         if request == "AUTHENTICATE password":
             # Don't check authentication, since only
