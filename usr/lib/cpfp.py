@@ -33,7 +33,7 @@ class UnexpectedAnswer(Exception):
 
 
 files = sorted(glob.glob('/etc/cpfpy.d/*'))
-WHITELIST = []
+RequestList = ''
 
 for conf in files:
     if not conf.endswith('~') and conf.count('.dpkg-') == 0:
@@ -50,14 +50,12 @@ for conf in files:
                     EXCESSIVE_STRING_LENGTH = int(value.strip())
                 if line.startswith('CONTROL_PORT_FILTER_WHITELIST'):
                     k, value = line.split('=')
-                    RequestList = value.strip()
+                    # concatenate values from files, add a comma
+                    RequestList = RequestList + value.strip() + ','
 
 WHITELIST = RequestList.split(',')
-
-print LIMIT_GETINFO_NET_LISTENERS_SOCKS
-print LIMIT_STRING_LENGTH
-print EXCESSIVE_STRING_LENGTH
-print WHITELIST
+# remove last element (comma)
+WHITELIST.pop()
 
 if  LIMIT_STRING_LENGTH:
     # used in check_answer()
@@ -66,7 +64,7 @@ else:
     # In my tests, the answer from "net_listeners_socks" was 1849 bytes long.
     MAX_LINESIZE = 2048
 
-print MAX_LINESIZE
+#print MAX_LINESIZE
 
 # This configuration would truncate "net_listeners_socks" answer and raise an execption,
 # Tor Button will be disabled.
