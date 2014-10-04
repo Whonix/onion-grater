@@ -217,6 +217,7 @@ def handle_connection(sock):
 
 
 def main():
+    print "Trying to start Tor control port filter on IP %s port %s" % (IP, PORT)
     # Listen on port 9052 (we cannot use 9051 as Tor uses that one)
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
