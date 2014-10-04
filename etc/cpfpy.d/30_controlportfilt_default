@@ -27,6 +27,18 @@ CONTROL_PORT_FILTER_IP=10.152.152.10
 
 CONTROL_PORT_FILTER_PORT=9052
 
+##############################
+## CONTROL_PORT_SOCKET       #
+##############################
+
+CONTROL_PORT_SOCKET=/var/run/tor/control
+
+##############################
+## CONTROL_PORT_AUTH_COOKIE  #
+##############################
+
+CONTROL_PORT_AUTH_COOKIE=/var/run/tor/control.authcookie
+
 ################################
 ## CONTROL_PORT_FILTER_VERBOSE #
 ################################

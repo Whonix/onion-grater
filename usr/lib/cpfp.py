@@ -58,6 +58,12 @@ for conf in files:
                 if line.startswith('CONTROL_PORT_FILTER_IP'):
                     k, value = line.split('=')
                     IP = str(value.strip())
+                if line.startswith('CONTROL_PORT_SOCKET'):
+                    k, value = line.split('=')
+                    SOCKET = str(value.strip())
+                if line.startswith('CONTROL_PORT_AUTH_COOKIE'):
+                    k, value = line.split('=')
+                    AUTH_COOKIE = str(value.strip())
 
 WHITELIST = RequestList.split(',')
 # remove last element (comma)
@@ -102,20 +108,20 @@ def check_answer(answer):
 
 def do_request_real(request):
     # check if tor socket exists
-    if not os.path.exists("/var/run/tor/control"):
+    if not os.path.exists(SOCKET):
         reply = "255 tor is not running"
         print "tor is not running"
         return reply + '\r\n'
 
     # Read authentication cookie
-    with open("/var/run/tor/control.authcookie", "rb") as f:
+    with open(AUTH_COOKIE, "rb") as f:
         rawcookie = f.read(32)
         hexcookie = binascii.hexlify(rawcookie)
 
         # Connect to the real control port
         sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         sock.settimeout(10.0)
-        sock.connect("/var/run/tor/control")
+        sock.connect(SOCKET)
         readh = sock.makefile("r")
         writeh = sock.makefile("w")
 
