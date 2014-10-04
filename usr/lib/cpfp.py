@@ -187,10 +187,10 @@ def handle_connection(sock):
             break
         # Strip escaped chars and white spaces at beginning and end of string
         request = line.strip()
+        first_word = request.split(' ', 1)[0]
 
         # Authentication request from Tor Browser.
-        # Strict check. '==' instead of '.startwith()'
-        if request == "AUTHENTICATE password":
+        if first_word == "AUTHENTICATE":
             # Don't check authentication, since only
             # safe requests are allowed
             writeh.write("250 OK\n")
