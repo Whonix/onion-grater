@@ -104,7 +104,7 @@ def do_request_real(request):
         rawcookie = f.read(32)
         hexcookie = binascii.hexlify(rawcookie)
 
-       # Connect to the real control port
+        # Connect to the real control port
         sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         sock.settimeout(10.0)
         sock.connect("/var/run/tor/control")
