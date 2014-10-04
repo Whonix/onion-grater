@@ -19,3 +19,28 @@ License: GPL-3+
  On Debian systems, the full text of the GNU General Public
  License version 3 can be found in the file
  `/usr/share/common-licenses/GPL-3'.
+
+Files: /usr/lib/cpfp.py
+Copyright: (C) Amnesia <amnesia at boum dot org>
+           (C) 2014 troubadour <trobador@riseup.net>
+           (C) 2014 Patrick Schleizer <adrelanos@riseup.net>
+Comment:
+ https://git-tails.immerda.ch/tails/tree/config/chroot_local-includes/usr/local/sbin/tor-controlport-filter?id=84d6433c6412e82395097fa63316955e88649ab7
+ https://git-tails.immerda.ch/tails/plain/config/chroot_local-includes/usr/local/sbin/tor-controlport-filter
+License: GPL-3+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ .
+ On Debian systems, the full text of the GNU General Public
+ License version 3 can be found in the file
+ `/usr/share/common-licenses/GPL-3'.
