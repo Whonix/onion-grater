@@ -1,13 +1,28 @@
 # Control Port Filter Proxy #
 
- A port from bash to Python of tor control port filter proxy (cpfp-tcpserver)
- developed in Whonix by Patrick Schleizer. The original Python code was
- forked from the Tails version of control port filter.
- https://git-tails.immerda.ch/tails/plain/config/ chroot_local-includes
- /usr/local/sbin/tor-controlport-filter
+ Filters out Tor control protocol commands that are dangerous for anonymity
+ such as GETINFO ADDRESS using a whitelist. Acts as a proxy between the client
+ application and Tor.
  .
- This package is developed by the Whonix team.
- 
+ For example it allows using Tor Browser's New Identity feature on Anonymity
+ Distribution Workstations, fixes Tor Browser's about:tor default homepage and
+ Tor Button status indicator without exposing commands that are dangerous for
+ anonymity.
+ .
+ This package is supposed to be installed on Anonymity Distribution Gateways.
+ .
+ It seamlessly integrates if the anon-ws-disable-stacked-tor package
+ is installed on a Anonymity Distribution Workstations. For example it then
+ allows running a unmodified Tor Browser Bundle from The Tor Project without
+ Tor over Tor and with functional New Identity and about:tor.
+ .
+ A port of control-port-filter that was originally implemented using bash and
+ ucspi-tcp tcpserver. This control-port-filter is written in Python. The
+ original Python code was forked from the Tails version of control port filter.
+ .
+ This package is produced independently of, and carries no guarantee from,
+ The Tor Project.
+
 (This package description has been [automatically](https://github.com/Whonix/whonix-developer-meta-files/blob/master/debug-steps/packaging-helper-script) extracted and mirrored from `debian/control`.)
 
 # Generic Readme #
