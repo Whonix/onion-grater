@@ -46,7 +46,7 @@ class TCPHandler(SocketServer.StreamRequestHandler):
         return True
 
 
-    def do_request_real(self,  request):
+    def do_request_real(self, request):
         # check if tor socket exists
         if not os.path.exists(SOCKET):
             reply = "255 tor is not running"
@@ -125,6 +125,7 @@ class TCPHandler(SocketServer.StreamRequestHandler):
                 break
             # Strip escaped chars and white spaces at beginning and end of string
             request = line.strip()
+            
             # Authentication request from Tor Browser.
             if request.startswith("AUTHENTICATE"):
                 # Don't check authentication, since only
@@ -155,51 +156,57 @@ class TCPHandler(SocketServer.StreamRequestHandler):
 
 if __name__ == "__main__":
     
-    #if not os.path.exists('/etc/cpfpy.d/'):
-    #    print 'Configuration folder does not exist'
-    #    raise UnexpectedAnswer('Configuration folder does not exist')
+    # default control port filer configuration
+    LIMIT_GETINFO_NET_LISTENERS_SOCKS = True
+    LIMIT_STRING_LENGTH = True
+    EXCESSIVE_STRING_LENGTH = 128
+    WHITELIST = ['SIGNAL NEWNYM', 'GETINFO net/listeners/socks', 'GETINFO status/bootstrap-phase', 'GETINFO status/circuit-established']
+    IP = '10.152.152.10'
+    PORT =  9052
+    SOCKET = '/var/run/tor/control'
+    AUTH_COOKIE = '/var/run/tor/control.authcookie'
+    
+    # read and override configuration from files
+    if os.path.exists('/etc/cpfpy.d/'):
+        files = sorted(glob.glob('/etc/cpfpy.d/*'))
+        if  files:
+            RequestList = ''
 
-    files = sorted(glob.glob('/etc/cpfpy.d/*'))
-    #if not files  :
-    #    print 'No configuration file in "/etc/cpfpy.d"'
-    #    raise UnexpectedAnswer('Configuration file does not exist')
-    RequestList = ''
+            for conf in files:
+                if not conf.endswith('~') and conf.count('.dpkg-') == 0:
+                    with open(conf) as f:
+                        for line in f:
+                            if line.startswith('CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS'):
+                                k, value = line.split('=')
+                                LIMIT_GETINFO_NET_LISTENERS_SOCKS = value.strip() == 'true'
+                            if line.startswith('CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH'):
+                                k, value = line.split('=')
+                                LIMIT_STRING_LENGTH = value.strip() == 'true'
+                            if line.startswith('CONTROL_PORT_FILTER_EXCESSIVE_STRING_LENGTH'):
+                                k, value = line.split('=')
+                                EXCESSIVE_STRING_LENGTH = int(value.strip())
+                            if line.startswith('CONTROL_PORT_FILTER_WHITELIST'):
+                                k, value = line.split('=')
+                                # concatenate values from files, add a comma
+                                RequestList = RequestList + value.strip() + ','
+                            if line.startswith('CONTROL_PORT_FILTER_PORT'):
+                                k, value = line.split('=')
+                                PORT = int(value.strip())
+                            if line.startswith('CONTROL_PORT_FILTER_IP'):
+                                k, value = line.split('=')
+                                IP = str(value.strip())
+                            if line.startswith('CONTROL_PORT_SOCKET'):
+                                k, value = line.split('=')
+                                SOCKET = str(value.strip())
+                            if line.startswith('CONTROL_PORT_AUTH_COOKIE'):
+                                k, value = line.split('=')
+                                AUTH_COOKIE = str(value.strip())
 
-    for conf in files:
-        if not conf.endswith('~') and conf.count('.dpkg-') == 0:
-            with open(conf) as f:
-                for line in f:
-                    if line.startswith('CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS'):
-                        k, value = line.split('=')
-                        LIMIT_GETINFO_NET_LISTENERS_SOCKS = value.strip() == 'true'
-                    if line.startswith('CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH'):
-                        k, value = line.split('=')
-                        LIMIT_STRING_LENGTH = value.strip() == 'true'
-                    if line.startswith('CONTROL_PORT_FILTER_EXCESSIVE_STRING_LENGTH'):
-                        k, value = line.split('=')
-                        EXCESSIVE_STRING_LENGTH = int(value.strip())
-                    if line.startswith('CONTROL_PORT_FILTER_WHITELIST'):
-                        k, value = line.split('=')
-                        # concatenate values from files, add a comma
-                        RequestList = RequestList + value.strip() + ','
-                    if line.startswith('CONTROL_PORT_FILTER_PORT'):
-                        k, value = line.split('=')
-                        PORT = int(value.strip())
-                    if line.startswith('CONTROL_PORT_FILTER_IP'):
-                        k, value = line.split('=')
-                        IP = str(value.strip())
-                    if line.startswith('CONTROL_PORT_SOCKET'):
-                        k, value = line.split('=')
-                        SOCKET = str(value.strip())
-                    if line.startswith('CONTROL_PORT_AUTH_COOKIE'):
-                        k, value = line.split('=')
-                        AUTH_COOKIE = str(value.strip())
-
-    WHITELIST = RequestList.split(',')
-    # remove last element (comma)
-    WHITELIST.pop()
-    # remove duplicates
-    WHITELIST = list(set(WHITELIST))
+            WHITELIST = RequestList.split(',')
+            # remove last element (comma)
+            WHITELIST.pop()
+            # remove duplicates
+            WHITELIST = list(set(WHITELIST))
 
     if  LIMIT_STRING_LENGTH:
         # used in check_answer()
