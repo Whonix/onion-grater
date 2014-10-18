@@ -52,6 +52,12 @@ class TCPHandler(SocketServer.StreamRequestHandler):
             reply = "255 tor is not running"
             print "tor is not running"
             return reply + '\r\n'
+            
+        # The "lie" implemented in cpfp-tcpserver
+        if request == 'GETINFO net/listeners/socks' and \
+            LIMIT_GETINFO_NET_LISTENERS_SOCKS:
+                return('250-net/listeners/socks="127.0.0.1:9150"\n')
+
         # Read authentication cookie
         with open(AUTH_COOKIE, "rb") as f:
             rawcookie = f.read(32)
@@ -71,11 +77,6 @@ class TCPHandler(SocketServer.StreamRequestHandler):
             # strict answer check ('==' instead of '.startwith()'
             if not answer.strip() == "250 OK":
                 raise UnexpectedAnswer("AUTHENTICATE failed")
-
-            # The "lie" implemented in cpfp-tcpserver
-            if request == 'GETINFO net/listeners/socks' and \
-                LIMIT_GETINFO_NET_LISTENERS_SOCKS:
-                    return('250-net/listeners/socks="127.0.0.1:9150"\n')
 
             # Send the request
             writeh.write(request + '\n')
@@ -156,7 +157,7 @@ class TCPHandler(SocketServer.StreamRequestHandler):
 
 if __name__ == "__main__":
     
-    # default control port filer configuration
+    # Default control port filer configuration
     LIMIT_GETINFO_NET_LISTENERS_SOCKS = True
     LIMIT_STRING_LENGTH = True
     EXCESSIVE_STRING_LENGTH = 128
@@ -166,7 +167,7 @@ if __name__ == "__main__":
     SOCKET = '/var/run/tor/control'
     AUTH_COOKIE = '/var/run/tor/control.authcookie'
     
-    # read and override configuration from files
+    # Read and override configuration from files
     if os.path.exists('/etc/cpfpy.d/'):
         files = sorted(glob.glob('/etc/cpfpy.d/*'))
         if  files:
@@ -203,19 +204,17 @@ if __name__ == "__main__":
                                 AUTH_COOKIE = str(value.strip())
 
             WHITELIST = RequestList.split(',')
-            # remove last element (comma)
+            # Remove last element (comma)
             WHITELIST.pop()
-            # remove duplicates
+            # Remove duplicates
             WHITELIST = list(set(WHITELIST))
 
     if  LIMIT_STRING_LENGTH:
-        # used in check_answer()
+        # Used in check_answer()
         MAX_LINESIZE = EXCESSIVE_STRING_LENGTH
     else:
         # In my tests, the answer from "net_listeners_socks" was 1849 bytes long.
         MAX_LINESIZE = 2048
-
-    #print MAX_LINESIZE
 
     # This configuration would truncate "net_listeners_socks" answer and raise an exception,
     # Tor Button will be disabled.
