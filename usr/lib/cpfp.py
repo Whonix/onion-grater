@@ -37,7 +37,7 @@ class UnexpectedAnswer(Exception):
 
 
 class TCPHandler(SocketServer.StreamRequestHandler):
-    
+
     def check_answer(self,  answer):
         # Check length only. Could be refined later.
         if len(answer) > MAX_LINESIZE:
@@ -52,7 +52,7 @@ class TCPHandler(SocketServer.StreamRequestHandler):
             reply = "255 tor is not running"
             print "tor is not running"
             return reply + '\r\n'
-            
+
         # The "lie" implemented in cpfp-tcpserver
         if request == 'GETINFO net/listeners/socks' and \
             LIMIT_GETINFO_NET_LISTENERS_SOCKS:
@@ -79,37 +79,46 @@ class TCPHandler(SocketServer.StreamRequestHandler):
                 raise UnexpectedAnswer("AUTHENTICATE failed")
 
             # Send the request
+            answer ,  answerline = '',  ''
             writeh.write(request + '\n')
             writeh.flush()
-            answer = readh.readline()
-            if not answer.startswith("250"):
-                raise UnexpectedAnswer("Request failed: " + request)
-            if not self.check_answer(answer):
-                raise UnexpectedAnswer("Request '" + request  + "': Answer too long '" + answer + "'")
-            reply = answer
+
+            if DISABLE_FILTERING:
+                # Some answers are longer than 8 Kb (arm).
+                answer = sock.recv(16384)
+            else:
+                answer = sock.recv(MAX_LINESIZE)
+
+            print '%s\n%s' % (request, answer)
+
+            if not DISABLE_FILTERING:
+                if not answer.startswith("250"):
+                    raise UnexpectedAnswer("Request failed: " + request)
+                # May be redundant.
+                if not self.check_answer(answer):
+                    raise UnexpectedAnswer("Request '" + request  + "': Answer too long '" + answer + "'")
 
             # Close the connection
             # Some requests return "250 OK" and close the connection.
             # 'SIGNAL NEWNYM' is an example.
-            if not answer.strip() == "250 OK":
-               writeh.write("QUIT\n")
-               writeh.flush()
-               answer = readh.readline()
-               if not answer.strip() == "250 OK":
-                   raise UnexpectedAnswer("QUIT failed")
-            # answer terminated with '250 OK'
-            reply = reply + answer
+            #if not answer.strip() == "250 OK":
+            #    writeh.write("QUIT\n")
+            #    writeh.flush()
+            #    answer = readh.readline()
+            #    if not answer.startswith('250'):
+            #        raise UnexpectedAnswer("QUIT failed")
+            #reply = reply + answer
 
             sock.close()
 
-            return reply
+            return answer
 
 
     def do_request(self, request):
         # Catch innocent exceptions, will report error instead
         try:
             answer = self.do_request_real(request)
-            print "Request went fine"
+            #print "Request went fine"
             return answer
         except (IOError, UnexpectedAnswer) as e:
             print "Warning: Couldn't perform Request!"
@@ -126,22 +135,27 @@ class TCPHandler(SocketServer.StreamRequestHandler):
                 break
             # Strip escaped chars and white spaces at beginning and end of string
             request = line.strip()
-            
+
             # Authentication request from Tor Browser.
             if request.startswith("AUTHENTICATE"):
                 # Don't check authentication, since only
                 # safe requests are allowed
                 self.wfile.write("250 OK\n")
 
-            elif request in WHITELIST:
-                # Perform a real request)
+            elif request == "QUIT":
+                # Quit session (telnet...)
+                self.wfile.write("250 Closing connection\n")
+                #break
+
+            elif DISABLE_FILTERING:
+                # Pass all requests
                 answer = self.do_request(request)
                 self.wfile.write(answer)
 
-            elif request == "QUIT":
-                # Quit session
-                self.wfile.write("250 Closing connection\n")
-                #break
+            elif request in WHITELIST:
+                # Filtering enabled
+                answer = self.do_request(request)
+                self.wfile.write(answer)
 
             else:
                 # Everything else we ignore/block
@@ -156,17 +170,18 @@ class TCPHandler(SocketServer.StreamRequestHandler):
 
 
 if __name__ == "__main__":
-    
+
     # Default control port filer configuration
-    LIMIT_GETINFO_NET_LISTENERS_SOCKS = True
-    LIMIT_STRING_LENGTH = True
-    EXCESSIVE_STRING_LENGTH = 128
-    WHITELIST = ['SIGNAL NEWNYM', 'GETINFO net/listeners/socks', 'GETINFO status/bootstrap-phase', 'GETINFO status/circuit-established']
     IP = '10.152.152.10'
     PORT =  9052
     SOCKET = '/var/run/tor/control'
     AUTH_COOKIE = '/var/run/tor/control.authcookie'
-    
+    DISABLE_FILTERING = False
+    LIMIT_GETINFO_NET_LISTENERS_SOCKS = True
+    LIMIT_STRING_LENGTH = True
+    EXCESSIVE_STRING_LENGTH = 128
+    WHITELIST = ['SIGNAL NEWNYM', 'GETINFO net/listeners/socks', 'GETINFO status/bootstrap-phase', 'GETINFO status/circuit-established']
+
     # Read and override configuration from files
     if os.path.exists('/etc/cpfpy.d/'):
         files = sorted(glob.glob('/etc/cpfpy.d/*'))
@@ -177,6 +192,9 @@ if __name__ == "__main__":
                 if not conf.endswith('~') and conf.count('.dpkg-') == 0:
                     with open(conf) as f:
                         for line in f:
+                            if line.startswith('CONTROL_PORT_FILTER_DISABLE_FILTERING'):
+                                k, value = line.split('=')
+                                DISABLE_FILTERING = value.strip() == 'true'
                             if line.startswith('CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS'):
                                 k, value = line.split('=')
                                 LIMIT_GETINFO_NET_LISTENERS_SOCKS = value.strip() == 'true'
@@ -216,13 +234,13 @@ if __name__ == "__main__":
         # In my tests, the answer from "net_listeners_socks" was 1849 bytes long.
         MAX_LINESIZE = 2048
 
-    # This configuration would truncate "net_listeners_socks" answer and raise an exception,
+    # This configuration would truncate "net_listeners_socks" answer and
+    # raise an exception,
     # Tor Button will be disabled.
-    if  LIMIT_STRING_LENGTH and \
-        not LIMIT_GETINFO_NET_LISTENERS_SOCKS:
+    if  LIMIT_STRING_LENGTH and not LIMIT_GETINFO_NET_LISTENERS_SOCKS:
             raise UnexpectedAnswer("Invalid configuration")
 
-    # Starts a TCP server 
+    # Starts a TCP server
     print "Trying to start Tor control port filter on IP %s port %s" % (IP, PORT)
     server = SocketServer.TCPServer((IP, PORT), TCPHandler)
 
