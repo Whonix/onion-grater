@@ -137,17 +137,17 @@ class TCPHandler(SocketServer.StreamRequestHandler):
             request = line.strip()
 
             # Authentication request from Tor Browser.
-            if request.startswith("AUTHENTICATE"):
+            #if request.startswith("AUTHENTICATE"):
                 # Don't check authentication, since only
                 # safe requests are allowed
-                self.wfile.write("250 OK\n")
+            #    self.wfile.write("250 OK\n")
 
-            elif request == "QUIT":
+            #elif request == "QUIT":
                 # Quit session (telnet...)
-                self.wfile.write("250 Closing connection\n")
-                #break
+            #    self.wfile.write("250 Closing connection\n")
+            #    break
 
-            elif DISABLE_FILTERING:
+            if DISABLE_FILTERING:
                 # Pass all requests
                 answer = self.do_request(request)
                 self.wfile.write(answer)
