@@ -38,12 +38,12 @@ class UnexpectedAnswer(Exception):
 
 class TCPHandler(SocketServer.StreamRequestHandler):
 
-    def check_answer(self,  answer):
+    #def check_answer(self,  answer):
         # Check length only. Could be refined later.
-        if len(answer) > MAX_LINESIZE:
+    #    if len(answer) > MAX_LINESIZE:
             # the answer is too long for the settings. Reject.
-            return False
-        return True
+    #        return False
+    #    return True
 
 
     def do_request_real(self, request):
@@ -82,11 +82,11 @@ class TCPHandler(SocketServer.StreamRequestHandler):
             answer ,  answerline = '',  ''
             writeh.write(request + '\n')
             writeh.flush()
-            if DISABLE_FILTERING:
+            #if DISABLE_FILTERING:
                 # Some answers are longer than 8 Kb (arm).
-                answer = sock.recv(16384)
-            else:
-                answer = sock.recv(MAX_LINESIZE)
+            answer = sock.recv(16384)
+            #else:
+            #    answer = sock.recv(MAX_LINESIZE)
 
             print '%s\n%s' % (request, answer)
 
@@ -94,8 +94,8 @@ class TCPHandler(SocketServer.StreamRequestHandler):
                 if not answer.startswith("250"):
                     raise UnexpectedAnswer("Request failed: " + request)
                 # May be redundant.
-                if not self.check_answer(answer):
-                    raise UnexpectedAnswer("Request '" + request  + "': Answer too long '" + answer + "'")
+                #if not self.check_answer(answer):
+                #    raise UnexpectedAnswer("Request '" + request  + "': Answer too long '" + answer + "'")
 
             # Close the connection
             # Some requests return "250 OK" and close the connection.
@@ -140,11 +140,6 @@ class TCPHandler(SocketServer.StreamRequestHandler):
                 # Don't check authentication, since only
                 # safe requests are allowed
                 self.wfile.write("250 OK\n")
-
-            #elif request == "QUIT":
-                # Quit session (telnet...)
-            #    self.wfile.write("250 Closing connection\n")
-            #    break
 
             elif DISABLE_FILTERING:
                 # Pass all requests
@@ -226,12 +221,12 @@ if __name__ == "__main__":
             # Remove duplicates
             WHITELIST = list(set(WHITELIST))
 
-    if  LIMIT_STRING_LENGTH:
+    #if  LIMIT_STRING_LENGTH:
         # Used in check_answer()
-        MAX_LINESIZE = EXCESSIVE_STRING_LENGTH
-    else:
+    #    MAX_LINESIZE = EXCESSIVE_STRING_LENGTH
+    #else:
         # In my tests, the answer from "net_listeners_socks" was 1849 bytes long.
-        MAX_LINESIZE = 2048
+    #    MAX_LINESIZE = 2048
 
     # This configuration would truncate "net_listeners_socks" answer and
     # raise an exception,
