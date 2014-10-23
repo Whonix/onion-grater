@@ -82,7 +82,6 @@ class TCPHandler(SocketServer.StreamRequestHandler):
             answer ,  answerline = '',  ''
             writeh.write(request + '\n')
             writeh.flush()
-
             if DISABLE_FILTERING:
                 # Some answers are longer than 8 Kb (arm).
                 answer = sock.recv(16384)
@@ -137,17 +136,17 @@ class TCPHandler(SocketServer.StreamRequestHandler):
             request = line.strip()
 
             # Authentication request from Tor Browser.
-            #if request.startswith("AUTHENTICATE"):
+            if request.startswith("AUTHENTICATE"):
                 # Don't check authentication, since only
                 # safe requests are allowed
-            #    self.wfile.write("250 OK\n")
+                self.wfile.write("250 OK\n")
 
             #elif request == "QUIT":
                 # Quit session (telnet...)
             #    self.wfile.write("250 Closing connection\n")
             #    break
 
-            if DISABLE_FILTERING:
+            elif DISABLE_FILTERING:
                 # Pass all requests
                 answer = self.do_request(request)
                 self.wfile.write(answer)
