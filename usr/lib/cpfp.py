@@ -87,7 +87,7 @@ class TCPHandler(SocketServer.StreamRequestHandler):
 
 
   def do_request(self, request):
-  # Catch innocent exceptions, will report error instead
+    # Catch innocent exceptions, will report error instead
     try:
       answer = self.do_request_real(request)
       #print "Request went fine"
@@ -138,7 +138,7 @@ class TCPHandler(SocketServer.StreamRequestHandler):
 
 if __name__ == "__main__":
 
-# Default control port filer configuration
+  # Default control port filer configuration
   IP = '10.152.152.10'
   PORT =  9052
   SOCKET = '/var/run/tor/control'
