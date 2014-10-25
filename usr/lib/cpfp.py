@@ -74,11 +74,7 @@ class TCPHandler(SocketServer.StreamRequestHandler):
             answer ,  answerline = '',  ''
             writeh.write(request + '\n')
             writeh.flush()
-            #if DISABLE_FILTERING:
-                # Some answers are longer than 8 Kb (arm).
             answer = sock.recv(16384)
-            #else:
-            #    answer = sock.recv(MAX_LINESIZE)
 
             print '%s\n%s' % (request, answer)
 
