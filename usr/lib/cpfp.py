@@ -150,8 +150,6 @@ if __name__ == "__main__":
     AUTH_COOKIE = '/var/run/tor/control.authcookie'
     DISABLE_FILTERING = False
     LIMIT_GETINFO_NET_LISTENERS_SOCKS = True
-    LIMIT_STRING_LENGTH = True
-    EXCESSIVE_STRING_LENGTH = 128
     WHITELIST = ['SIGNAL NEWNYM', 'GETINFO net/listeners/socks', 'GETINFO status/bootstrap-phase', 'GETINFO status/circuit-established']
 
     # Read and override configuration from files
@@ -170,12 +168,6 @@ if __name__ == "__main__":
                             if line.startswith('CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS'):
                                 k, value = line.split('=')
                                 LIMIT_GETINFO_NET_LISTENERS_SOCKS = value.strip() == 'true'
-                            if line.startswith('CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH'):
-                                k, value = line.split('=')
-                                LIMIT_STRING_LENGTH = value.strip() == 'true'
-                            if line.startswith('CONTROL_PORT_FILTER_EXCESSIVE_STRING_LENGTH'):
-                                k, value = line.split('=')
-                                EXCESSIVE_STRING_LENGTH = int(value.strip())
                             if line.startswith('CONTROL_PORT_FILTER_WHITELIST'):
                                 k, value = line.split('=')
                                 # concatenate values from files, add a comma
@@ -198,9 +190,6 @@ if __name__ == "__main__":
             WHITELIST.pop()
             # Remove duplicates
             WHITELIST = list(set(WHITELIST))
-
-    if  LIMIT_STRING_LENGTH and not LIMIT_GETINFO_NET_LISTENERS_SOCKS:
-            raise UnexpectedAnswer("Invalid configuration")
 
     # Starts a TCP server
     print "Trying to start Tor control port filter on IP %s port %s" % (IP, PORT)
