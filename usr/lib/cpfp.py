@@ -45,7 +45,7 @@ class TCPHandler(SocketServer.StreamRequestHandler):
       print "tor is not running"
       return reply + '\r\n'
 
-    # The "lie" implemented in cpfp-tcpserver
+    # The "lie" implemented in cpfp-bash
     if request == 'GETINFO net/listeners/socks' and LIMIT_GETINFO_NET_LISTENERS_SOCKS:
       return('250-net/listeners/socks="127.0.0.1:9150"\n')
 
