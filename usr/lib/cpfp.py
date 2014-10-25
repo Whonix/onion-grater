@@ -38,14 +38,6 @@ class UnexpectedAnswer(Exception):
 
 class TCPHandler(SocketServer.StreamRequestHandler):
 
-    #def check_answer(self,  answer):
-        # Check length only. Could be refined later.
-    #    if len(answer) > MAX_LINESIZE:
-            # the answer is too long for the settings. Reject.
-    #        return False
-    #    return True
-
-
     def do_request_real(self, request):
         # check if tor socket exists
         if not os.path.exists(SOCKET):
@@ -93,20 +85,6 @@ class TCPHandler(SocketServer.StreamRequestHandler):
             if not DISABLE_FILTERING:
                 if not answer.startswith("250"):
                     raise UnexpectedAnswer("Request failed: " + request)
-                # May be redundant.
-                #if not self.check_answer(answer):
-                #    raise UnexpectedAnswer("Request '" + request  + "': Answer too long '" + answer + "'")
-
-            # Close the connection
-            # Some requests return "250 OK" and close the connection.
-            # 'SIGNAL NEWNYM' is an example.
-            #if not answer.strip() == "250 OK":
-            #    writeh.write("QUIT\n")
-            #    writeh.flush()
-            #    answer = readh.readline()
-            #    if not answer.startswith('250'):
-            #        raise UnexpectedAnswer("QUIT failed")
-            #reply = reply + answer
 
             sock.close()
 
@@ -221,16 +199,6 @@ if __name__ == "__main__":
             # Remove duplicates
             WHITELIST = list(set(WHITELIST))
 
-    #if  LIMIT_STRING_LENGTH:
-        # Used in check_answer()
-    #    MAX_LINESIZE = EXCESSIVE_STRING_LENGTH
-    #else:
-        # In my tests, the answer from "net_listeners_socks" was 1849 bytes long.
-    #    MAX_LINESIZE = 2048
-
-    # This configuration would truncate "net_listeners_socks" answer and
-    # raise an exception,
-    # Tor Button will be disabled.
     if  LIMIT_STRING_LENGTH and not LIMIT_GETINFO_NET_LISTENERS_SOCKS:
             raise UnexpectedAnswer("Invalid configuration")
 
