@@ -77,9 +77,9 @@ class TCPHandler(SocketServer.StreamRequestHandler):
 
       print '%s\n%s' % (request, answer)
 
-      if not DISABLE_FILTERING:
-        if not answer.startswith("250"):
-          raise UnexpectedAnswer("Request failed: " + request)
+      #if not DISABLE_FILTERING:
+      #  if not answer.startswith("250"):
+      #    raise UnexpectedAnswer("Request failed: " + request)
 
       sock.close()
 
