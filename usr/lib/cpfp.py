@@ -23,6 +23,7 @@ import SocketServer
 import binascii
 import os
 import glob
+import uuid
 
 
 
@@ -185,6 +186,10 @@ if __name__ == "__main__":
     WHITELIST.pop()
     # Remove duplicates
     WHITELIST = list(set(WHITELIST))
+
+  # Generate random user ID.
+  uid = uuid.uuid4()
+  print uid
 
   # Starts a TCP server
   print "Trying to start Tor control port filter on IP %s port %s" % (IP, PORT)
