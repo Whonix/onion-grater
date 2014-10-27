@@ -212,19 +212,22 @@ if __name__ == "__main__":
     logger.warning('User configuration folder "/etc/cpfpy.d" does not exist.')
     logger.warning('Running with default configuration.')
 
+  try:
+    # Starts a TCP server
+    #print "Trying to start Tor control port filter on IP %s port %s" % (IP, PORT)
+    # Logger available levels:
+    #   .info
+    #   .warning
+    #   .error
+    #   .critical
+    #   .debug
+    logger.info("Trying to start Tor control port filter on IP %s port %s" % (IP, PORT))
+    server = SocketServer.TCPServer((IP, PORT), TCPHandler)
 
-  # Starts a TCP server
-  #print "Trying to start Tor control port filter on IP %s port %s" % (IP, PORT)
-  # Logger available levels: 
-  #   .info
-  #   .warning
-  #   .error
-  #   .critical
-  #   .debug
-  logger.info("Trying to start Tor control port filter on IP %s port %s" % (IP, PORT))
-  server = SocketServer.TCPServer((IP, PORT), TCPHandler)
+    #print "Tor control port filter started, listening on IP %s port %s" % (IP, PORT)
+    logger.info("Tor control port filter started, listening on IP %s port %s" % (IP, PORT))
+    # Accept parallel connections.
+    server.serve_forever()
 
-  #print "Tor control port filter started, listening on IP %s port %s" % (IP, PORT)
-  logger.info("Tor control port filter started, listening on IP %s port %s" % (IP, PORT))
-  # Accept parallel connections.
-  server.serve_forever()
+  except IOError as e:
+    logger.critical('Socket error %s' % (e))
