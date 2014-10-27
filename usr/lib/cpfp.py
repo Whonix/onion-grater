@@ -44,7 +44,7 @@ class TCPHandler(SocketServer.StreamRequestHandler):
     # check if tor socket exists
     if not os.path.exists(SOCKET):
       reply = "255 tor is not running"
-      print "tor is not running"
+      #print "tor is not running"
       return reply + '\r\n'
 
     # The "lie" implemented in cpfp-bash
@@ -77,7 +77,7 @@ class TCPHandler(SocketServer.StreamRequestHandler):
       writeh.flush()
       answer = sock.recv(16384)
 
-      print '%s\n%s' % (request, answer)
+      #print '%s\n%s' % (request, answer)
       logger.info('Request: %s' % (request.strip()))
       logger.info('Answer : %s' % (answer.strip()))
 
@@ -97,8 +97,8 @@ class TCPHandler(SocketServer.StreamRequestHandler):
       #print "Request went fine"
       return answer
     except (IOError, UnexpectedAnswer) as e:
-      print "Warning: Couldn't perform Request!"
-      print e
+      #print "Warning: Couldn't perform Request!"
+      #print e
       return e
 
 
@@ -146,7 +146,7 @@ if __name__ == "__main__":
 
   # Generate random user ID.
   uid = uuid.uuid4()
-  print uid
+  #print uid
 
   # Create logger
   logging.basicConfig(filename='/var/log/controlportfilt.log', level=logging.NOTSET)
@@ -212,7 +212,7 @@ if __name__ == "__main__":
 
 
   # Starts a TCP server
-  print "Trying to start Tor control port filter on IP %s port %s" % (IP, PORT)
+  #print "Trying to start Tor control port filter on IP %s port %s" % (IP, PORT)
   # Logger available levels: 
   #   .info
   #   .warning
@@ -222,7 +222,7 @@ if __name__ == "__main__":
   logger.info("Trying to start Tor control port filter on IP %s port %s" % (IP, PORT))
   server = SocketServer.TCPServer((IP, PORT), TCPHandler)
 
-  print "Tor control port filter started, listening on IP %s port %s" % (IP, PORT)
+  #print "Tor control port filter started, listening on IP %s port %s" % (IP, PORT)
   logger.info("Tor control port filter started, listening on IP %s port %s" % (IP, PORT))
   # Accept parallel connections.
   server.serve_forever()
