@@ -151,7 +151,7 @@ if __name__ == "__main__":
   # Create logger
   logging.basicConfig(filename='/var/log/controlportfilt.log', level=logging.NOTSET)
   logger = logging.getLogger(unicode(uid))
-  
+
   # Default control port filer configuration
   IP = '10.152.152.10'
   PORT =  9052
@@ -165,41 +165,51 @@ if __name__ == "__main__":
   # Read and override configuration from files
   if os.path.exists('/etc/cpfpy.d/'):
     files = sorted(glob.glob('/etc/cpfpy.d/*'))
-  if  files:
-    RequestList = ''
 
-    for conf in files:
-      if not conf.endswith('~') and conf.count('.dpkg-') == 0:
-        with open(conf) as f:
-          for line in f:
-            if line.startswith('CONTROL_PORT_FILTER_DISABLE_FILTERING'):
-              k, value = line.split('=')
-              DISABLE_FILTERING = value.strip() == 'true'
-            if line.startswith('CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS'):
-              k, value = line.split('=')
-              LIMIT_GETINFO_NET_LISTENERS_SOCKS = value.strip() == 'true'
-            if line.startswith('CONTROL_PORT_FILTER_WHITELIST'):
-              k, value = line.split('=')
-              # concatenate values from files, add a comma
-              RequestList = RequestList + value.strip() + ','
-            if line.startswith('CONTROL_PORT_FILTER_PORT'):
-              k, value = line.split('=')
-              PORT = int(value.strip())
-            if line.startswith('CONTROL_PORT_FILTER_IP'):
-              k, value = line.split('=')
-              IP = str(value.strip())
-            if line.startswith('CONTROL_PORT_SOCKET'):
-              k, value = line.split('=')
-              SOCKET = str(value.strip())
-            if line.startswith('CONTROL_PORT_AUTH_COOKIE'):
-              k, value = line.split('=')
-              AUTH_COOKIE = str(value.strip())
+    if  files:
+      RequestList = ''
+      for conf in files:
+        logger.info('Configuration read from "%s"' % (conf))
+        if not conf.endswith('~') and conf.count('.dpkg-') == 0:
+          with open(conf) as f:
+            for line in f:
+              if line.startswith('CONTROL_PORT_FILTER_DISABLE_FILTERING'):
+                k, value = line.split('=')
+                DISABLE_FILTERING = value.strip() == 'true'
+              if line.startswith('CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS'):
+                k, value = line.split('=')
+                LIMIT_GETINFO_NET_LISTENERS_SOCKS = value.strip() == 'true'
+              if line.startswith('CONTROL_PORT_FILTER_WHITELIST'):
+                k, value = line.split('=')
+                # concatenate values from files, add a comma
+                RequestList = RequestList + value.strip() + ','
+              if line.startswith('CONTROL_PORT_FILTER_PORT'):
+                k, value = line.split('=')
+                PORT = int(value.strip())
+              if line.startswith('CONTROL_PORT_FILTER_IP'):
+                k, value = line.split('=')
+                IP = str(value.strip())
+              if line.startswith('CONTROL_PORT_SOCKET'):
+                k, value = line.split('=')
+                SOCKET = str(value.strip())
+              if line.startswith('CONTROL_PORT_AUTH_COOKIE'):
+                k, value = line.split('=')
+                AUTH_COOKIE = str(value.strip())
 
-    WHITELIST = RequestList.split(',')
-    # Remove last element (comma)
-    WHITELIST.pop()
-    # Remove duplicates
-    WHITELIST = list(set(WHITELIST))
+      WHITELIST = RequestList.split(',')
+      # Remove last element (comma)
+      WHITELIST.pop()
+      # Remove duplicates
+      WHITELIST = list(set(WHITELIST))
+
+    else:
+      logger.warning('No file found in user configuration folder "/etc/cpfpy.d".')
+      logger.warning('Running with default configuration.')
+
+  else:
+    logger.warning('User configuration folder "/etc/cpfpy.d" does not exist.')
+    logger.warning('Running with default configuration.')
+
 
   # Starts a TCP server
   print "Trying to start Tor control port filter on IP %s port %s" % (IP, PORT)
