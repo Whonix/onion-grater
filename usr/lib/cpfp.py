@@ -133,11 +133,10 @@ class TCPHandler(SocketServer.StreamRequestHandler):
         self.wfile.write("510 Request filtered\n")
         logger.info('Request: %s' % (request.strip()))
         logger.warning('Answer : 510 Request filtered "%s"' % (request))
- 
 
       # Ensure the answer was written
       self.wfile.flush()
-      
+
     # Ensure all data was written
     self.wfile.flush()
 
