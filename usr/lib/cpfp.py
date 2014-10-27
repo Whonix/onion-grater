@@ -24,6 +24,7 @@ import binascii
 import os
 import glob
 import uuid
+import logging
 
 
 
@@ -77,6 +78,8 @@ class TCPHandler(SocketServer.StreamRequestHandler):
       answer = sock.recv(16384)
 
       print '%s\n%s' % (request, answer)
+      logger.info('Request: %s' % (request.strip()))
+      logger.info('Answer : %s' % (answer.strip()))
 
       #if not DISABLE_FILTERING:
       #  if not answer.startswith("250"):
@@ -128,10 +131,13 @@ class TCPHandler(SocketServer.StreamRequestHandler):
       else:
         # Everything else we ignore/block
         self.wfile.write("510 Request filtered\n")
+        logger.info('Request: %s' % (request.strip()))
+        logger.warning('Answer : 510 Request filtered "%s"' % (request))
+ 
 
       # Ensure the answer was written
       self.wfile.flush()
-
+      
     # Ensure all data was written
     self.wfile.flush()
 
@@ -139,6 +145,14 @@ class TCPHandler(SocketServer.StreamRequestHandler):
 
 if __name__ == "__main__":
 
+  # Generate random user ID.
+  uid = uuid.uuid4()
+  print uid
+
+  # Create logger
+  logging.basicConfig(filename='/var/log/controlportfilt.log', level=logging.NOTSET)
+  logger = logging.getLogger(unicode(uid))
+  
   # Default control port filer configuration
   IP = '10.152.152.10'
   PORT =  9052
@@ -146,7 +160,8 @@ if __name__ == "__main__":
   AUTH_COOKIE = '/var/run/tor/control.authcookie'
   DISABLE_FILTERING = False
   LIMIT_GETINFO_NET_LISTENERS_SOCKS = True
-  WHITELIST = ['SIGNAL NEWNYM', 'GETINFO net/listeners/socks', 'GETINFO status/bootstrap-phase', 'GETINFO status/circuit-established']
+  WHITELIST = ['SIGNAL NEWNYM', 'GETINFO net/listeners/socks', 'GETINFO status/bootstrap-phase', \
+               'GETINFO status/circuit-established', 'QUIT']
 
   # Read and override configuration from files
   if os.path.exists('/etc/cpfpy.d/'):
@@ -187,14 +202,18 @@ if __name__ == "__main__":
     # Remove duplicates
     WHITELIST = list(set(WHITELIST))
 
-  # Generate random user ID.
-  uid = uuid.uuid4()
-  print uid
-
   # Starts a TCP server
   print "Trying to start Tor control port filter on IP %s port %s" % (IP, PORT)
+  # Logger available levels: 
+  #   .info
+  #   .warning
+  #   .error
+  #   .critical
+  #   .debug
+  logger.info("Trying to start Tor control port filter on IP %s port %s" % (IP, PORT))
   server = SocketServer.TCPServer((IP, PORT), TCPHandler)
 
   print "Tor control port filter started, listening on IP %s port %s" % (IP, PORT)
+  logger.info("Tor control port filter started, listening on IP %s port %s" % (IP, PORT))
   # Accept parallel connections.
   server.serve_forever()
