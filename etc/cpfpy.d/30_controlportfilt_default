@@ -80,6 +80,6 @@ CONTROL_PORT_FILTER_EXCESSIVE_STRING_LENGTH=128
 ##################################
 ## CONTROL_PORT_FILTER_WHITELIST #
 ##################################
-CONTROL_PORT_FILTER_WHITELIST=SIGNAL NEWNYM,GETINFO net/listeners/socks,GETINFO status/bootstrap-phase,GETINFO status/circuit-established
+CONTROL_PORT_FILTER_WHITELIST=SIGNAL NEWNYM,GETINFO net/listeners/socks,GETINFO status/bootstrap-phase,GETINFO status/circuit-established,QUIT
 
 ## End of /etc/controlportfilt.d/30_controlportfilt_default
