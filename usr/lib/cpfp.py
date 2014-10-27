@@ -43,9 +43,10 @@ class TCPHandler(SocketServer.StreamRequestHandler):
   def do_request_real(self, request):
     # check if tor socket exists
     if not os.path.exists(SOCKET):
-      reply = "255 tor is not running"
+      #reply = "255 tor is not running"
       #print "tor is not running"
-      return reply + '\r\n'
+      #return reply + '\r\n'
+      logger.critical('Tor is not running') 
 
     # The "lie" implemented in cpfp-bash
     if request == 'GETINFO net/listeners/socks' and LIMIT_GETINFO_NET_LISTENERS_SOCKS:
