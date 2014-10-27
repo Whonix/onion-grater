@@ -100,7 +100,8 @@ class TCPHandler(SocketServer.StreamRequestHandler):
     except (IOError, UnexpectedAnswer) as e:
       #print "Warning: Couldn't perform Request!"
       #print e
-      return e
+      #return e
+      logger.error(e)
 
 
   def handle(self):
