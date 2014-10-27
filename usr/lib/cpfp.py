@@ -43,10 +43,8 @@ class TCPHandler(SocketServer.StreamRequestHandler):
   def do_request_real(self, request):
     # check if tor socket exists
     if not os.path.exists(SOCKET):
-      #reply = "255 tor is not running"
-      #print "tor is not running"
-      #return reply + '\r\n'
-      logger.critical('Tor is not running') 
+      logger.critical('Tor is not running')
+      return
 
     # The "lie" implemented in cpfp-bash
     if request == 'GETINFO net/listeners/socks' and LIMIT_GETINFO_NET_LISTENERS_SOCKS:
@@ -68,26 +66,18 @@ class TCPHandler(SocketServer.StreamRequestHandler):
       writeh.write("AUTHENTICATE " + hexcookie + "\n")
       writeh.flush()
       answer = readh.readline()
-      # strict answer check ('==' instead of '.startwith()'
       if not answer.strip() == "250 OK":
         raise UnexpectedAnswer("AUTHENTICATE failed")
 
       # Send the request
-      answer ,  answerline = '',  ''
       writeh.write(request + '\n')
       writeh.flush()
       answer = sock.recv(16384)
 
-      #print '%s\n%s' % (request, answer)
       logger.info('Request: %s' % (request.strip()))
       logger.info('Answer : %s' % (answer.strip()))
 
-      #if not DISABLE_FILTERING:
-      #  if not answer.startswith("250"):
-      #    raise UnexpectedAnswer("Request failed: " + request)
-
       sock.close()
-
       return answer
 
 
@@ -95,12 +85,8 @@ class TCPHandler(SocketServer.StreamRequestHandler):
     # Catch innocent exceptions, will report error instead
     try:
       answer = self.do_request_real(request)
-      #print "Request went fine"
       return answer
     except (IOError, UnexpectedAnswer) as e:
-      #print "Warning: Couldn't perform Request!"
-      #print e
-      #return e
       logger.error(e)
 
 
@@ -212,15 +198,16 @@ if __name__ == "__main__":
     logger.warning('User configuration folder "/etc/cpfpy.d" does not exist.')
     logger.warning('Running with default configuration.')
 
+  # Catch server exceptions.
+  # Most likely one: "Address already in use" if control port filter running.
   try:
     # Starts a TCP server
-    #print "Trying to start Tor control port filter on IP %s port %s" % (IP, PORT)
-    # Logger available levels:
-    #   .info
-    #   .warning
-    #   .error
-    #   .critical
-    #   .debug
+    #   Logger available levels:
+    #    .info
+    #    .warning
+    #    .error
+    #    .critical
+    #    .debug
     logger.info("Trying to start Tor control port filter on IP %s port %s" % (IP, PORT))
     server = SocketServer.TCPServer((IP, PORT), TCPHandler)
 
@@ -230,4 +217,4 @@ if __name__ == "__main__":
     server.serve_forever()
 
   except IOError as e:
-    logger.critical('Socket error %s' % (e))
+    logger.critical('Server error %s' % (e))
