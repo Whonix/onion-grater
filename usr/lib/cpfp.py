@@ -72,7 +72,7 @@ class TCPHandler(SocketServer.StreamRequestHandler):
       # Send the request
       writeh.write(request + '\n')
       writeh.flush()
-      answer = sock.recv(16384)
+      answer = sock.recv(LIMIT_STRING_LENGTH)
 
       logger.info('Request: %s' % (request.strip()))
       logger.info('Answer : %s' % (answer.strip()))
@@ -146,6 +146,7 @@ if __name__ == "__main__":
   SOCKET = '/var/run/tor/control'
   AUTH_COOKIE = '/var/run/tor/control.authcookie'
   DISABLE_FILTERING = False
+  LIMIT_STRING_LENGTH = 16384
   LIMIT_GETINFO_NET_LISTENERS_SOCKS = True
   WHITELIST = ['SIGNAL NEWNYM', 'GETINFO net/listeners/socks', 'GETINFO status/bootstrap-phase', \
                'GETINFO status/circuit-established', 'QUIT']
@@ -157,13 +158,16 @@ if __name__ == "__main__":
     if  files:
       RequestList = ''
       for conf in files:
-        logger.info('Configuration read from "%s"' % (conf))
         if not conf.endswith('~') and conf.count('.dpkg-') == 0:
+          logger.info('Configuration read from "%s"' % (conf))
           with open(conf) as f:
             for line in f:
               if line.startswith('CONTROL_PORT_FILTER_DISABLE_FILTERING'):
                 k, value = line.split('=')
                 DISABLE_FILTERING = value.strip() == 'true'
+              if line.startswith('CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH'):
+                k, value = line.split('=')
+                LIMIT_STRING_LENGTH = int(value.strip())
               if line.startswith('CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS'):
                 k, value = line.split('=')
                 LIMIT_GETINFO_NET_LISTENERS_SOCKS = value.strip() == 'true'
@@ -183,6 +187,11 @@ if __name__ == "__main__":
               if line.startswith('CONTROL_PORT_AUTH_COOKIE'):
                 k, value = line.split('=')
                 AUTH_COOKIE = str(value.strip())
+
+      # Disable limit.
+      if LIMIT_STRING_LENGTH == -1:
+        # "sock.recv()" requires an argument, gives default.
+        LIMIT_STRING_LENGTH = 16384
 
       WHITELIST = RequestList.split(',')
       # Remove last element (comma)
