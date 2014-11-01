@@ -15,9 +15,9 @@
 ## it only prevents starting Control Port Filter Proxy.
 CONTROL_PORT_FILTER_PROXY=1
 
-#######################################
-CONTROL_PORT_FILTER_DISABLE_FILTERING #
-#######################################
+##########################################
+## CONTROL_PORT_FILTER_DISABLE_FILTERING #
+##########################################
 ## True or False.
 ## If 'True', all the requests from clients are passed
 ## to Tor control port.
