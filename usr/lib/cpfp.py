@@ -190,8 +190,8 @@ if __name__ == "__main__":
 
       # Disable limit.
       if LIMIT_STRING_LENGTH == -1:
-        # "sock.recv()" requires an argument, gives default.
-        LIMIT_STRING_LENGTH = 16384
+        # "sock.recv()" requires an argument. 64 KB, arbitrary.
+        LIMIT_STRING_LENGTH = 65536
 
       WHITELIST = RequestList.split(',')
       # Remove last element (comma)
