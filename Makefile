@@ -1,6 +1,14 @@
 #!/usr/bin/make -f
 
-## generic deb build script version 0.6
+## This file is part of Whonix.
+## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
+## See the file COPYING for copying conditions.
+
+## generic deb build script version 1.3
+
+## This is a copy.
+## master location:
+## https://github.com/Whonix/Whonix/blob/master/Makefile
 
 DESTDIR ?= /
 
@@ -9,6 +17,15 @@ all:
 
 dist:
 	./make-helper.bsh dist
+
+undist:
+	./make-helper.bsh undist
+
+debdist:
+	./make-helper.bsh debdist
+
+undebdist:
+	./make-helper.bsh undebdist
 
 manpages:
 	./make-helper.bsh manpages
@@ -49,6 +66,9 @@ deb-clean:
 deb-cleanup:
 	./make-helper.bsh deb-cleanup
 
+lintian:
+	./make-helper.bsh lintian
+
 dput-ubuntu-ppa:
 	./make-helper.bsh dput-ubuntu-ppa
 
@@ -78,6 +98,24 @@ uninstallsim:
 
 deb-chl-bumpup:
 	./make-helper.bsh deb-chl-bumpup
+
+deb-uachl-bumpup:
+	./make-helper.bsh deb-uachl-bumpup
+
+git-tag-sign:
+	./make-helper.bsh git-tag-sign
+
+git-tag-verify:
+	./make-helper.bsh git-tag-verify
+
+git-tag-check:
+	./make-helper.bsh git-tag-check
+
+git-commit-verify:
+	./make-helper.bsh git-commit-verify
+
+git-verify:
+	./make-helper.bsh git-verify
 
 help:
 	./make-helper.bsh help
