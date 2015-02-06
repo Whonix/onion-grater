@@ -1,0 +1,422 @@
+commit c4d0e428cc26d62c96eae5bcc33d7e24f9af801c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 6 23:14:20 2015 +0000
+
+    added upstream changelog creation to debian/rules
+
+commit d3a51a616d40e07054fe9311a9cb5f772d003318
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 6 23:13:58 2015 +0000
+
+    updated makefile
+
+commit 31c8eb1f48eb6edbbff8734695794f51587f6428
+Merge: 090c719 f872414
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Jan 10 17:28:19 2015 +0000
+
+    Merge remote-tracking branch 'origin/master'
+
+commit f87241455e90de5cc50c6ea511f17017b5581341
+Author: troubadoour <trobador@riseup.net>
+Date:   Wed Nov 5 15:36:55 2014 +0000
+
+    "LIMIT_STRING_LENGTH = 65536" when disabled.
+
+commit 9fd0949b83ccee418017acf4237cffb3fd6fe67c
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Nov 1 02:01:26 2014 +0000
+
+    missing ##
+
+commit 090c719d8f1ac8b5314ae04d2bd062d4662a0e3b
+Author: troubadoour <trobador@riseup.net>
+Date:   Fri Oct 31 15:25:02 2014 +0000
+
+    modified configuration variables.
+    + CONTROL_PORT_FILTER_DISABLE_FILTERING
+    - CONTROL_PORT_FILTER_EXCESSIVE_STRING_LENGTH
+    integer instead of boolean in CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH
+
+commit c11e71142810a42e13d1169fdfffbda703e9fff2
+Author: troubadoour <trobador@riseup.net>
+Date:   Fri Oct 31 15:07:56 2014 +0000
+
+    added LIMIT_STRING_LENGTH
+    default 16384
+    Set to default if "CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH=-1" (default)
+
+commit 6b708776533b29f7992448b797f8043088c29be1
+Author: troubadoour <trobador@riseup.net>
+Date:   Mon Oct 27 22:34:17 2014 +0000
+
+    logging: "Tor socket does not exist"
+
+commit b194cd476435c4d55d1ebd5d4379efc29b95d1e5
+Author: troubadoour <trobador@riseup.net>
+Date:   Mon Oct 27 21:47:47 2014 +0000
+
+    code cleaning, comments.
+
+commit 9066974810eb029d487818f079d6ae02439942a1
+Author: troubadoour <trobador@riseup.net>
+Date:   Mon Oct 27 20:44:19 2014 +0000
+
+    logging <-- server IOError
+
+commit e0de009c2cdc482021d1c1171369b653fb3cf324
+Author: troubadoour <trobador@riseup.net>
+Date:   Mon Oct 27 19:41:24 2014 +0000
+
+    logging <-- IOError, UnexpectedAnswer
+
+commit ea6a3004897b4cc2c31b25a6edda2c47ce542ce1
+Author: troubadoour <trobador@riseup.net>
+Date:   Mon Oct 27 16:49:24 2014 +0000
+
+    logging <-- Tor socket error.
+
+commit c7071a72f86c6db1a8aef063bf638980cb45a004
+Author: troubadoour <trobador@riseup.net>
+Date:   Mon Oct 27 16:32:54 2014 +0000
+
+    commented "print" statements.
+
+commit fe98a03ce1af485d62570d3599b5d0283a21d7f9
+Author: troubadoour <trobador@riseup.net>
+Date:   Mon Oct 27 16:13:32 2014 +0000
+
+    logging <-- configuration
+
+commit 36e629297e62bed9d40c2c0545d79511a83061ce
+Author: troubadoour <trobador@riseup.net>
+Date:   Mon Oct 27 13:05:53 2014 +0000
+
+    cleaning: indent spaces
+
+commit e700b521f5b22352a7e01764d0b6eb3e6e1d0b2f
+Author: troubadoour <trobador@riseup.net>
+Date:   Mon Oct 27 09:11:54 2014 +0000
+
+    added 'QUIT' to white list.
+
+commit 0987192700741b40e7abf87ad81e365bb8ff61bd
+Author: troubadoour <trobador@riseup.net>
+Date:   Mon Oct 27 09:09:11 2014 +0000
+
+    logging: initial implementation
+
+commit 6aad38eab9a05a07a8923588a3974e6e37fe284f
+Author: troubadoour <trobador@riseup.net>
+Date:   Sun Oct 26 09:05:27 2014 +0000
+
+    Added UUID
+
+commit a7e6c6f8606df0eb6082b52cfe22c854d9226666
+Author: troubadoour <trobador@riseup.net>
+Date:   Sun Oct 26 08:45:10 2014 +0000
+
+    Commented answer check in do_request_real() function.
+
+commit 5de97365826583094d52c59ffdb96955506a4913
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Oct 25 14:44:27 2014 +0000
+
+    comment: let's refer to cpfp-bash rather than cpfp-tcpserver
+
+commit ab9a0c8eb9e7f445ce4c5e32f719df1ce86bd763
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Oct 25 14:43:51 2014 +0000
+
+    comment indentation
+
+commit 415ca986fb665774ce02b3eeb2cc7c2a71b1c06f
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Oct 25 08:33:57 2014 +0000
+
+    New line at end of file
+
+commit 05bf0c1dca0d55934957ef9a42e069ae538f703d
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Oct 25 07:43:57 2014 +0000
+
+    Indentation with two spaces, no tab.
+
+commit a3aadd9cc3858bff04c5139b29bcea41eaa5e1bc
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Oct 25 07:15:46 2014 +0000
+
+    Code cleaning. Removed commented lines.
+
+commit d6e4f5a75410f937565f1caf40dff24d97de5997
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Oct 25 07:08:33 2014 +0000
+
+    Removed CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH, CONTROL_PORT_FILTER_EXCESSIVE_STRING_LENGTH
+
+commit 26330a7e831b865d44e8156627afd4d824dbc190
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Oct 25 06:53:35 2014 +0000
+
+    Code cleaning. Removed commented lines.
+
+commit 108b50cd23ae05673052dc1952b58c0012578b9e
+Author: troubadoour <trobador@riseup.net>
+Date:   Thu Oct 23 15:11:23 2014 +0000
+
+    Max line size 16384 in "sock.recv(16384)".
+    commented check_answer() funcrion.
+
+commit 424459ac058fa74df9c6d7acd1d0b1e0a485c2c2
+Author: troubadoour <trobador@riseup.net>
+Date:   Thu Oct 23 11:18:47 2014 +0000
+
+    Put back AUTHENTICATE in TCP handler
+    Required by Tor Browser
+
+commit 349184dbd6cc1d92bb462aad9959fc57fe64b374
+Author: troubadoour <trobador@riseup.net>
+Date:   Wed Oct 22 20:34:58 2014 +0000
+
+    Removed fake AUTHENTICATE in TCP handler (returning "250 OK"). Real authentication is written to the real socket.
+    Removed "QUIT" catching, as it would return without closing Tor control port socket.
+
+commit 1358a3709c3f9afdc7d788cf38a9483bbf90bd67
+Author: troubadoour <trobador@riseup.net>
+Date:   Tue Oct 21 22:35:22 2014 +0000
+
+    Transparent mode CONTROL_PORT_FILTER_DISABLE_FILTERING=[true/false]
+    sock.recv() instead of .readline
+
+commit 2174f9e6cad40fb55867bb0fe545372ec0cc32d5
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Oct 18 18:17:38 2014 +0000
+
+    Moved the "lie" in front of "with open(AUTH_COOKIE, "rb") as f:" block.
+    The socket was not closed after "net/listeners/socks" request.
+
+commit 1ddf5df96e7879ae7b6b839cecf4f6a744dc8540
+Author: troubadoour <trobador@riseup.net>
+Date:   Fri Oct 17 19:54:22 2014 +0000
+
+    Default hardcoded configuration
+
+commit 4deb3d30a1eb208480cedaca333ee815ad24500e
+Author: troubadoour <trobador@riseup.net>
+Date:   Thu Oct 16 19:18:13 2014 +0000
+
+    Replaced TCP socket with TCP server on the server side.
+    CPFP handles parallel connections.
+
+commit 6792958e1c7e47b8e87d4566a41aeff6c1e56a4d
+Author: troubadoour <trobador@riseup.net>
+Date:   Mon Oct 13 19:38:32 2014 +0000
+
+    request.startswith() instead of first_word
+
+commit fd834938d754dbc7f1ae655283836f17acb8988a
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Oct 7 20:42:20 2014 +0000
+
+    readme
+
+commit 2e74b59526ab3a5cc116fd6c5291534585f8f049
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Oct 4 23:22:56 2014 +0000
+
+    packaging
+
+commit 6d53c469a7ed8c4e06363d42f8b16140be9b08da
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Oct 4 22:55:09 2014 +0000
+
+    made control port socket and control port auth cookie configurable
+
+commit 23b8439556320d790611f2bb46f92671889216c0
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Oct 4 22:47:14 2014 +0000
+
+    output
+
+commit ea822cc5d680b517830f570ce454682707f7dfd1
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Oct 4 22:44:54 2014 +0000
+
+    don't require hard coded "AUTHENTICATE password", accept anything for password
+
+commit 9956b8f1a4772130320c6733bf1c499bfe55dd13
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Oct 4 21:50:30 2014 +0000
+
+    remove duplicates in WHITELIST
+
+commit 17b32f663dd28ada6efca5b5001f656d506ec42f
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Oct 4 21:00:36 2014 +0000
+
+    made IP and PORT configurable
+
+commit 075122da65482f090793b4f2364a0f6b520cf7d9
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Oct 4 20:40:21 2014 +0000
+
+    typo
+
+commit 097dc0bc02c08479224014c7990d07f69431e470
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Oct 4 20:39:01 2014 +0000
+
+    minor comment
+
+commit 210a6f53f92af586f7d182f77a5f309dc65b52a3
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Oct 4 19:10:45 2014 +0000
+
+    CONTROL_PORT_FILTER_WHITELIST extensible
+    removed some testing lines
+
+commit d78ba785f0221e09abcb20578a4aa7fd12eb74e9
+Author: troubadoour <trobador@riseup.net>
+Date:   Fri Oct 3 19:51:30 2014 +0000
+
+    rename controlportfilt.d to cpfpy.d
+
+commit 20e904e1014ea57a08c50882fa42d5b37621ca4e
+Author: troubadoour <trobador@riseup.net>
+Date:   Fri Oct 3 18:29:44 2014 +0000
+
+    sort files in /etc/controlportfilt.d
+
+commit cc03815740ab6d2a6d94178696f9f751a873f369
+Author: troubadoour <trobador@riseup.net>
+Date:   Fri Oct 3 18:26:43 2014 +0000
+
+    copyright
+
+commit b1d60ff54e84cede66769a7c8dbf681a654e1e80
+Author: troubadoour <trobador@riseup.net>
+Date:   Fri Oct 3 18:07:11 2014 +0000
+
+    leading spaces
+
+commit 03ef280ff315421b36074d492ef80f5d00d69de2
+Author: troubadoour <trobador@riseup.net>
+Date:   Thu Oct 2 21:45:04 2014 +0000
+
+    parse /etc/controlportfilt.d/ in cpfp.py
+    parsing the configuration strings, not trying to get them from the environment
+
+commit df2d3a0dab90b2db803fcdae35eb8c5976a929e8
+Author: troubadoour <trobador@riseup.net>
+Date:   Thu Oct 2 21:40:45 2014 +0000
+
+    Commented out bash source for /etc/controlportfilt.d/
+
+commit 6bb1b6055c56db286d84ba6231fc314a7bb98453
+Author: troubadoour <trobador@riseup.net>
+Date:   Thu Oct 2 21:36:52 2014 +0000
+
+    New syntax
+    whitelist in one line, removed quotes...
+
+commit e836957b92dc0c61d34ee08d647cbd4e15e8fb35
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Sep 30 00:48:12 2014 +0000
+
+    typo
+
+commit 51378a949cf6bdddf400913ad46b986e1ffedbac
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Sep 29 23:12:10 2014 +0000
+
+    fixed copyright
+
+commit f39e957abc1b638eb30de5ba08b8ab4edb53938c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Sep 29 23:06:21 2014 +0000
+
+    fixed debian/changelog
+
+commit a7a9b1e9142379d50d8637f593dc2e7a3dc4ccb1
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Sep 29 23:04:44 2014 +0000
+
+    fixed debian/rules
+
+commit 00ef721e6bedd30b186b91e8d29ce7053db4cea7
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Sep 29 23:03:04 2014 +0000
+
+    fixed debian/changelog
+
+commit 1401feb8eb9020e0b9087ee108b758528fd54586
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Sep 29 23:00:32 2014 +0000
+
+    fixed new lines and leading spaces
+
+commit 67d9f9aefe45c216afc849aaafff5cdc404d8429
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Sep 27 19:02:18 2014 +0000
+
+    debian/control
+
+commit 287fa160ec7eee9db9f67fc2cb7350e15d15faab
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Sep 27 15:48:27 2014 +0000
+
+    README  debian/control
+
+commit ef5feb6131eb3b11ff9b88524f4ae0205ffcd2eb
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Sep 27 13:41:06 2014 +0000
+
+    debian/control
+
+commit 05717af28a16d3175d611467a2484a47a09d3a5d
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Sep 27 13:23:37 2014 +0000
+
+    .gitattributes
+
+commit fbbe682789a5f2570c25f70d3abdff3935481f6a
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Sep 27 13:17:41 2014 +0000
+
+    man page
+
+commit adb6bf96e3ff62c21a2b98c61aa377ec83ac4485
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Sep 27 12:45:27 2014 +0000
+
+    debian/control
+
+commit a2b1328b0a05bc8b36674400402358800fab07a5
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Sep 27 12:09:54 2014 +0000
+
+    debian/control
+
+commit 33c57331ffc2cc83b697b73530046708dfe54932
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Sep 27 11:59:46 2014 +0000
+
+    debian/control
+
+commit 86f005f4659b6e75a475db9886106a4b8eee15cf
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Sep 27 11:48:33 2014 +0000
+
+    debian/control
+
+commit f5fa24a2ebf7ff37f346d60b546126c5475fc34a
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Sep 27 11:41:29 2014 +0000
+
+    debian/control
+
+commit 63664e01e7ca9828617f993d403519f6b29cf3eb
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Sep 27 11:36:57 2014 +0000
+
+    initial release
