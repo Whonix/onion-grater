@@ -128,8 +128,6 @@ class TCPHandler(SocketServer.StreamRequestHandler):
     # Ensure all data was written
     self.wfile.flush()
 
-
-
 if __name__ == "__main__":
 
   # Generate random user ID.
@@ -137,7 +135,7 @@ if __name__ == "__main__":
   #print uid
 
   # Create logger
-  logging.basicConfig(filename='/var/log/controlportfilt.log', level=logging.NOTSET)
+  logging.basicConfig(filename='/var/log/control-port-filter-python.log', level=logging.NOTSET)
   logger = logging.getLogger(unicode(uid))
 
   # Default control port filer configuration

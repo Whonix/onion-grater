@@ -10,10 +10,7 @@
 	dh $@
 
 override_dh_install:
-	## TODO
-	#dh_installinit --onlyscripts
-	$(CURDIR)/make-helper.bsh manpages
-	dh_installman $(CURDIR)/debian/tmp-man/*
+	dh_installinit --onlyscripts
 
 override_dh_installchangelogs:
 	dh_installchangelogs changelog.upstream upstream
