@@ -15,6 +15,7 @@ Standards-Version: 3.9.4
 Package: control-port-filter-python
 Architecture: all
 Depends: ${misc:Depends}, ${python:Depends}, anon-shared-helper-scripts
+Conflicts: control-port-filter
 Description: Whitelisting filter for dangerous Tor control protocol commands
  Filters out Tor control protocol commands that are dangerous for anonymity
  such as GETINFO ADDRESS using a whitelist. Acts as a proxy between the client
