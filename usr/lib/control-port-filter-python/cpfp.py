@@ -23,7 +23,6 @@ import SocketServer
 import binascii
 import os
 import glob
-import uuid
 import logging
 import signal
 import sys
@@ -143,12 +142,12 @@ class TCPHandler(SocketServer.StreamRequestHandler):
 if __name__ == "__main__":
 
   # Generate random user ID.
-  uid = uuid.uuid4()
-  #print uid
+  pid = os.getpid()
+  #print pid
 
   # Create logger
   logging.basicConfig(filename='/var/log/control-port-filter-python.log', level=logging.NOTSET)
-  logger = logging.getLogger(unicode(uid))
+  logger = logging.getLogger(unicode(pid))
 
   signal.signal(signal.SIGTERM, signal_sigterm_handler)
   signal.signal(signal.SIGINT, signal_sigint_handler)
