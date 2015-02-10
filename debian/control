@@ -6,6 +6,7 @@ Source: control-port-filter-python
 Section: misc
 Priority: optional
 Maintainer: troubadour <trobador@riseup.net>
+Uploaders: Patrick Schleizer <adrelanos@riseup.net>
 Build-Depends: debhelper (>= 8), config-package-dev (>=5), python (>= 2.6)
 Homepage: https://www.whonix.org/wiki/Dev/CPFP
 Vcs-Browser: https://github.com/troubadoour/control-port-filter-python
