@@ -25,6 +25,18 @@ import os
 import glob
 import uuid
 import logging
+import signal
+import sys
+
+
+
+def signal_sigterm_handler(signal, frame):
+  logger.info('Signal sigterm received. Exiting.')
+  sys.exit(143)
+
+def signal_sigint_handler(signal, frame):
+  logger.info('Signal sigint received. Exiting.')
+  sys.exit(130)
 
 
 
@@ -137,6 +149,9 @@ if __name__ == "__main__":
   # Create logger
   logging.basicConfig(filename='/var/log/control-port-filter-python.log', level=logging.NOTSET)
   logger = logging.getLogger(unicode(uid))
+
+  signal.signal(signal.SIGTERM, signal_sigterm_handler)
+  signal.signal(signal.SIGINT, signal_sigint_handler)
 
   # Default control port filer configuration
   IP = '10.152.152.10'
