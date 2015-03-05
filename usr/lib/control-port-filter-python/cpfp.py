@@ -58,7 +58,7 @@ class TCPHandler(SocketServer.StreamRequestHandler):
       return
 
     # The "lie" implemented in cpfp-bash
-    if request == 'GETINFO net/listeners/socks' and LIMIT_GETINFO_NET_LISTENERS_SOCKS:
+    if request == 'getinfo net/listeners/socks' and LIMIT_GETINFO_NET_LISTENERS_SOCKS:
       return('250-net/listeners/socks="127.0.0.1:9150"\n')
 
     # Read authentication cookie
@@ -109,10 +109,10 @@ class TCPHandler(SocketServer.StreamRequestHandler):
       if not line:
         break
       # Strip escaped chars and white spaces at beginning and end of string
-      request = line.strip()
+      request = line.lower().strip()
 
       # Authentication request from Tor Browser.
-      if request.startswith("AUTHENTICATE"):
+      if request.startswith("authenticate"):
         # Don't check authentication, since only
         # safe requests are allowed
         self.wfile.write("250 OK\n")
@@ -160,8 +160,8 @@ if __name__ == "__main__":
   DISABLE_FILTERING = False
   LIMIT_STRING_LENGTH = 16384
   LIMIT_GETINFO_NET_LISTENERS_SOCKS = True
-  WHITELIST = ['SIGNAL NEWNYM', 'GETINFO net/listeners/socks', 'GETINFO status/bootstrap-phase', \
-               'GETINFO status/circuit-established', 'QUIT']
+  WHITELIST = ['signal newnym', 'getinfo net/listeners/socks', 'getinfo status/bootstrap-phase', \
+               'getinfo status/circuit-established', 'quit']
 
   # Read and override configuration from files
   if os.path.exists('/etc/cpfpy.d/'):
