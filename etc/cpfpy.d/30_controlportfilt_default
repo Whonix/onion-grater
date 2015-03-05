@@ -19,10 +19,10 @@ CONTROL_PORT_FILTER_PROXY=1
 ##########################################
 ## CONTROL_PORT_FILTER_DISABLE_FILTERING #
 ##########################################
-## True or False.
-## If 'True', all the requests from clients are passed
+## true or false
+## If 'true', all the requests from clients are passed
 ## to Tor control port.
-CONTROL_PORT_FILTER_DISABLE_FILTERING=False
+CONTROL_PORT_FILTER_DISABLE_FILTERING=false
 
 ##############################
 ## CONTROL_PORT_FILTER_IP    #
@@ -59,9 +59,8 @@ CONTROL_PORT_FILTER_VERBOSE=0
 ##########################################################
 ## CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS #
 ##########################################################
-## Enable or disable.
-## 0 disabled.
-## Lie when getting asked
+## false or true
+## When set to 'true', lie when getting asked
 ## GETINFO net/listeners/socks
 ## and answer
 ## 250-net/listeners/socks="127.0.0.1:9150"
