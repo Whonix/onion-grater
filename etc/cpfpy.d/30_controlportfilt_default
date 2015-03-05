@@ -64,4 +64,4 @@ CONTROL_PORT_FILTER_DISABLE_FILTERING=false
 ##################################
 ## CONTROL_PORT_FILTER_WHITELIST #
 ##################################
-CONTROL_PORT_FILTER_WHITELIST=SIGNAL NEWNYM,GETINFO net/listeners/socks,GETINFO status/bootstrap-phase,GETINFO status/circuit-established,QUIT
+CONTROL_PORT_FILTER_WHITELIST=signal newnym,getinfo net/listeners/socks,getinfo status/bootstrap-phase,getinfo status/circuit-established,quit
