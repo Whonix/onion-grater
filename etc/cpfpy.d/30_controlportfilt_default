@@ -75,6 +75,7 @@ CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH=16384
 ## true or false
 ## If 'true', all the requests from clients are passed
 ## to Tor control port.
+## 'true' is recommended against for security reasons!
 CONTROL_PORT_FILTER_DISABLE_FILTERING=false
 
 ##################################
