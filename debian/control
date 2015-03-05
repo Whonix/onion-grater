@@ -7,7 +7,7 @@ Section: misc
 Priority: optional
 Maintainer: troubadour <trobador@riseup.net>
 Uploaders: Patrick Schleizer <adrelanos@riseup.net>
-Build-Depends: debhelper (>= 8), config-package-dev (>=5), python (>= 2.6)
+Build-Depends: debhelper (>= 9), faketime
 Homepage: https://www.whonix.org/wiki/Dev/CPFP
 Vcs-Browser: https://github.com/troubadoour/control-port-filter-python
 Vcs-Git: https://github.com/troubadoour/control-port-filter-python.git
@@ -16,7 +16,8 @@ Standards-Version: 3.9.4
 Package: control-port-filter-python
 Architecture: all
 Pre-Depends: tor
-Depends: ${misc:Depends}, ${python:Depends}, anon-shared-helper-scripts
+Depends: ${misc:Depends}, ${python:Depends}, anon-shared-helper-scripts,
+ python (>= 2.6)
 Conflicts: control-port-filter
 Description: Whitelisting filter for dangerous Tor control protocol commands
  Filters out Tor control protocol commands that are dangerous for anonymity
