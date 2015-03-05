@@ -59,7 +59,9 @@ class TCPHandler(SocketServer.StreamRequestHandler):
 
     # The "lie" implemented in cpfp-bash
     if request == 'getinfo net/listeners/socks' and LIMIT_GETINFO_NET_LISTENERS_SOCKS:
-      return('250-net/listeners/socks="127.0.0.1:9150"\n')
+      temp = '250-net/listeners/socks="127.0.0.1:9150"\n'
+      logger.info('Lying: %s' % (temp.strip()))
+      return(temp)
 
     # Read authentication cookie
     with open(AUTH_COOKIE, "rb") as f:
@@ -85,17 +87,16 @@ class TCPHandler(SocketServer.StreamRequestHandler):
       writeh.flush()
       answer = sock.recv(LIMIT_STRING_LENGTH)
 
-      logger.info('Request: %s' % (request.strip()))
-      logger.info('Answer : %s' % (answer.strip()))
-
       sock.close()
       return answer
 
 
   def do_request(self, request):
+    logger.info('Request: %s' % (request.strip()))
     # Catch innocent exceptions, will report error instead
     try:
       answer = self.do_request_real(request)
+      logger.info('Answer: %s' % (answer.strip()))
       return answer
     except (IOError, UnexpectedAnswer) as e:
       logger.error(e)
@@ -111,7 +112,7 @@ class TCPHandler(SocketServer.StreamRequestHandler):
       # Strip escaped chars and white spaces at beginning and end of string
       request = line.lower().strip()
 
-      # Authentication request from Tor Browser.
+      # Authentication request.
       if request.startswith("authenticate"):
         # Don't check authentication, since only
         # safe requests are allowed
@@ -131,7 +132,7 @@ class TCPHandler(SocketServer.StreamRequestHandler):
         # Everything else we ignore/block
         self.wfile.write("510 Request filtered\n")
         logger.info('Request: %s' % (request.strip()))
-        logger.warning('Answer : 510 Request filtered "%s"' % (request))
+        logger.warning('Answer: 510 Request filtered "%s"' % (request))
 
       # Ensure the answer was written
       self.wfile.flush()
@@ -239,3 +240,5 @@ if __name__ == "__main__":
 
   except IOError as e:
     logger.critical('Server error %s' % (e))
+    logger.critical('Exiting.')
+    sys.exit(1)
