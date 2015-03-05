@@ -16,14 +16,6 @@
 ## it only prevents starting Control Port Filter Proxy.
 CONTROL_PORT_FILTER_PROXY=1
 
-##########################################
-## CONTROL_PORT_FILTER_DISABLE_FILTERING #
-##########################################
-## true or false
-## If 'true', all the requests from clients are passed
-## to Tor control port.
-CONTROL_PORT_FILTER_DISABLE_FILTERING=false
-
 ##############################
 ## CONTROL_PORT_FILTER_IP    #
 ##############################
@@ -76,6 +68,14 @@ CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS=true
 ## are rejected.
 ## Set value to -1 to disable.
 CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH=16384
+
+##########################################
+## CONTROL_PORT_FILTER_DISABLE_FILTERING #
+##########################################
+## true or false
+## If 'true', all the requests from clients are passed
+## to Tor control port.
+CONTROL_PORT_FILTER_DISABLE_FILTERING=false
 
 ##################################
 ## CONTROL_PORT_FILTER_WHITELIST #
