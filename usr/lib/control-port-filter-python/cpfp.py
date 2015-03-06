@@ -18,6 +18,7 @@
 # doing NEWNYM. But it could just as well rewrite the
 # TOR_CONTROL_PORT environment variable to itself or do something else.
 
+import gevent
 from gevent import socket
 from gevent.server import StreamServer
 import binascii
@@ -28,12 +29,16 @@ import signal
 import sys
 
 
-
-def signal_sigterm_handler(signal, frame):
+## gevent signal does not pass arguments.
+#def signal_sigterm_handler(signal, frame):
+def signal_sigterm_handler():
+  server.stop()
   logger.info('Signal sigterm received. Exiting.')
   sys.exit(143)
 
-def signal_sigint_handler(signal, frame):
+#def signal_sigint_handler(signal, frame):
+def signal_sigint_handler():
+  server.stop()
   logger.info('Signal sigint received. Exiting.')
   sys.exit(130)
 
@@ -150,8 +155,8 @@ if __name__ == "__main__":
   logging.basicConfig(filename='/var/log/control-port-filter-python.log', level=logging.NOTSET)
   logger = logging.getLogger(unicode(pid))
 
-  signal.signal(signal.SIGTERM, signal_sigterm_handler)
-  signal.signal(signal.SIGINT, signal_sigint_handler)
+  gevent.signal(signal.SIGTERM, signal_sigterm_handler)
+  gevent.signal(signal.SIGINT, signal_sigint_handler)
 
   # Default control port filer configuration
   IP = '10.152.152.10'
@@ -239,7 +244,7 @@ if __name__ == "__main__":
     logger.info("Tor control port filter started, listening on IP %s port %s" % (IP, PORT))
     server.serve_forever()
 
-  except IOError as e:
+  except Exception as e:
     logger.critical('Server error %s' % (e))
     logger.critical('Exiting.')
     sys.exit(1)
