@@ -18,8 +18,8 @@
 # doing NEWNYM. But it could just as well rewrite the
 # TOR_CONTROL_PORT environment variable to itself or do something else.
 
-import socket
-import SocketServer
+from gevent import socket
+from gevent.server import StreamServer
 import binascii
 import os
 import glob
@@ -49,98 +49,99 @@ class UnexpectedAnswer(Exception):
 
 
 
-class TCPHandler(SocketServer.StreamRequestHandler):
+#class TCPHandler(SocketServer.StreamRequestHandler):
 
-  def do_request_real(self, request):
-    # check if tor socket exists
-    if not os.path.exists(SOCKET):
-      logger.critical('Tor socket: "%s" does not exist' % (SOCKET))
-      return
+def do_request_real(request):
+  # check if tor socket exists
+  if not os.path.exists(SOCKET):
+    logger.critical('Tor socket: "%s" does not exist' % (SOCKET))
+    return
 
-    # The "lie" implemented in cpfp-bash
-    if request == 'getinfo net/listeners/socks' and LIMIT_GETINFO_NET_LISTENERS_SOCKS:
-      return('250-net/listeners/socks="127.0.0.1:9150"\n')
+  # The "lie" implemented in cpfp-bash
+  if request == 'getinfo net/listeners/socks' and LIMIT_GETINFO_NET_LISTENERS_SOCKS:
+    temp = '250-net/listeners/socks="127.0.0.1:9150"\n'
+    logger.info('Lying: %s' % (temp.strip()))
+    return(temp)
 
-    # Read authentication cookie
-    with open(AUTH_COOKIE, "rb") as f:
-      rawcookie = f.read(32)
-      hexcookie = binascii.hexlify(rawcookie)
+  # Read authentication cookie
+  with open(AUTH_COOKIE, "rb") as f:
+    rawcookie = f.read(32)
+    hexcookie = binascii.hexlify(rawcookie)
 
-      # Connect to the real control port
-      sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-      sock.settimeout(10.0)
-      sock.connect(SOCKET)
-      readh = sock.makefile("r")
-      writeh = sock.makefile("w")
+    # Connect to the real control port
+    sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    sock.settimeout(10.0)
+    sock.connect(SOCKET)
+    readh = sock.makefile("r")
+    writeh = sock.makefile("w")
 
-      # Authenticate
-      writeh.write("AUTHENTICATE " + hexcookie + "\n")
-      writeh.flush()
-      answer = readh.readline()
-      if not answer.strip() == "250 OK":
-        raise UnexpectedAnswer("AUTHENTICATE failed")
+    # Authenticate
+    writeh.write("AUTHENTICATE " + hexcookie + "\n")
+    writeh.flush()
+    answer = readh.readline()
+    if not answer.strip() == "250 OK":
+      raise UnexpectedAnswer("AUTHENTICATE failed")
 
-      # Send the request
-      writeh.write(request + '\n')
-      writeh.flush()
-      answer = sock.recv(LIMIT_STRING_LENGTH)
+    # Send the request
+    writeh.write(request + '\n')
+    writeh.flush()
+    answer = sock.recv(LIMIT_STRING_LENGTH)
 
+    sock.close()
+    return answer
+
+
+def do_request(request):
+  logger.info('Request: %s' % (request.strip()))
+  # Catch innocent exceptions, will report error instead
+  try:
+    answer = do_request_real(request)
+    logger.info('Answer: %s' % (answer.strip()))
+    return answer
+  except (IOError, UnexpectedAnswer) as e:
+    logger.error(e)
+
+
+def handle(sock, address):
+  # Keep accepting requests
+  fh = sock.makefile()
+  while True:
+    # Read in a newline terminated line
+    line = fh.readline()
+    if not line:
+      break
+    # Strip escaped chars and white spaces at beginning and end of string
+    request = line.lower().strip()
+
+    # Authentication request.
+    if request.startswith("authenticate"):
+      # Don't check authentication, since only
+      # safe requests are allowed
+      fh.write("250 OK\n")
+
+    elif DISABLE_FILTERING:
+      # Pass all requests
+      answer = do_request(request)
+      fh.write(answer)
+
+    elif request in WHITELIST:
+      # Filtering enabled
+      answer = do_request(request)
+      fh.write(answer)
+
+    else:
+      # Everything else we ignore/block
+      fh.write("510 Request filtered\n")
       logger.info('Request: %s' % (request.strip()))
-      logger.info('Answer : %s' % (answer.strip()))
+      logger.warning('Answer: 510 Request filtered "%s"' % (request))
 
-      sock.close()
-      return answer
+    # Ensure the answer was written
+    fh.flush()
 
-
-  def do_request(self, request):
-    # Catch innocent exceptions, will report error instead
-    try:
-      answer = self.do_request_real(request)
-      return answer
-    except (IOError, UnexpectedAnswer) as e:
-      logger.error(e)
-
-
-  def handle(self):
-    # Keep accepting requests
-    while True:
-      # Read in a newline terminated line
-      line = self.rfile.readline()
-      if not line:
-        break
-      # Strip escaped chars and white spaces at beginning and end of string
-      request = line.lower().strip()
-
-      # Authentication request from Tor Browser.
-      if request.startswith("authenticate"):
-        # Don't check authentication, since only
-        # safe requests are allowed
-        self.wfile.write("250 OK\n")
-
-      elif DISABLE_FILTERING:
-        # Pass all requests
-        answer = self.do_request(request)
-        self.wfile.write(answer)
-
-      elif request in WHITELIST:
-        # Filtering enabled
-        answer = self.do_request(request)
-        self.wfile.write(answer)
-
-      else:
-        # Everything else we ignore/block
-        self.wfile.write("510 Request filtered\n")
-        logger.info('Request: %s' % (request.strip()))
-        logger.warning('Answer : 510 Request filtered "%s"' % (request))
-
-      # Ensure the answer was written
-      self.wfile.flush()
-
-    # Ensure all data was written
-    self.wfile.flush()
+  # Ensure all data was written
+  fh.flush()
 
 if __name__ == "__main__":
-
   # Generate random user ID.
   pid = os.getpid()
   #print pid
@@ -230,12 +231,15 @@ if __name__ == "__main__":
     #    .critical
     #    .debug
     logger.info("Trying to start Tor control port filter on IP %s port %s" % (IP, PORT))
-    server = SocketServer.TCPServer((IP, PORT), TCPHandler)
+    # ACCEPT CONCURRENT CONNECTIONS.
+    # limit to 5 simultaneous connections.
+    server = StreamServer((IP, PORT), handle, spawn=5)
 
     #print "Tor control port filter started, listening on IP %s port %s" % (IP, PORT)
     logger.info("Tor control port filter started, listening on IP %s port %s" % (IP, PORT))
-    # Accept parallel connections.
     server.serve_forever()
 
   except IOError as e:
     logger.critical('Server error %s' % (e))
+    logger.critical('Exiting.')
+    sys.exit(1)
