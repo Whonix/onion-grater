@@ -227,7 +227,6 @@ if __name__ == "__main__":
         ## limit to 5 simultaneous connections.
         server = StreamServer((IP, PORT), handle, spawn=5)
 
-        #print "Tor control port filter started, listening on IP %s port %s" % (IP, PORT)
         logger.info("Tor control port filter started, listening on IP %s port %s" % (IP, PORT))
         server.serve_forever()
 
