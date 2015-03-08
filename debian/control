@@ -29,16 +29,15 @@ Description: Whitelisting filter for dangerous Tor control protocol commands
  Tor Button status indicator without exposing commands that are dangerous for
  anonymity.
  .
- This package is supposed to be installed on Anonymity Distribution Gateways.
+ This package is supposed to be installed on Anonymity Distributions.
  .
  It seamlessly integrates if the anon-ws-disable-stacked-tor package
  is installed on a Anonymity Distribution Workstations. For example it then
  allows running a unmodified Tor Browser Bundle from The Tor Project without
  Tor over Tor and with functional New Identity and about:tor.
  .
- A port of control-port-filter that was originally implemented using bash and
- ucspi-tcp tcpserver. This control-port-filter is written in Python. The
- original Python code was forked from the Tails version of control port filter.
+ This control-port-filter is written in Python. The original Python code
+ was forked from the Tails version of control port filter.
  .
  This package is produced independently of, and carries no guarantee from,
  The Tor Project.
