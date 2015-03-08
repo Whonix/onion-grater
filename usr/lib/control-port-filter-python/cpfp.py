@@ -12,12 +12,6 @@
 # If something goes wrong, an error code is returned, and
 # Torbutton will display a warning dialog that New Identity failed.
 
-# Only one application can talk through this filter proxy
-# simultaneously. A malicious application that is running as a
-# local user could use this to prevent other applications from
-# doing NEWNYM. But it could just as well rewrite the
-# TOR_CONTROL_PORT environment variable to itself or do something else.
-
 import gevent
 from gevent import socket
 from gevent.server import StreamServer
