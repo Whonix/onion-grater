@@ -99,12 +99,12 @@ def handle(sock, address):
     ## Keep accepting requests
     while True:
         ## Read in a newline terminated line
-        line = fh.readline()
-        if not line:
+        rline = fh.readline()
+        if not rline:
             break
         ## Strip escaped chars and white spaces.
         ## Convert to lowercase.
-        request = line.lower().strip()
+        request = rline.lower().strip()
 
         ## Authentication request.
         if request.startswith("authenticate"):
@@ -173,8 +173,8 @@ if __name__ == "__main__":
             for conf in files:
                 if not conf.endswith('~') and conf.count('.dpkg-') == 0:
                     logger.info('Configuration read from "%s"' % (conf))
-                    with open(conf) as f:
-                        for line in f:
+                    with open(conf) as c:
+                        for line in c:
                             if line.startswith('CONTROL_PORT_FILTER_DISABLE_FILTERING'):
                                 k, value = line.split('=')
                                 DISABLE_FILTERING = value.strip() == 'true'
@@ -203,8 +203,8 @@ if __name__ == "__main__":
 
             ## Disable limit.
             if LIMIT_STRING_LENGTH == -1:
-              # "sock.recv()" requires an argument. 64 KB, arbitrary.
-              LIMIT_STRING_LENGTH = 65536
+                # "sock.recv()" requires an argument. 64 KB, arbitrary.
+                LIMIT_STRING_LENGTH = 65536
 
             WHITELIST = RequestList.split(',')
             ## Remove last element (comma)
