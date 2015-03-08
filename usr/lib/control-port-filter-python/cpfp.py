@@ -28,15 +28,18 @@ import logging
 import signal
 import sys
 
+
 def signal_sigterm_handler():
     server.stop()
     logger.info('Signal sigterm received. Exiting.')
     sys.exit(143)
 
+
 def signal_sigint_handler():
     server.stop()
     logger.info('Signal sigint received. Exiting.')
     sys.exit(130)
+
 
 class UnexpectedAnswer(Exception):
     def __init__(self, msg):
@@ -45,6 +48,7 @@ class UnexpectedAnswer(Exception):
     def __str__(self):
         return "[UnexpectedAnswer] " + self.msg
 
+
 def do_request_real(request):
     ## Check if tor socket exists
     if not os.path.exists(SOCKET):
@@ -52,7 +56,8 @@ def do_request_real(request):
         return
 
     ## The "lie" implemented in cpfp-bash
-    if request == 'getinfo net/listeners/socks' and LIMIT_GETINFO_NET_LISTENERS_SOCKS:
+    if request == ('getinfo net/listeners/socks' and
+                    LIMIT_GETINFO_NET_LISTENERS_SOCKS):
         temp = '250-net/listeners/socks="127.0.0.1:9150"\n'
         logger.info('Lying: %s' % (temp.strip()))
         return(temp)
@@ -84,6 +89,7 @@ def do_request_real(request):
         sock.close()
         return answer
 
+
 def do_request(request):
     logger.info('Request: %s' % (request.strip()))
     ## Catch innocent exceptions, will report error instead
@@ -93,6 +99,7 @@ def do_request(request):
         return answer
     except (IOError, UnexpectedAnswer) as e:
         logger.error(e)
+
 
 def handle(sock, address):
     fh = sock.makefile()
@@ -154,13 +161,13 @@ if __name__ == "__main__":
 
     ## Default control port filer configuration
     IP = '10.152.152.10'
-    PORT =  9052
+    PORT = 9052
     SOCKET = '/var/run/tor/control'
     AUTH_COOKIE = '/var/run/tor/control.authcookie'
     DISABLE_FILTERING = False
     LIMIT_STRING_LENGTH = 16384
     LIMIT_GETINFO_NET_LISTENERS_SOCKS = True
-    WHITELIST = ['signal newnym', 'getinfo net/listeners/socks', 
+    WHITELIST = ['signal newnym', 'getinfo net/listeners/socks',
                  'getinfo status/bootstrap-phase',
                  'getinfo status/circuit-established', 'quit']
 
@@ -168,36 +175,44 @@ if __name__ == "__main__":
     if os.path.exists('/etc/cpfpy.d/'):
         files = sorted(glob.glob('/etc/cpfpy.d/*'))
 
-        if  files:
+        if files:
             RequestList = ''
             for conf in files:
                 if not conf.endswith('~') and conf.count('.dpkg-') == 0:
                     logger.info('Configuration read from "%s"' % (conf))
                     with open(conf) as c:
                         for line in c:
-                            if line.startswith('CONTROL_PORT_FILTER_DISABLE_FILTERING'):
+                            if line.startswith(
+                                'CONTROL_PORT_FILTER_DISABLE_FILTERING'):
                                 k, value = line.split('=')
                                 DISABLE_FILTERING = value.strip() == 'true'
-                            if line.startswith('CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH'):
+                            if line.startswith(
+                                'CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH'):
                                 k, value = line.split('=')
                                 LIMIT_STRING_LENGTH = int(value.strip())
-                            if line.startswith('CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS'):
+                            if line.startswith(
+                                'CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS'):
                                 k, value = line.split('=')
                                 LIMIT_GETINFO_NET_LISTENERS_SOCKS = value.strip() == 'true'
-                            if line.startswith('CONTROL_PORT_FILTER_WHITELIST'):
+                            if line.startswith(
+                                'CONTROL_PORT_FILTER_WHITELIST'):
                                 k, value = line.split('=')
                                 # concatenate values from files, add a comma
                                 RequestList = RequestList + value.strip() + ','
-                            if line.startswith('CONTROL_PORT_FILTER_PORT'):
+                            if line.startswith(
+                                'CONTROL_PORT_FILTER_PORT'):
                                 k, value = line.split('=')
                                 PORT = int(value.strip())
-                            if line.startswith('CONTROL_PORT_FILTER_IP'):
+                            if line.startswith(
+                                'CONTROL_PORT_FILTER_IP'):
                                 k, value = line.split('=')
                                 IP = str(value.strip())
-                            if line.startswith('CONTROL_PORT_SOCKET'):
+                            if line.startswith(
+                                'CONTROL_PORT_SOCKET'):
                                 k, value = line.split('=')
                                 SOCKET = str(value.strip())
-                            if line.startswith('CONTROL_PORT_AUTH_COOKIE'):
+                            if line.startswith(
+                                'CONTROL_PORT_AUTH_COOKIE'):
                                 k, value = line.split('=')
                                 AUTH_COOKIE = str(value.strip())
 
@@ -222,12 +237,14 @@ if __name__ == "__main__":
 
     ## Catch server exceptions.
     try:
-        logger.info("Trying to start Tor control port filter on IP %s port %s" % (IP, PORT))
+        logger.info("Trying to start Tor control port filter on IP %s port %s"
+                     % (IP, PORT))
         ## ACCEPT CONCURRENT CONNECTIONS.
         ## limit to 5 simultaneous connections.
         server = StreamServer((IP, PORT), handle, spawn=5)
 
-        logger.info("Tor control port filter started, listening on IP %s port %s" % (IP, PORT))
+        logger.info("Tor control port filter started, listening on IP %s port %s"
+                     % (IP, PORT))
         server.serve_forever()
 
     except Exception as e:
