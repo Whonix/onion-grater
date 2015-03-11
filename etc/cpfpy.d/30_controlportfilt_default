@@ -65,3 +65,9 @@ CONTROL_PORT_FILTER_DISABLE_FILTERING=false
 ## CONTROL_PORT_FILTER_WHITELIST #
 ##################################
 CONTROL_PORT_FILTER_WHITELIST=signal newnym,getinfo net/listeners/socks,getinfo status/bootstrap-phase,getinfo status/circuit-established,quit
+
+##############################
+# CONCURRENT_CONNECTIONS_LIMIT #
+##############################
+Limit the number of parallel connections accepted by the server
+CONCURRENT_CONNECTIONS_LIMIT=5
