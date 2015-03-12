@@ -163,7 +163,7 @@ if __name__ == "__main__":
     WHITELIST = ['signal newnym', 'getinfo net/listeners/socks',
                  'getinfo status/bootstrap-phase',
                  'getinfo status/circuit-established', 'quit']
-    CONCURRENT_CONNECTIONS_LIMIT = 5
+    CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT = 5
 
     ## Read and override configuration from files
     if os.path.exists('/etc/cpfpy.d/'):
@@ -210,9 +210,9 @@ if __name__ == "__main__":
                                 k, value = line.split('=')
                                 AUTH_COOKIE = str(value.strip())
                             if line.startswith(
-                                'CONCURRENT_CONNECTIONS_LIMIT'):
+                                'CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT'):
                                 k, value = line.split('=')
-                                CONCURRENT_CONNECTIONS_LIMIT = int(value.strip())
+                                CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT = int(value.strip())
 
             ## Disable limit.
             if LIMIT_STRING_LENGTH == -1:
@@ -239,7 +239,7 @@ if __name__ == "__main__":
                      % (IP, PORT))
         ## ACCEPT CONCURRENT CONNECTIONS.
         ## limit to 5 simultaneous connections.
-        server = StreamServer((IP, PORT), handle, spawn=CONCURRENT_CONNECTIONS_LIMIT)
+        server = StreamServer((IP, PORT), handle, spawn=CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT)
 
         logger.info("Tor control port filter started, listening on IP %s port %s"
                      % (IP, PORT))
