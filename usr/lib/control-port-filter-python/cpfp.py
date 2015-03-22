@@ -42,9 +42,11 @@ class configuration:
             files = sorted(glob.glob('/etc/cpfpy.d/*'))
 
             if files:
+                conf_found = False
                 RequestList = ''
                 for conf in files:
                     if not conf.endswith('~') and conf.count('.dpkg-') == 0:
+                        conf_found = True
                         with open(conf) as c:
                             for line in c:
                                 if line.startswith(
@@ -84,6 +86,11 @@ class configuration:
                                     'CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT'):
                                     k, value = line.split('=')
                                     self.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT = int(value.strip())
+
+                if not conf_found:
+                    self.set_default()
+                    return ('No valid file found in user configuration folder "/etc/cpfpy.d".'\
+                            ' Running with default configuration.')
 
                 ## Disable limit.
                 if self.LIMIT_STRING_LENGTH == -1:
