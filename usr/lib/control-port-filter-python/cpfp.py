@@ -49,6 +49,7 @@ class configuration:
                         conf_found = True
                         with open(conf) as c:
                             for line in c:
+                                #k, value = line.split('=')
                                 if line.startswith(
                                     'CONTROL_PORT_FILTER_DISABLE_FILTERING'):
                                     k, value = line.split('=')
