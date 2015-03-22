@@ -121,7 +121,7 @@ class configuration:
         self.PORT = 9052
         self.SOCKET = '/var/run/tor/control'
         self.AUTH_COOKIE = '/var/run/tor/control.authcookie'
-        selfDISABLE_FILTERING = False
+        self.DISABLE_FILTERING = False
         self.LIMIT_STRING_LENGTH = 16384
         self.LIMIT_GETINFO_NET_LISTENERS_SOCKS = True
         self.WHITELIST = ['signal newnym', 'getinfo net/listeners/socks',
