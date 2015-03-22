@@ -46,7 +46,6 @@ class configuration:
                 for conf in files:
                     if not conf.endswith('~') and conf.count('.dpkg-') == 0:
                         with open(conf) as c:
-                            conf_file = conf
                             for line in c:
                                 if line.startswith(
                                     'CONTROL_PORT_FILTER_DISABLE_FILTERING'):
@@ -106,8 +105,6 @@ class configuration:
             self.set_default()
             return('User configuration folder "/etc/cpfpy.d" does not exist.'\
                     ' Running with default configuration.')
-
-        return('Configuration read from "%s"' % (conf_file))
 
 
     def set_default(self):
@@ -244,7 +241,8 @@ if __name__ == "__main__":
 
     configuration = configuration()
     message = configuration.read()
-    logger.info(message)
+    if message is not None:
+        logger.warning(message)
 
     ## Catch server exceptions.
     try:
