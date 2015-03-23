@@ -35,6 +35,101 @@ def signal_sigint_handler():
     sys.exit(130)
 
 
+class configuration:
+    def read(self):
+        ## Read and override configuration from files
+        if os.path.exists('/etc/cpfpy.d/'):
+            files = sorted(glob.glob('/etc/cpfpy.d/*'))
+
+            if files:
+                conf_found = False
+                RequestList = ''
+                for conf in files:
+                    if not conf.endswith('~') and conf.count('.dpkg-') == 0:
+                        conf_found = True
+                        with open(conf) as c:
+                            for line in c:
+                                #k, value = line.split('=')
+                                if line.startswith(
+                                    'CONTROL_PORT_FILTER_DISABLE_FILTERING'):
+                                    k, value = line.split('=')
+                                    self.DISABLE_FILTERING = value.strip() == 'true'
+                                if line.startswith(
+                                    'CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH'):
+                                    k, value = line.split('=')
+                                    self.LIMIT_STRING_LENGTH = int(value.strip())
+                                if line.startswith(
+                                    'CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS'):
+                                    k, value = line.split('=')
+                                    self.LIMIT_GETINFO_NET_LISTENERS_SOCKS = value.strip() == 'true'
+                                if line.startswith(
+                                    'CONTROL_PORT_FILTER_WHITELIST'):
+                                    k, value = line.split('=')
+                                    # concatenate values from files, add a comma
+                                    RequestList = RequestList + value.strip() + ','
+                                if line.startswith(
+                                    'CONTROL_PORT_FILTER_PORT'):
+                                    k, value = line.split('=')
+                                    self.PORT = int(value.strip())
+                                if line.startswith(
+                                    'CONTROL_PORT_FILTER_IP'):
+                                    k, value = line.split('=')
+                                    self.IP = str(value.strip())
+                                if line.startswith(
+                                    'CONTROL_PORT_SOCKET'):
+                                    k, value = line.split('=')
+                                    self.SOCKET = str(value.strip())
+                                if line.startswith(
+                                    'CONTROL_PORT_AUTH_COOKIE'):
+                                    k, value = line.split('=')
+                                    self.AUTH_COOKIE = str(value.strip())
+                                if line.startswith(
+                                    'CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT'):
+                                    k, value = line.split('=')
+                                    self.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT = int(value.strip())
+
+                if not conf_found:
+                    self.set_default()
+                    return ('No valid file found in user configuration folder "/etc/cpfpy.d".'\
+                            ' Running with default configuration.')
+
+                ## Disable limit.
+                if self.LIMIT_STRING_LENGTH == -1:
+                    # "sock.recv()" requires an argument. 64 KB, arbitrary.
+                    self.LIMIT_STRING_LENGTH = 65536
+
+                self.WHITELIST = RequestList.split(',')
+                ## Remove last element (comma)
+                self.WHITELIST.pop()
+                ## Remove duplicates
+                self.WHITELIST = list(set(self.WHITELIST))
+
+            else:
+                self.set_default()
+                return('No file found in user configuration folder "/etc/cpfpy.d".'\
+                        ' Running with default configuration.')
+
+        else:
+            self.set_default()
+            return('User configuration folder "/etc/cpfpy.d" does not exist.'\
+                    ' Running with default configuration.')
+
+
+    def set_default(self):
+        ## Default control port filer configuration
+        self.IP = '10.152.152.10'
+        self.PORT = 9052
+        self.SOCKET = '/var/run/tor/control'
+        self.AUTH_COOKIE = '/var/run/tor/control.authcookie'
+        self.DISABLE_FILTERING = False
+        self.LIMIT_STRING_LENGTH = 16384
+        self.LIMIT_GETINFO_NET_LISTENERS_SOCKS = True
+        self.WHITELIST = ['signal newnym', 'getinfo net/listeners/socks',
+                    'getinfo status/bootstrap-phase',
+                    'getinfo status/circuit-established', 'quit']
+        self.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT = 5
+
+    
 class UnexpectedAnswer(Exception):
     def __init__(self, msg):
         self.msg = msg
@@ -45,26 +140,26 @@ class UnexpectedAnswer(Exception):
 
 def do_request_real(request):
     ## Check if tor socket exists
-    if not os.path.exists(SOCKET):
-        logger.critical('Tor socket: "%s" does not exist' % (SOCKET))
+    if not os.path.exists(configuration.SOCKET):
+        logger.critical('Tor socket: "%s" does not exist' % (configuration.SOCKET))
         return
 
     ## The "lie" implemented in cpfp-bash
     if request == ('getinfo net/listeners/socks' and
-                    LIMIT_GETINFO_NET_LISTENERS_SOCKS):
+                    configuration.LIMIT_GETINFO_NET_LISTENERS_SOCKS):
         temp = '250-net/listeners/socks="127.0.0.1:9150"\n'
         logger.info('Lying: %s' % (temp.strip()))
         return(temp)
 
     ## Read authentication cookie
-    with open(AUTH_COOKIE, "rb") as f:
+    with open(configuration.AUTH_COOKIE, "rb") as f:
         rawcookie = f.read(32)
         hexcookie = binascii.hexlify(rawcookie)
 
         ## Connect to the real control port
         sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         sock.settimeout(10.0)
-        sock.connect(SOCKET)
+        sock.connect(configuration.SOCKET)
         readh = sock.makefile("r")
         writeh = sock.makefile("w")
 
@@ -78,7 +173,7 @@ def do_request_real(request):
         ## Send the request
         writeh.write(request + '\n')
         writeh.flush()
-        answer = sock.recv(LIMIT_STRING_LENGTH)
+        answer = sock.recv(configuration.LIMIT_STRING_LENGTH)
 
         sock.close()
         return answer
@@ -113,12 +208,12 @@ def handle(sock, address):
             # safe requests are allowed
             fh.write("250 OK\n")
 
-        elif DISABLE_FILTERING:
+        elif configuration.DISABLE_FILTERING:
             ## Pass all requests
             answer = do_request(request)
             fh.write(answer)
 
-        elif request in WHITELIST:
+        elif request in configuration.WHITELIST:
             ## Filtering enabled
             answer = do_request(request)
             fh.write(answer)
@@ -152,97 +247,22 @@ if __name__ == "__main__":
     gevent.signal(signal.SIGTERM, signal_sigterm_handler)
     gevent.signal(signal.SIGINT, signal_sigint_handler)
 
-    ## Default control port filer configuration
-    IP = '10.152.152.10'
-    PORT = 9052
-    SOCKET = '/var/run/tor/control'
-    AUTH_COOKIE = '/var/run/tor/control.authcookie'
-    DISABLE_FILTERING = False
-    LIMIT_STRING_LENGTH = 16384
-    LIMIT_GETINFO_NET_LISTENERS_SOCKS = True
-    WHITELIST = ['signal newnym', 'getinfo net/listeners/socks',
-                 'getinfo status/bootstrap-phase',
-                 'getinfo status/circuit-established', 'quit']
-    CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT = 5
-
-    ## Read and override configuration from files
-    if os.path.exists('/etc/cpfpy.d/'):
-        files = sorted(glob.glob('/etc/cpfpy.d/*'))
-
-        if files:
-            RequestList = ''
-            for conf in files:
-                if not conf.endswith('~') and conf.count('.dpkg-') == 0:
-                    logger.info('Configuration read from "%s"' % (conf))
-                    with open(conf) as c:
-                        for line in c:
-                            if line.startswith(
-                                'CONTROL_PORT_FILTER_DISABLE_FILTERING'):
-                                k, value = line.split('=')
-                                DISABLE_FILTERING = value.strip() == 'true'
-                            if line.startswith(
-                                'CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH'):
-                                k, value = line.split('=')
-                                LIMIT_STRING_LENGTH = int(value.strip())
-                            if line.startswith(
-                                'CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS'):
-                                k, value = line.split('=')
-                                LIMIT_GETINFO_NET_LISTENERS_SOCKS = value.strip() == 'true'
-                            if line.startswith(
-                                'CONTROL_PORT_FILTER_WHITELIST'):
-                                k, value = line.split('=')
-                                # concatenate values from files, add a comma
-                                RequestList = RequestList + value.strip() + ','
-                            if line.startswith(
-                                'CONTROL_PORT_FILTER_PORT'):
-                                k, value = line.split('=')
-                                PORT = int(value.strip())
-                            if line.startswith(
-                                'CONTROL_PORT_FILTER_IP'):
-                                k, value = line.split('=')
-                                IP = str(value.strip())
-                            if line.startswith(
-                                'CONTROL_PORT_SOCKET'):
-                                k, value = line.split('=')
-                                SOCKET = str(value.strip())
-                            if line.startswith(
-                                'CONTROL_PORT_AUTH_COOKIE'):
-                                k, value = line.split('=')
-                                AUTH_COOKIE = str(value.strip())
-                            if line.startswith(
-                                'CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT'):
-                                k, value = line.split('=')
-                                CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT = int(value.strip())
-
-            ## Disable limit.
-            if LIMIT_STRING_LENGTH == -1:
-                # "sock.recv()" requires an argument. 64 KB, arbitrary.
-                LIMIT_STRING_LENGTH = 65536
-
-            WHITELIST = RequestList.split(',')
-            ## Remove last element (comma)
-            WHITELIST.pop()
-            ## Remove duplicates
-            WHITELIST = list(set(WHITELIST))
-
-        else:
-            logger.warning('No file found in user configuration folder "/etc/cpfpy.d".')
-            logger.warning('Running with default configuration.')
-
-    else:
-        logger.warning('User configuration folder "/etc/cpfpy.d" does not exist.')
-        logger.warning('Running with default configuration.')
+    configuration = configuration()
+    message = configuration.read()
+    if message is not None:
+        logger.warning(message)
 
     ## Catch server exceptions.
     try:
         logger.info("Trying to start Tor control port filter on IP %s port %s"
-                     % (IP, PORT))
+                     % (configuration.IP, configuration.PORT))
         ## ACCEPT CONCURRENT CONNECTIONS.
         ## limit to 5 simultaneous connections.
-        server = StreamServer((IP, PORT), handle, spawn=CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT)
+        server = StreamServer((configuration.IP, configuration.PORT), handle,
+                               spawn=configuration.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT)
 
         logger.info("Tor control port filter started, listening on IP %s port %s"
-                     % (IP, PORT))
+                     % (configuration.IP, configuration.PORT))
         server.serve_forever()
 
     except Exception as e:
