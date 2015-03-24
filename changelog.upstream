@@ -1,3 +1,307 @@
+commit e69333659107220b898c74333528f505317e21a5
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Mar 24 17:26:30 2015 +0000
+
+    updated makefile generic to version 1.4
+
+commit e3a9b78f84f73b7ab4bbe5270aba2faaf939256e
+Merge: 7182a6a cc43e06
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Mar 23 21:29:28 2015 +0000
+
+    Merge remote-tracking branch 'troubadoour/master'
+
+commit cc43e0684f41f134241fdf077aaf8daa3a1781a3
+Author: troubadoour <trobador@riseup.net>
+Date:   Sun Mar 22 22:27:05 2015 +0000
+
+    missing dot
+
+commit eb11f771e36075999542e7aeadac5140f32e1137
+Author: troubadoour <trobador@riseup.net>
+Date:   Sun Mar 22 22:08:39 2015 +0000
+
+    testing typo (line commented)
+
+commit baf9ab9ca537a40421a30babbbb5f749f6af5dab
+Author: troubadoour <trobador@riseup.net>
+Date:   Sun Mar 22 16:33:01 2015 +0000
+
+    default configuration if only '~' or 'dpkg' files
+
+commit 2250f3de84697368bdcd3956c84bdb3530f1ed0d
+Author: troubadoour <trobador@riseup.net>
+Date:   Sun Mar 22 16:13:49 2015 +0000
+
+    log configuration message only if error (no configuration file or folder)
+
+commit b043238d68b6ac68fd0432563de8024a9adeb789
+Author: troubadoour <trobador@riseup.net>
+Date:   Sun Mar 22 15:55:22 2015 +0000
+
+    move global variables in a class
+
+commit 7182a6aee8f72140d47ea0fce2a6b1c2438cc280
+Merge: 88ba9fd 8b3e361
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Mar 13 00:21:16 2015 +0000
+
+    Merge remote-tracking branch 'troubadoour/master'
+
+commit 8b3e361559887e5f8b89805ffd83a5b9fd79f6eb
+Author: troubadoour <trobador@riseup.net>
+Date:   Thu Mar 12 20:58:47 2015 +0000
+
+    CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT (was CONCURRENT_CONNECTIONS_LIMIT)
+
+commit 88ba9fd9d2d31fba61efb61d6e6c19c5cd78bc02
+Merge: 0317ed7 ecced26
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Mar 11 21:01:13 2015 +0000
+
+    Merge remote-tracking branch 'troubadoour/master'
+
+commit ecced265b9f4f8cf065dfdb6013989c29b63858e
+Author: troubadoour <trobador@riseup.net>
+Date:   Wed Mar 11 19:48:58 2015 +0000
+
+    number of parrallel connections as paarmeter
+
+commit 0317ed71742916c2fe8a6b0b86f862fe429bff98
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Mar 8 18:45:53 2015 +0000
+
+    logrotate support - https://phabricator.whonix.org/T227
+
+commit 0db13a5c221367644a1b963206c7ba6160765254
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Mar 8 18:17:26 2015 +0000
+
+    package description
+
+commit cf2abd9a02e48b3e337069baebdf27a6ec6b3dcc
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Mar 8 18:13:30 2015 +0000
+
+    licensing: fix path to cpfp.py
+
+commit 6a0c798c299193515a910790ffb13fac97cce182
+Merge: 6b01e6b 8c478c7
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Mar 8 16:24:07 2015 +0000
+
+    Merge remote-tracking branch 'troubadoour/master'
+
+commit 8c478c7fe6985154c20e7505d8dd4d0672888286
+Author: troubadoour <trobador@riseup.net>
+Date:   Sun Mar 8 12:02:47 2015 +0000
+
+    comments
+
+commit ca7774cdcf8e1120d36b3f6f78915f6a56abeb13
+Author: troubadoour <trobador@riseup.net>
+Date:   Sun Mar 8 11:58:58 2015 +0000
+
+    adjustments for pep8
+
+commit a570197958777431384b377863955cdeafd327f9
+Author: troubadoour <trobador@riseup.net>
+Date:   Sun Mar 8 10:03:15 2015 +0000
+
+    adjustments for pylint
+
+commit 05d5ed43f71db54634af945b70de9e6feb34b738
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Mar 7 22:35:59 2015 +0000
+
+    cleanup
+
+commit e114d9e6a4f9621c2e9198495436a95a432a2d98
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Mar 7 22:31:41 2015 +0000
+
+    cleanup, comments
+
+commit a35421cfadace355a288beaa736c73d669e1a414
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Mar 7 21:46:13 2015 +0000
+
+    four spaces indentation
+
+commit 6b01e6bd5112375531fe7c848445a871fad9c3c8
+Merge: a3411d8 ef69916
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Mar 6 22:47:37 2015 +0000
+
+    Merge remote-tracking branch 'troubadoour/master'
+
+commit ef69916111a4c24780623b0dd6be42c2f88796da
+Author: troubadoour <trobador@riseup.net>
+Date:   Fri Mar 6 20:33:37 2015 +0000
+
+    gevent signal. cleanup on exiting.
+
+commit a3411d82462a247aee4765074ca650cda33dfa24
+Merge: d5439ba 1ced24c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Mar 6 17:17:14 2015 +0000
+
+    Merge remote-tracking branch 'troubadoour/master'
+
+commit 1ced24c78bc83c7502b5fe8be704e1fa78a83f7e
+Author: troubadoour <trobador@riseup.net>
+Date:   Fri Mar 6 16:52:51 2015 +0000
+
+    dependencies
+
+commit 9447486676f8720e444b330b28dbf2e40d3e5362
+Author: troubadoour <trobador@riseup.net>
+Date:   Fri Mar 6 16:05:58 2015 +0000
+
+    accept parallel connections
+
+commit 4fd944156a3c7690449b14b805af0c8869ded71f
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Mar 5 23:08:58 2015 +0000
+
+    misc debugging
+
+commit d5439ba0817d2d7ce8b5f8ed9ac694e7cb6d017b
+Merge: fdc656e d2d3b95
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Mar 5 21:53:10 2015 +0000
+
+    Merge remote-tracking branch 'troubadoour/master'
+
+commit d2d3b95e305a902ef79d170c1b5d1f97449f5f19
+Author: troubadoour <trobador@riseup.net>
+Date:   Thu Mar 5 21:40:10 2015 +0000
+
+    cpfp case insensitive
+
+commit e658a117569a0f49c9d83761c6338437907ee668
+Author: troubadoour <trobador@riseup.net>
+Date:   Thu Mar 5 21:08:09 2015 +0000
+
+    remove CONTROL_PORT_FILTER_PROXY from control-port-filter-python config file
+
+commit fdc656eea0d1c17b614aa87a4d6937cba2908f2a
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Mar 5 20:36:58 2015 +0000
+
+    comment
+
+commit b6f391121ec0992c755d465723866349bfec9826
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Mar 5 20:36:13 2015 +0000
+
+    shuffle
+
+commit d56136008395956127094e87fb6794f645d7fcc3
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Mar 5 20:35:40 2015 +0000
+
+    config file fixes
+
+commit 64373d2df81bf52e9ddd26dd11f51b62e91b9a9d
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Mar 5 20:09:00 2015 +0000
+
+    - bumped debhelper build depends from 8 to 9
+    - removed unnecessary dependency on config-package-dev
+    - added faketime dependency
+    - added dependency python (>= 2.6) to fix lintian warning
+
+commit ceda2b02da46fd899a3200f057593c356f701339
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Feb 16 10:33:42 2015 +0000
+
+    bumped debian/compat version from 8 to 9
+
+commit 22270c574210c67329b60ea3381e9a364e379212
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Feb 10 01:49:41 2015 +0000
+
+    init script: fixed "sudo service control-port-filter-python status"
+
+commit 164812a565dfe3baa18ccf3f4c49895b368d39f3
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Feb 10 01:24:20 2015 +0000
+
+    debian/control: added "Uploaders: Patrick Schleizer <adrelanos@riseup.net>" to fix lintian warnings "W: control-port-filter-python source: changelog-should-mention-nmu" and "W: control-port-filter-python source: source-nmu-has-incorrect-version-number 3:0.3-1"
+
+commit 8b47bc0f323ca836797223d0480b65fe2a5182ce
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Feb 10 01:18:57 2015 +0000
+
+    debian/control: added "Pre-Depends: tor" so user and group "debian-tor" exist
+
+commit f82cd0873f30808ef42bca1fee973c4f344301b7
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Feb 10 01:15:10 2015 +0000
+
+    debian/control: added "Conflicts: control-port-filter" to allow smooth upgrading
+
+commit be78ae7844603ad7fbd39677b16f5b7b434869a4
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Feb 10 00:55:30 2015 +0000
+
+    log own pid rather than random unique uid - https://phabricator.whonix.org/T154
+
+commit 455dff33af4abd54f8ea61ada03accd5848ebfa5
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Feb 10 00:48:38 2015 +0000
+
+    log when signal sigterm or sigint received and exit
+
+commit 22fa5085008dfab47d94a0bd93d4412474bea40b
+Merge: cb3017b 90836de
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 6 23:53:33 2015 +0000
+
+    Merge branch 'x'
+
+commit 90836dec08a0eea9232455d7ff9874989a8f042d
+Merge: cb3017b bc4373a
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 6 23:52:30 2015 +0000
+
+    Merge remote-tracking branch 'origin/master' into x
+    
+    Removed Conflicts:
+    	man/cpfpy.8.ronn
+    	usr/bin/cpfpy
+
+commit cb3017ba257aa581ed0ca8e9a0a5db86e5ea4b1c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 6 23:41:16 2015 +0000
+
+    added init script and changed log destination
+
+commit 324c0fcc4c3c607afa33ff7dc6b12bc250fcb260
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 6 23:23:43 2015 +0000
+
+    moved from usr/lib/cpfp.py to usr/lib/control-port-filter-python/cpfp.py
+
+commit ccb330030c2a6a5b8c59432d4e29a718819a457d
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 6 23:22:11 2015 +0000
+
+    deleted man/controlportfilt.8.ronn and usr/bin/controlportfilt because no longer necessary for this python version
+
+commit 5c202460057dd6ec7bd8d1260633d4e5ca95b06f
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 6 23:21:17 2015 +0000
+
+    comments
+
+commit fb43f93b39f08f0483d1a9dbee0c0668cac7aaa1
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 6 23:14:46 2015 +0000
+
+    added changelog.upstream
+
 commit c4d0e428cc26d62c96eae5bcc33d7e24f9af801c
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Feb 6 23:14:20 2015 +0000
@@ -9,6 +313,12 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Feb 6 23:13:58 2015 +0000
 
     updated makefile
+
+commit bc4373a904984edb5968aa2ccb3846b87e0a30cb
+Author: troubadoour <trobador@riseup.net>
+Date:   Sat Jan 10 19:26:43 2015 +0000
+
+    renaming files.
 
 commit 31c8eb1f48eb6edbbff8734695794f51587f6428
 Merge: 090c719 f872414
