@@ -51,33 +51,33 @@ class configuration:
                             for line in c:
                                 if '=' in line:
                                     k, value = line.split('=')
-                                    if line.startswith(
-                                        'CONTROL_PORT_FILTER_DISABLE_FILTERING'):
+
+                                    if k == 'CONTROL_PORT_FILTER_DISABLE_FILTERING':
                                         self.DISABLE_FILTERING = value.strip() == 'true'
-                                    if line.startswith(
-                                        'CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH'):
+
+                                    if k == 'CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH':
                                         self.LIMIT_STRING_LENGTH = int(value.strip())
-                                    if line.startswith(
-                                        'CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS'):
+
+                                    if k ==  'CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS':
                                         self.LIMIT_GETINFO_NET_LISTENERS_SOCKS = value.strip() == 'true'
-                                    if line.startswith(
-                                        'CONTROL_PORT_FILTER_WHITELIST'):
+
+                                    if k == 'CONTROL_PORT_FILTER_WHITELIST':
                                         # concatenate values from files, add a comma
                                         RequestList = RequestList + value.strip() + ','
-                                    if line.startswith(
-                                        'CONTROL_PORT_FILTER_PORT'):
+
+                                    if k == 'CONTROL_PORT_FILTER_PORT':
                                         self.PORT = int(value.strip())
-                                    if line.startswith(
-                                        'CONTROL_PORT_FILTER_IP'):
+
+                                    if k == 'CONTROL_PORT_FILTER_IP':
                                         self.IP = str(value.strip())
-                                    if line.startswith(
-                                        'CONTROL_PORT_SOCKET'):
+
+                                    if k == 'CONTROL_PORT_SOCKET':
                                         self.SOCKET = str(value.strip())
-                                    if line.startswith(
-                                        'CONTROL_PORT_AUTH_COOKIE'):
+
+                                    if k == 'CONTROL_PORT_AUTH_COOKIE':
                                         self.AUTH_COOKIE = str(value.strip())
-                                    if line.startswith(
-                                        'CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT'):
+
+                                    if k == 'CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT':
                                         self.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT = int(value.strip())
 
                 if not conf_found:
