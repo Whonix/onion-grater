@@ -49,44 +49,36 @@ class configuration:
                         conf_found = True
                         with open(conf) as c:
                             for line in c:
-                                #k, value = line.split('=')
-                                if line.startswith(
-                                    'CONTROL_PORT_FILTER_DISABLE_FILTERING'):
+                                if '=' in line:
                                     k, value = line.split('=')
-                                    self.DISABLE_FILTERING = value.strip() == 'true'
-                                if line.startswith(
-                                    'CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH'):
-                                    k, value = line.split('=')
-                                    self.LIMIT_STRING_LENGTH = int(value.strip())
-                                if line.startswith(
-                                    'CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS'):
-                                    k, value = line.split('=')
-                                    self.LIMIT_GETINFO_NET_LISTENERS_SOCKS = value.strip() == 'true'
-                                if line.startswith(
-                                    'CONTROL_PORT_FILTER_WHITELIST'):
-                                    k, value = line.split('=')
-                                    # concatenate values from files, add a comma
-                                    RequestList = RequestList + value.strip() + ','
-                                if line.startswith(
-                                    'CONTROL_PORT_FILTER_PORT'):
-                                    k, value = line.split('=')
-                                    self.PORT = int(value.strip())
-                                if line.startswith(
-                                    'CONTROL_PORT_FILTER_IP'):
-                                    k, value = line.split('=')
-                                    self.IP = str(value.strip())
-                                if line.startswith(
-                                    'CONTROL_PORT_SOCKET'):
-                                    k, value = line.split('=')
-                                    self.SOCKET = str(value.strip())
-                                if line.startswith(
-                                    'CONTROL_PORT_AUTH_COOKIE'):
-                                    k, value = line.split('=')
-                                    self.AUTH_COOKIE = str(value.strip())
-                                if line.startswith(
-                                    'CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT'):
-                                    k, value = line.split('=')
-                                    self.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT = int(value.strip())
+
+                                    if k == 'CONTROL_PORT_FILTER_DISABLE_FILTERING':
+                                        self.DISABLE_FILTERING = value.strip() == 'true'
+
+                                    if k == 'CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH':
+                                        self.LIMIT_STRING_LENGTH = int(value.strip())
+
+                                    if k ==  'CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS':
+                                        self.LIMIT_GETINFO_NET_LISTENERS_SOCKS = value.strip() == 'true'
+
+                                    if k == 'CONTROL_PORT_FILTER_WHITELIST':
+                                        # concatenate values from files, add a comma
+                                        RequestList = RequestList + value.strip() + ','
+
+                                    if k == 'CONTROL_PORT_FILTER_PORT':
+                                        self.PORT = int(value.strip())
+
+                                    if k == 'CONTROL_PORT_FILTER_IP':
+                                        self.IP = str(value.strip())
+
+                                    if k == 'CONTROL_PORT_SOCKET':
+                                        self.SOCKET = str(value.strip())
+
+                                    if k == 'CONTROL_PORT_AUTH_COOKIE':
+                                        self.AUTH_COOKIE = str(value.strip())
+
+                                    if k == 'CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT':
+                                        self.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT = int(value.strip())
 
                 if not conf_found:
                     self.set_default()
@@ -256,8 +248,7 @@ if __name__ == "__main__":
     try:
         logger.info("Trying to start Tor control port filter on IP %s port %s"
                      % (configuration.IP, configuration.PORT))
-        ## ACCEPT CONCURRENT CONNECTIONS.
-        ## limit to 5 simultaneous connections.
+        ## Accept concurrent connections.
         server = StreamServer((configuration.IP, configuration.PORT), handle,
                                spawn=configuration.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT)
 
