@@ -1,34 +1,33 @@
-# Control Port Filter Proxy #
+# Whitelisting filter for dangerous Tor control protocol commands #
 
- Filters out Tor control protocol commands that are dangerous for anonymity
- such as GETINFO ADDRESS using a whitelist. Acts as a proxy between the client
- application and Tor.
- .
- For example it allows using Tor Browser's New Identity feature on Anonymity
- Distribution Workstations, fixes Tor Browser's about:tor default homepage and
- Tor Button status indicator without exposing commands that are dangerous for
- anonymity.
- .
- This package is supposed to be installed on Anonymity Distribution Gateways.
- .
- It seamlessly integrates if the anon-ws-disable-stacked-tor package
- is installed on a Anonymity Distribution Workstations. For example it then
- allows running a unmodified Tor Browser Bundle from The Tor Project without
- Tor over Tor and with functional New Identity and about:tor.
- .
- A port of control-port-filter that was originally implemented using bash and
- ucspi-tcp tcpserver. This control-port-filter is written in Python. The
- original Python code was forked from the Tails version of control port filter.
- .
- This package is produced independently of, and carries no guarantee from,
- The Tor Project.
+Filters out Tor control protocol commands that are dangerous for anonymity
+such as GETINFO ADDRESS using a whitelist. Acts as a proxy between the client
+application and Tor.
+
+For example it allows using Tor Browser's New Identity feature on Anonymity
+Distribution Workstations, fixes Tor Browser's about:tor default homepage and
+Tor Button status indicator without exposing commands that are dangerous for
+anonymity.
+
+This package is supposed to be installed on Anonymity Distributions.
+
+It seamlessly integrates if the anon-ws-disable-stacked-tor package
+is installed on a Anonymity Distribution Workstations. For example it then
+allows running a unmodified Tor Browser Bundle from The Tor Project without
+Tor over Tor and with functional New Identity and about:tor.
+
+This control-port-filter is written in Python. The original Python code
+was forked from the Tails version of control port filter.
+
+This package is produced independently of, and carries no guarantee from,
+The Tor Project.
 
 (This package description has been [automatically](https://github.com/Whonix/whonix-developer-meta-files/blob/master/debug-steps/packaging-helper-script) extracted and mirrored from `debian/control`.)
 
 # Generic Readme #
 ## Readme Version ##
 
-[Generic Readme](https://github.com/Whonix/whonix-developer-meta-files/blob/master/README_generic.md) Version 0.2
+[Generic Readme](https://github.com/Whonix/whonix-developer-meta-files/blob/master/README_generic.md) Version 0.3
 
 ## Cooperating Anonymity Distributions ##
 
@@ -36,11 +35,7 @@
 
 The functionality of this package was once exclusively available in the [Whonix](https://www.whonix.org) ([github](https://github.com/Whonix/Whonix)) anonymity distribution.
 
-Since multiple projects and individuals stated interest in various of Whonix's functionality (examples: [Qubes OS](http://qubes-os.org/trac) ([discussion](https://groups.google.com/forum/#!topic/qubes-devel/jxr89--oGs0)); [piratelinux](https://github.com/piratelinux) ([discussion](https://github.com/adrelanos/VPN-Firewall/commit/6147f0e606377f5a801e98daf22e24ba2c750a21#commitcomment-6360713))) and because it's better to share certain characteristics [(such as /etc/hostname etc.) among all anonymity distributions](https://mailman.boum.org/pipermail/tails-dev/2013-January/002457.html)), as much source code as possible, Whonix [is split](https://github.com/Whonix/Whonix/issues/40) into [multiple standalone packages](https://github.com/Whonix) ([list](https://github.com/Whonix/Whonix/issues/40#issuecomment-44753572)).
-
-## Work in Progress ##
-
-While the functionality of the original source code of this package has been tested and found to be stable in Whonix, it still is a work in progress. Split of Whonix is not done yet. Packaging is unfinished. Functionality has not been tested outside of Whonix yet. This is a fully untested early pre-release allowing further [discussion](https://github.com/Whonix/Whonix/issues/40) on how various anonymity distributions can be best standardized and share as much source code as possible.
+Because multiple projects and individuals stated interest in various of Whonix's functionality (examples: [Qubes OS](http://qubes-os.org/trac) ([discussion](https://groups.google.com/forum/#!topic/qubes-devel/jxr89--oGs0)); [piratelinux](https://github.com/piratelinux) ([discussion](https://github.com/adrelanos/VPN-Firewall/commit/6147f0e606377f5a801e98daf22e24ba2c750a21#commitcomment-6360713))), it's best to share as much source code as possible, it's best to share certain characteristics [(such as /etc/hostname etc.) among all anonymity distributions](https://mailman.boum.org/pipermail/tails-dev/2013-January/002457.html)) Whonix has been split into [multiple separate packages](https://github.com/Whonix).
 
 ## Generic Packaging ##
 
@@ -61,7 +56,33 @@ See comments below and [instructions](https://www.whonix.org/wiki/Dev/Build_Docu
 
 ## How to install in Debian using apt-get ##
 
-Binary packages will later be available in Whonix's APT repository. By no means you're required to use the binary version of this package. This might be interesting for users of Debian and derivatives.
+Binary packages are available in Whonix's APT repository. By no means you are required to use the binary version of this package. This might be interesting for users of Debian and derivatives. **Note, that usage of this package outside of Whonix is untested and there is no maintainer that supports this use case.**
+
+1\. Get [Whonix's Signing Key](https://www.whonix.org/wiki/Whonix_Signing_Key).
+
+2\. Add Whonix's Signing Key to apt-key.
+
+```
+gpg --export 916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA | sudo apt-key add -
+```
+
+3\. Add Whonix's APT repository.
+
+```
+echo "deb http://sourceforge.net/projects/whonixdevelopermetafiles/files/internal/ wheezy main" > /etc/apt/sources.list.d/whonix.list
+```
+
+4\. Update your package lists.
+
+```
+sudo apt-get update
+```
+
+5\. Install this package. Replace `package-name` with the actual name of this package.
+
+```
+sudo apt-get install package-name
+```
 
 ## Cooperation ##
 
