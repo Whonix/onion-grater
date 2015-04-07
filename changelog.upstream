@@ -1,3 +1,52 @@
+commit aa7bbc98c063667c96739f9ae70480f175431b78
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Apr 2 18:41:09 2015 +0000
+
+    added genmkfile to Build-Depends
+
+commit f0e1824365d00c7734b3e50a7a80915d04bf4183
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Apr 2 17:24:31 2015 +0000
+
+    updated makefile generic to version 1.5
+
+commit d8e1d5711d2a71a9ab638c03e84a0d9b48d7ae48
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Apr 2 16:00:19 2015 +0000
+
+    added systemd service - https://phabricator.whonix.org/T106
+
+commit be292e810ab4f1986135946a79e04d893f3aeab0
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Apr 1 16:53:07 2015 +0000
+
+    updated readme
+
+commit 3f971f644c3ca317414e2f94050ee08b7bdf8e24
+Merge: 9db1fe1 8201de3
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Mar 29 19:03:31 2015 +0000
+
+    Merge remote-tracking branch 'troubadoour/master'
+
+commit 8201de3fb0c6fe6902011733f83bcfc0fa240934
+Author: troubadoour <trobador@riseup.net>
+Date:   Fri Mar 27 21:23:14 2015 +0000
+
+    replace "line.startswith()" with 'k'
+
+commit 98151e803dda34b9c567399c857225baebd6c849
+Author: troubadoour <trobador@riseup.net>
+Date:   Thu Mar 26 21:43:22 2015 +0000
+
+    remove redundant "k, value = line.split('=')" lines
+
+commit 9db1fe1f99366ed2a316722037af9436cc793449
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Mar 24 17:36:25 2015 +0000
+
+    bumped changelog version
+
 commit e69333659107220b898c74333528f505317e21a5
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Mar 24 17:26:30 2015 +0000
