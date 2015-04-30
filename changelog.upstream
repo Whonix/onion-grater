@@ -1,3 +1,45 @@
+commit ad063907765453494e18a668dbb6b17e4a9e7a1c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Apr 30 15:09:06 2015 +0000
+
+    added dh-python to build dependencies
+
+commit e4b3099f15786c4e7298cfec743824e624a15f24
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Apr 30 14:47:41 2015 +0000
+
+    ported to systemd
+
+commit 48932339f2f4a1945e69a1d13d27050c285e0131
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Apr 28 16:54:45 2015 +0000
+
+    packaging, use debhelper with python2 to fix lintian warning
+
+commit 1910037c82be65cc7a1f08235d4097b18d575cc8
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Apr 28 13:43:09 2015 +0000
+
+    added debian/source/lintian-overrides with debian-watch-may-check-gpg-signature to fix lintian warning - https://phabricator.whonix.org/T277
+
+commit a2e90c836daa554e4122aa360313009998be0c29
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Apr 27 14:05:25 2015 +0000
+
+    lintian warning copyright fix
+
+commit 309205215a09a10af97eddfb36696a2f8d9c25c6
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Apr 26 23:15:57 2015 +0000
+
+    packaging, bumped Standards-Version from 3.9.4 to 3.9.6 for jessie support
+
+commit cec0c80a3049ab24e965fbac7a007d147466d1b4
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Apr 7 17:41:38 2015 +0000
+
+    bumped changelog version
+
 commit aa7bbc98c063667c96739f9ae70480f175431b78
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Apr 2 18:41:09 2015 +0000
