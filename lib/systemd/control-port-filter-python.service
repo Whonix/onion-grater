@@ -7,8 +7,11 @@ Description=Whitelisting filter for dangerous Tor control protocol commands
 Documentation=https://www.whonix.org/wiki/Dev/Control_Port_Filter_Proxy
 
 [Service]
-Type=simple
-ExecStart=/usr/lib/control-port-filter-python/cpfp.py
+Type=forking
+PIDFile=/var/run/control-port-filter-python/pid
+ExecStart=/usr/sbin/cpfpd start
+ExecStop=/usr/sbin/cpfp stop
+ExecReload=/usr/sbin/cpfpd restart
 User=debian-tor
 Group=debian-tor
 
