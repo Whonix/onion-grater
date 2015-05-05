@@ -20,7 +20,7 @@ License: GPL-3+
  License version 3 can be found in the file
  `/usr/share/common-licenses/GPL-3'.
 
-Files: usr/lib/control-port-filter-python/cpfp.py
+Files: usr/sbin/cpfpd
 Copyright: (C) Amnesia <amnesia at boum dot org>
            (C) 2014 troubadour <trobador@riseup.net>
            (C) 2014 Patrick Schleizer <adrelanos@riseup.net>
