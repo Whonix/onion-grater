@@ -1,19 +1,39 @@
 ## This file is part of Whonix.
-## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
+## Copyright (C) 2012 - 2015 Patrick Schleizer <adrelanos@riseup.net>
 ## See the file COPYING for copying conditions.
 
 [Unit]
-Description=Whitelisting filter for dangerous Tor control protocol commands
-Documentation=https://www.whonix.org/wiki/Dev/Control_Port_Filter_Proxy
+Description = Control Port Filter Proxy
+ConditionPathExists = /usr/sbin/cpfpd
+After = remote-fs.target syslog.target network.target
 
 [Service]
-Type=forking
-PIDFile=/var/run/control-port-filter-python/pid
-ExecStart=/usr/sbin/cpfpd start
-ExecStop=/usr/sbin/cpfp stop
-ExecReload=/usr/sbin/cpfpd restart
-User=debian-tor
-Group=debian-tor
+Type = forking
+
+## Run ExecStartPre with root-permissions
+PermissionsStartOnly=true
+ExecStartPre = /usr/lib/anon-shared-helper-scripts/torsocks-remove-ld-preload
+#ExecStartPre = /bin/touch /var/log/%p.log 
+ExecStartPre = /bin/touch /var/log/%p.log ; /bin/chown --recursive  debian-tor:debian-tor /var/log/%p.log
+PIDFile = /var/run/%p/pid
+
+## Run ExecStart with User=debian-tor / Group=debian-tor
+#User = debian-tor
+#Group = debian-tor
+ExecStart = /usr/sbin/cpfpd start
+
+TimeoutSec = 30
+Restart = always
+StandardOutput = syslog
+
+## TODO: Watchdog disabled.  cpfpd would need to implement the sd_notify protocol
+# WatchdogSec = 1m
+
+##
+## Hardening
+##
+
+PrivateTmp=yes
 
 [Install]
 WantedBy=multi-user.target
