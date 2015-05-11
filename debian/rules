@@ -11,7 +11,7 @@
 
 override_dh_installchangelogs:
 	dh_installchangelogs changelog.upstream upstream
-	
+
 override_dh_install:
 	make manpages
 	dh_installman $(CURDIR)/debian/tmp-man/*
