@@ -125,8 +125,6 @@ class ControlPortFilter():
         self.stdin_path = '/dev/null'
         self.stdout_path = '/dev/null'
         self.stderr_path = '/dev/null'
-        if not os.path.exists('/var/run/control-port-filter-python'):
-            os.mkdir('/var/run/control-port-filter-python')
         self.pidfile_path =  '/var/run/control-port-filter-python/pid'
         self.pidfile_timeout = 5
 

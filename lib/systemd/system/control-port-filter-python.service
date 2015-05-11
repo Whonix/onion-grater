@@ -9,22 +9,24 @@ After = remote-fs.target syslog.target network.target
 
 [Service]
 Type = forking
+User = debian-tor
+Group = debian-tor
 
 ## Run ExecStartPre with root-permissions
 PermissionsStartOnly=true
 ExecStartPre = /usr/lib/anon-shared-helper-scripts/torsocks-remove-ld-preload
-#ExecStartPre = /bin/touch /var/log/%p.log 
+ExecStartPre = /bin/mkdir -p /var/run/%p
+ExecStartPre = /bin/chown --recursive debian-tor:debian-tor /var/run/%p
 ExecStartPre = /bin/touch /var/log/%p.log ; /bin/chown --recursive  debian-tor:debian-tor /var/log/%p.log
-PIDFile = /var/run/%p/pid
 
 ## Run ExecStart with User=debian-tor / Group=debian-tor
-#User = debian-tor
-#Group = debian-tor
 ExecStart = /usr/sbin/cpfpd start
+PIDFile = /var/run/%p/pid
 
 TimeoutSec = 30
 Restart = always
 StandardOutput = syslog
+StandardError = syslog
 
 ## TODO: Watchdog disabled.  cpfpd would need to implement the sd_notify protocol
 # WatchdogSec = 1m
