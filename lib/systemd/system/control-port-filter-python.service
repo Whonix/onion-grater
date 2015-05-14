@@ -11,14 +11,6 @@ After = remote-fs.target syslog.target network.target
 Type = simple
 User = debian-tor
 Group = debian-tor
-
-## Run ExecStartPre with root-permissions
-PermissionsStartOnly=true
-ExecStartPre = /bin/mkdir -p /run/%p
-ExecStartPre = /bin/chown --recursive debian-tor:debian-tor /var/run/%p
-ExecStartPre = /bin/touch /var/log/%p.log ; /bin/chown --recursive  debian-tor:debian-tor /var/log/%p.log
-
-## Run ExecStart with User=debian-tor / Group=debian-tor
 ExecStart = /usr/sbin/cpfpd start
 PIDFile = /run/%p/pid
 
