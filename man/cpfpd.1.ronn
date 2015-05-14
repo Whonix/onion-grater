@@ -22,13 +22,13 @@ Whitelisting filter for dangerous Tor control protocol commands
 Filters out Tor control protocol commands that are dangerous for anonymity
 such as GETINFO ADDRESS using a whitelist. Acts as a proxy between the client
 application and Tor.
-.
+
 For example it allows using Tor Browser's New Identity feature on Anonymity
 Distribution Workstations, fixes Tor Browser's about:tor default homepage and
 Tor Button status indicator without exposing commands that are dangerous for
 anonymity.
 
-cpfpd is run as a deamon and the start|stop|restart|status options are
+cpfpd is run as a daemon and the start|stop|restart|status options are
 handled by systemd (control-port-filter-python.service).
 
 ## AUTHOR
