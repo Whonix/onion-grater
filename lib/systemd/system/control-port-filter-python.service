@@ -13,6 +13,7 @@ User = debian-tor
 Group = debian-tor
 ExecStart = /usr/sbin/cpfpd start
 PIDFile = /run/%p/pid
+SuccessExitStatus = 143
 
 TimeoutSec = 30
 Restart = always
