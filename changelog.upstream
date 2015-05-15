@@ -1,3 +1,149 @@
+commit 11e2cb5fc61a341ec8eff8bbb8086b577e6387b6
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu May 14 23:01:15 2015 +0000
+
+    systemd unit: added 'SuccessExitStatus = 143' so when systemd stopped the service it will consider it terminated with status success rather than failure - https://phabricator.whonix.org/T274
+
+commit 78c0a49b0450152daee1446892d4de1607525e4c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu May 14 23:01:03 2015 +0000
+
+    systemd unit file: replaced ExecStartPre touch/mkdir stuff with usr/lib/tmpfiles.d mechanism - https://phabricator.whonix.org/T274
+
+commit 6f6734588381a4129e4209b4bee86ba5e1fe0bdb
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu May 14 22:52:34 2015 +0000
+
+    systemd unit: removed "ExecStartPre = /usr/lib/anon-shared-helper-scripts/torsocks-remove-ld-preload" - Doesn't work with systemd and also not required. - https://phabricator.whonix.org/T274
+
+commit f211d6074313c789a866981d2cbd470bb1b6684d
+Merge: 34d1bc3 133be44
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu May 14 22:37:41 2015 +0000
+
+    Merge remote-tracking branch 'troubadoour/master'
+
+commit 133be441d1d234b51bda1c03f50da2e1b2813f1f
+Merge: 9f80d19 34d1bc3
+Author: troubadoour <trobador@riseup.net>
+Date:   Thu May 14 20:38:53 2015 +0000
+
+    Merge remote-tracking branch 'origin/master'
+
+commit 9f80d19f778a5d6d047b1fe24212905f8b003c28
+Author: troubadoour <trobador@riseup.net>
+Date:   Thu May 14 20:33:49 2015 +0000
+
+    Type = simple
+
+commit 34d1bc3ab6faa3c4c19f0bedfeaa491abf886490
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon May 11 11:18:00 2015 +0000
+
+    minor formatting
+
+commit d6c62e9625ae41ceeb1e15f501b0513b1c6c9ca8
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon May 11 11:10:25 2015 +0000
+
+    fixed man page
+
+commit 4d4e4c30bb0862d46f651a09329f9e88f3235489
+Merge: 6f9f769 ec16d0d
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon May 11 11:09:08 2015 +0000
+
+    Merge remote-tracking branch 'troubadoour/master'
+
+commit ec16d0d4906ecc278a7644c6c48a8df27aa89d48
+Author: troubadoour <trobador@riseup.net>
+Date:   Sun May 10 20:54:49 2015 +0000
+
+    group /user -> debian-tor. Create pid directory in systemd.
+
+commit 257a133aa04625b1bc2ef2f8ffa08564f8839b2e
+Author: troubadoour <trobador@riseup.net>
+Date:   Sun May 10 20:44:43 2015 +0000
+
+    man page
+
+commit 6f9f769593b2e083fa9ff29f3afc35496ec7b442
+Merge: f8719a3 5a06efa
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat May 9 15:13:58 2015 +0000
+
+    Merge remote-tracking branch 'troubadoour/master'
+
+commit 5a06efa8cad9c23734963740400784b376a8ec82
+Author: troubadoour <trobador@riseup.net>
+Date:   Fri May 8 20:17:45 2015 +0000
+
+    control-port-filter-python.service comment out user/group debian-tor
+
+commit f0eedc86739fb2524be35fe29fa92dbc30f9e80a
+Author: troubadoour <trobador@riseup.net>
+Date:   Thu May 7 20:16:17 2015 +0000
+
+    create /var/run/control-port-filter-python directory
+
+commit baf8eaa1bb891343bd6ac6aa5fc51e2f7673f833
+Author: troubadoour <trobador@riseup.net>
+Date:   Tue May 5 19:13:24 2015 +0000
+
+    copyright
+
+commit 9226b2923034e011a994941d37578e6a93720e3f
+Author: troubadoour <trobador@riseup.net>
+Date:   Mon May 4 21:19:37 2015 +0000
+
+    stdout stderr > /dev/null
+
+commit f8719a3d403682691e8e68d097dcc4ed07de2700
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun May 3 22:20:19 2015 +0000
+
+    fixed path lib/systemd/control-port-filter-python.service -> lib/systemd/system/control-port-filter-python.service
+
+commit 0be3fcb5f51f6e66fca399141d031aeca57c234d
+Merge: 5c886a6 5683400
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun May 3 21:31:51 2015 +0000
+
+    Merge remote-tracking branch 'troubadoour/master' into mtest
+    
+    Conflicts:
+    	etc/init.d/control-port-filter-python
+
+commit 56834009d345861e381d4316bdabdfe0b8f18ace
+Author: troubadoour <trobador@riseup.net>
+Date:   Sun May 3 20:49:13 2015 +0000
+
+    debian/control
+
+commit e5a376f03aa80810af0078e4dd5222eba5b36b6f
+Author: troubadoour <trobador@riseup.net>
+Date:   Sun May 3 19:34:41 2015 +0000
+
+    modify /lib/systemd/control-port-filter-python.service
+
+commit a7875d45b79a600c40ebb1ccfbed05a78c9d80ca
+Author: troubadoour <trobador@riseup.net>
+Date:   Sun May 3 19:32:04 2015 +0000
+
+    modify /etc/init.d/control-port-filter-python
+
+commit d7d5839ce50b7dc9c3d64cb84b644bda63ef6051
+Author: troubadoour <trobador@riseup.net>
+Date:   Sun May 3 19:14:01 2015 +0000
+
+    -cpfp.py + cpfpd
+
+commit 5c886a6ab98d4b9bddfb75163b9cc5694fae1f8d
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Apr 30 17:56:14 2015 +0000
+
+    bumped changelog version
+
 commit ad063907765453494e18a668dbb6b17e4a9e7a1c
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Apr 30 15:09:06 2015 +0000
