@@ -12,18 +12,17 @@
 # If something goes wrong, an error code is returned, and
 # Torbutton will display a warning dialog that New Identity failed.
 
-#import daemon
+import daemon
 from daemon import runner
-#import gevent
-#from gevent import socket
-#from gevent.server import StreamServer
+import gevent
+from gevent import socket
+from gevent.server import StreamServer
 import binascii
 import os
 import glob
 import logging
 import signal
 import sys
-import time
 
 
 class Configuration:
@@ -132,17 +131,7 @@ class ControlPortFilter():
         logger.warning('Signal sigterm received. Exiting.')
         sys.exit(143)
 
-    #def signal_sigint_handler(self):
-        #logger.warning('Signal sigint received. Exiting.')
-        #sys.exit(130)
-
     def do_request_real(self, request):
-        # gevent has to be imported after the daemon starts because the
-        # event loop is started as soon as the module is imported.
-        # This conflicts with the daemon.
-        # Should be solved in jessie with python-gevent 1.0.1
-        from gevent import socket
-
         # Check if tor socket exists
         if not os.path.exists(self.configuration.SOCKET):
             logger.critical('Tor socket: "%s" does not exist' % (self.configuration.SOCKET))
@@ -233,12 +222,7 @@ class ControlPortFilter():
         fh.flush()
 
     def run(self):
-        # See comment in do_request_real.
-        import gevent
-        from gevent.server import StreamServer
-
         gevent.signal(signal.SIGTERM, self.signal_sigterm_handler)
-        #gevent.signal(signal.SIGINT, self.signal_sigint_handler)
 
         self.configuration = Configuration()
         message = self.configuration.read()
