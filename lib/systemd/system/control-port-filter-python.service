@@ -3,25 +3,25 @@
 ## See the file COPYING for copying conditions.
 
 [Unit]
-Description = Control Port Filter Proxy
-ConditionPathExists = /usr/sbin/cpfpd
-After = remote-fs.target syslog.target network.target
+Description=Control Port Filter Proxy
+ConditionPathExists=/usr/sbin/cpfpd
+After=remote-fs.target syslog.target network.target
 
 [Service]
-Type = simple
-User = debian-tor
-Group = debian-tor
-ExecStart = /usr/sbin/cpfpd start
-PIDFile = /run/%p/pid
-SuccessExitStatus = 143
+Type=simple
+User=debian-tor
+Group=debian-tor
+ExecStart=/usr/sbin/cpfpd start
+PIDFile=/run/%p/pid
+SuccessExitStatus=143
 
-TimeoutSec = 30
-Restart = always
-StandardOutput = syslog
-StandardError = syslog
+TimeoutSec=30
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
 
 ## TODO: Watchdog disabled.  cpfpd would need to implement the sd_notify protocol
-# WatchdogSec = 1m
+# WatchdogSec=1m
 
 ##
 ## Hardening
