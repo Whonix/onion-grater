@@ -1,3 +1,15 @@
+commit 5f9bdc8e84f3ef4d0896be03d0fc37b47e60b9c0
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat May 23 16:53:01 2015 +0000
+
+    systemd unit: removed spaces (as per https://phabricator.whonix.org/T316)
+
+commit f5b0f7c3b7f02703b6fb2996da6c443a37a1151c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed May 20 16:13:20 2015 +0000
+
+    bumped changelog version
+
 commit 6ec7ea23a34af29103ad34199fefaef59f46662e
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed May 20 16:10:22 2015 +0000
