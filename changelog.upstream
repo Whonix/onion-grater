@@ -1,3 +1,15 @@
+commit 7c393884622c719bd482dd7cf8447b067a7003c8
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun May 24 13:14:10 2015 +0000
+
+    systemd unit: removed 'syslog.target' from 'After=' to fix lintian warning 'W: control-port-filter-python: systemd-service-file-refers-to-obsolete-target lib/systemd/system/control-port-filter-python.service syslog.target' - https://www.whonix.org/forum/index.php/topic,560.msg8260.html#msg8260
+
+commit f37969a9fb8ddf7b1863525e65efa40fe2b4cfc6
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun May 24 04:26:26 2015 +0000
+
+    bumped changelog version
+
 commit 97ea14529835b5e9ca8a2a192fd3738608ab0be5
 Merge: d5e7928 338e31c
 Author: Patrick Schleizer <adrelanos@riseup.net>
