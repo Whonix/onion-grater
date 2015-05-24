@@ -5,7 +5,7 @@
 [Unit]
 Description=Control Port Filter Proxy
 ConditionPathExists=/usr/sbin/cpfpd
-After=remote-fs.target syslog.target network.target
+After=remote-fs.target network.target
 
 [Service]
 Type=simple
