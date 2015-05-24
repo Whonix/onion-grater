@@ -1,8 +1,28 @@
+commit 97ea14529835b5e9ca8a2a192fd3738608ab0be5
+Merge: d5e7928 338e31c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun May 24 04:24:46 2015 +0000
+
+    Merge remote-tracking branch 'troubadoour/master'
+
+commit d5e79286b48ba23290cff2174706182b865ac033
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat May 23 16:54:16 2015 +0000
+
+    bumped changelog version
+
 commit 5f9bdc8e84f3ef4d0896be03d0fc37b47e60b9c0
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sat May 23 16:53:01 2015 +0000
 
     systemd unit: removed spaces (as per https://phabricator.whonix.org/T316)
+
+commit 338e31ca182c044a98e045afa2990371265f1610
+Merge: a608e24 f5b0f7c
+Author: troubadoour <trobador@riseup.net>
+Date:   Wed May 20 18:14:38 2015 +0000
+
+    Merge remote-tracking branch 'origin/master'
 
 commit f5b0f7c3b7f02703b6fb2996da6c443a37a1151c
 Author: Patrick Schleizer <adrelanos@riseup.net>
@@ -27,6 +47,13 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri May 15 20:26:14 2015 +0000
 
     bumped changelog version
+
+commit a608e24cf84978b0e9ba43f2b9ddd060b0b6e7fa
+Author: troubadoour <trobador@riseup.net>
+Date:   Fri May 15 20:11:17 2015 +0000
+
+    import gevent at beginning of script (python-gevent 1.0.1 fix starting event loop on import)
+     Please enter the commit message for your changes. Lines starting
 
 commit 11e2cb5fc61a341ec8eff8bbb8086b577e6387b6
 Author: Patrick Schleizer <adrelanos@riseup.net>
