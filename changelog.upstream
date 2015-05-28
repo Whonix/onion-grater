@@ -1,3 +1,15 @@
+commit 838061e72547b308adee51182350135c830fc2c5
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu May 28 17:05:14 2015 +0000
+
+    systemd unit: removed 'StandardOutput=syslog' and 'StandardError=syslog' as per https://www.whonix.org/forum/index.php/topic,560.msg8267.html#msg8267
+
+commit 979ca841966b44e7c383744223edbcc65ea92258
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun May 24 13:16:20 2015 +0000
+
+    bumped changelog version
+
 commit 7c393884622c719bd482dd7cf8447b067a7003c8
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun May 24 13:14:10 2015 +0000
