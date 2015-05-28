@@ -17,8 +17,6 @@ SuccessExitStatus=143
 
 TimeoutSec=30
 Restart=always
-StandardOutput=syslog
-StandardError=syslog
 
 ## TODO: Watchdog disabled.  cpfpd would need to implement the sd_notify protocol
 # WatchdogSec=1m
