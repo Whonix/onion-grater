@@ -264,14 +264,6 @@ if __name__ == "__main__":
     # Preserve the logger.
     daemon_runner.daemon_context.files_preserve=[handler.stream]
 
-    # Argument parsing is done in daemon.runner.
-    argument = sys.argv[1]
-    if argument == 'start':
-        daemon_runner._start()
-
-    if argument == 'stop':
-        daemon_runner._stop()
-
-    if argument == 'restart':
-        daemon_runner._restart()
+    # Start the daemon
+    daemon_runner._start()
 
