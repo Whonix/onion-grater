@@ -1,3 +1,22 @@
+commit 07427bec28e5f6fa54e70f72c62e1d0c1906d34b
+Merge: 51de33e 3c1f475
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri May 29 21:36:34 2015 +0000
+
+    Merge remote-tracking branch 'troubadoour/master'
+
+commit 3c1f47571c6e7d6d18831a719b874aa6eca5dcc8
+Author: troubadoour <trobador@riseup.net>
+Date:   Fri May 29 20:31:36 2015 +0000
+
+    remove argument parsing, done in daemon/systemd
+
+commit 51de33e8c9df329e5bade5b448efa2029f745252
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu May 28 17:06:57 2015 +0000
+
+    bumped changelog version
+
 commit 838061e72547b308adee51182350135c830fc2c5
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu May 28 17:05:14 2015 +0000
