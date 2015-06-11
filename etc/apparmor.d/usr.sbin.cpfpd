@@ -1,0 +1,24 @@
+# Last Modified: Mon Jun  8 20:19:11 UTC 2015
+#include <tunables/global>
+
+## The attach_disconnected flag prevents a denied 
+## message on /dev/null -> disconnected path.
+
+/usr/sbin/cpfpd flags=(attach_disconnected) {
+  #include <abstractions/base>
+  #include <abstractions/python>
+
+  /etc/cpfpy.d/ r,
+  /etc/cpfpy.d/* r,
+
+  /run/tor/control.authcookie r,
+  /run/control-port-filter-python/* rwlk,
+
+  /tmp/* rwk,
+  /var/tmp/* rwk,
+
+  /var/log/control-port-filter-python.log rwk,
+
+  /usr/sbin/cpfpd r,
+  
+}
