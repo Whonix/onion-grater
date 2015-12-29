@@ -28,46 +28,50 @@ import sys
 class Configuration:
     def read(self):
         # Read and override configuration from files
-        if os.path.exists('/etc/cpfpy.d/'):
-            files = sorted(glob.glob('/etc/cpfpy.d/*.conf'))
+        if os.path.exists('/etc/cpfpy.d'):
+            files = sorted(glob.glob('/etc/cpfpy.d/*'))
 
             if files:
                 conf_found = False
                 RequestList = ''
                 for conf in files:
-                    conf_found = True
-                    with open(conf) as c:
-                        for line in c:
-                            if '=' in line:
-                                k, value = line.split('=')
+                    if not conf.endswith('~') and conf.count('.dpkg-') == 0:
+                        conf_found = True
+                        with open(conf) as c:
+                            for line in c:
+                                if '=' in line:
+                                    k, value = line.split('=')
 
-                                if k == 'CONTROL_PORT_FILTER_DISABLE_FILTERING':
-                                    self.DISABLE_FILTERING = value.strip() == 'true'
+                                    if k == 'CONTROL_PORT_FILTER_DISABLE_FILTERING':
+                                        self.DISABLE_FILTERING = value.strip() == 'true'
 
-                                if k == 'CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH':
-                                    self.LIMIT_STRING_LENGTH = int(value.strip())
+                                    if k == 'CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH':
+                                        self.LIMIT_STRING_LENGTH = int(value.strip())
 
-                                if k ==  'CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS':
-                                    self.LIMIT_GETINFO_NET_LISTENERS_SOCKS = value.strip() == 'true'
+                                    if k == 'CONTROL_PORT_FILTER_ALLOw_WiLDCARDS':
+                                        self.ALLOW_WILDCARDS = value.strip() == 'true'
 
-                                if k == 'CONTROL_PORT_FILTER_WHITELIST':
-                                    # concatenate values from files, add a comma
-                                    RequestList = RequestList + value.strip() + ','
+                                    if k ==  'CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS':
+                                        self.LIMIT_GETINFO_NET_LISTENERS_SOCKS = value.strip() == 'true'
 
-                                if k == 'CONTROL_PORT_FILTER_PORT':
-                                    self.PORT = int(value.strip())
+                                    if k == 'CONTROL_PORT_FILTER_WHITELIST':
+                                        # concatenate values from files, add a comma
+                                        RequestList = RequestList + value.strip() + ','
 
-                                if k == 'CONTROL_PORT_FILTER_IP':
-                                    self.IP = str(value.strip())
+                                    if k == 'CONTROL_PORT_FILTER_PORT':
+                                        self.PORT = int(value.strip())
 
-                                if k == 'CONTROL_PORT_SOCKET':
-                                    self.SOCKET = str(value.strip())
+                                    if k == 'CONTROL_PORT_FILTER_IP':
+                                        self.IP = str(value.strip())
 
-                                if k == 'CONTROL_PORT_AUTH_COOKIE':
-                                    self.AUTH_COOKIE = str(value.strip())
+                                    if k == 'CONTROL_PORT_SOCKET':
+                                        self.SOCKET = str(value.strip())
 
-                                if k == 'CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT':
-                                    self.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT = int(value.strip())
+                                    if k == 'CONTROL_PORT_AUTH_COOKIE':
+                                        self.AUTH_COOKIE = str(value.strip())
+
+                                    if k == 'CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT':
+                                        self.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT = int(value.strip())
 
                 if not conf_found:
                     self.set_default()
@@ -84,6 +88,8 @@ class Configuration:
                 self.WHITELIST.pop()
                 # Remove duplicates
                 self.WHITELIST = list(set(self.WHITELIST))
+
+                print
 
             else:
                 self.set_default()
@@ -176,9 +182,18 @@ class ControlPortFilter():
         try:
             answer = self.do_request_real(request)
             logger.debug('Answer: %s' % (answer.strip()))
+            #logger.debug(self.configuration.WHITELIST)
             return answer
         except (IOError, UnexpectedAnswer) as e:
             logger.error(e)
+
+    def request_contains_wildcard(self, request):
+        for item in self.configuration.WHITELIST:
+            if '*' in item:
+                item = item[:len(item)-2]
+                if item in request:
+                    return True
+        return False
 
     def handle(self, sock, address):
         fh = sock.makefile()
@@ -198,13 +213,18 @@ class ControlPortFilter():
                 # safe requests are allowed
                 fh.write("250 OK\n")
 
+            elif (self.configuration.ALLOW_WILDCARDS
+                  and self.request_contains_wildcard(request)):
+                # Pass the request
+                answer = self.do_request(request)
+                fh.write(answer)
+
             elif self.configuration.DISABLE_FILTERING:
                 # Pass all requests
                 answer = self.do_request(request)
                 fh.write(answer)
 
             elif request in self.configuration.WHITELIST:
-                # Filtering enabled
                 answer = self.do_request(request)
                 fh.write(answer)
 
