@@ -29,7 +29,7 @@ class Configuration:
     def read(self):
         # Read and override configuration from files
         if os.path.exists('/etc/cpfpy.d'):
-            files = sorted(glob.glob('/etc/cpfpy.d/*'))
+            files = sorted(glob.glob('/etc/cpfpy.d/*.conf'))
 
             if files:
                 conf_found = False
