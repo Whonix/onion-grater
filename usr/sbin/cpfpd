@@ -89,8 +89,6 @@ class Configuration:
                 # Remove duplicates
                 self.WHITELIST = list(set(self.WHITELIST))
 
-                print
-
             else:
                 self.set_default()
                 return('No file found in user configuration folder "/etc/cpfpy.d".'\
