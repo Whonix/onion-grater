@@ -48,7 +48,7 @@ class Configuration:
                                     if k == 'CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH':
                                         self.LIMIT_STRING_LENGTH = int(value.strip())
 
-                                    if k == 'CONTROL_PORT_FILTER_ALLOw_WiLDCARDS':
+                                    if k == 'CONTROL_PORT_FILTER_ALLOW_WILDCARDS':
                                         self.ALLOW_WILDCARDS = value.strip() == 'true'
 
                                     if k ==  'CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS':
