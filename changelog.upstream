@@ -1,3 +1,77 @@
+commit 09112197cb59a504750c85bf7c0f9528455cd63b
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Jan 1 19:47:03 2016 +0000
+
+    comment
+
+commit 3f1f12b787fc5ff7f0cd6a99428cbd7fa02401da
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Dec 30 20:02:49 2015 +0100
+
+    commented default CONTROL_PORT_FILTER_WHITELIST entries
+
+commit 28c5bec367777964a3d5b8eda9f31d3a35494ced
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Dec 30 19:38:13 2015 +0100
+
+    more readable configuration of CONTROL_PORT_FILTER_WHITELIST
+
+commit 5e3833ae476e3313485065d59a2cc7056dda82a2
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Dec 30 19:04:26 2015 +0100
+
+    minor cleanup
+
+commit 5fed540f8f98a57abd84c159e4c5d3e8d8739f6a
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Dec 30 19:03:46 2015 +0100
+
+    minor, fixed variable name case sensitiveness CONTROL_PORT_FILTER_ALLOW_WILDCARDS
+
+commit 0c0556bcabf32b655fda6204e41b4997029ddf18
+Merge: 941b038 ad1a3dd
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Dec 30 18:44:37 2015 +0100
+
+    Merge remote-tracking branch 'troubadoour/master'
+
+commit ad1a3ddacc0d0cc80c93a6a1050697a015a6d56e
+Author: troubadoour <trobador@riseup.net>
+Date:   Tue Dec 29 17:38:50 2015 +0000
+
+    glob .conf files in /etc/cpfpy.d
+
+commit 96a8c164e44269c7ffd9e8c715b92a84f3359c59
+Author: troubadoour <trobador@riseup.net>
+Date:   Tue Dec 29 17:11:15 2015 +0000
+
+    Add wildcard support
+    New variable CONTROL_PORT_FILTER_ALLOw_WiLDCARDS. If set, commands containing
+    random data (ex hidden service ID:port) are passed if an wildcard alias exists
+    in the commands whitelist (ex 'add_onion *')
+
+commit 941b0385ff41c7006925c7f5ca3f05d1bbc6d164
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Dec 15 21:02:23 2015 +0000
+
+    updated README.md
+
+commit 4280a718558f776bfac8b5b2fce3a13bd021fe5c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Nov 30 19:48:20 2015 +0000
+
+    Only source configuration files that end with the '.conf' extension.
+    
+    Thanks to @nrgaway for the suggestion!
+    
+    https://phabricator.whonix.org/T286
+
+commit 1e47a1f6dfda480472d82f72ddc10a836c884c15
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Aug 25 14:07:56 2015 +0000
+
+    bumped changelog version
+
 commit 152d9e0ebc4ff2ff62309c4faac7b8a221d39b07
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Aug 24 17:47:19 2015 +0000
