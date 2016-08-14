@@ -7,9 +7,9 @@
 /usr/sbin/cpfpd flags=(attach_disconnected) {
   #include <abstractions/base>
   #include <abstractions/python>
-  
-## This script doesn't really need to read the interpreter that's running it.
-deny /usr/bin/python{2,3}.[0-7]* r,
+
+  ## This script doesn't really need to read the interpreter that's running it.
+  deny /usr/bin/python{2,3}.[0-7]* r,
 
   /etc/cpfpy.d/ r,
   /etc/cpfpy.d/* r,
