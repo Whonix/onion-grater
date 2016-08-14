@@ -5,7 +5,9 @@
 [Unit]
 Description=Control Port Filter Proxy
 ConditionPathExists=/usr/sbin/cpfpd
+
 After=network.target
+Wants==network.target
 
 [Service]
 Type=simple
