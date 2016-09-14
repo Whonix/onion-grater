@@ -143,7 +143,7 @@ class ControlPortFilter():
         # The "lie" implemented in cpfp-bash
         if request == ('getinfo net/listeners/socks' and
                         self.configuration.LIMIT_GETINFO_NET_LISTENERS_SOCKS):
-            temp = '250-net/listeners/socks="127.0.0.1:9150"\n'
+            temp = '250-net/listeners/socks="127.0.0.1:9150"\r\n'
             logger.debug('Lying: %s' % (temp.strip()))
             return(temp)
 
@@ -160,14 +160,14 @@ class ControlPortFilter():
             writeh = sock.makefile("w")
 
             # Authenticate
-            writeh.write("AUTHENTICATE " + hexcookie + "\n")
+            writeh.write("AUTHENTICATE " + hexcookie + "\r\n")
             writeh.flush()
             answer = readh.readline()
             if not answer.strip() == "250 OK":
                 raise UnexpectedAnswer("AUTHENTICATE failed")
 
             # Send the request
-            writeh.write(request + '\n')
+            writeh.write(request + '\r\n')
             writeh.flush()
             answer = sock.recv(self.configuration.LIMIT_STRING_LENGTH)
 
@@ -209,7 +209,10 @@ class ControlPortFilter():
             if request.startswith("authenticate"):
                 # Don't check authentication, since only
                 # safe requests are allowed
-                fh.write("250 OK\n")
+                fh.write("250 OK\r\n")
+
+            elif request.startswith("authchallenge"):
+                fh.write("250 AUTHCHALLENGE SERVERHASH=D3A6FF5943582E95E3B8C5449AF30EC6A11BBB1513DE0ED9ED50AC6075046F48 SERVERNONCE45CBD16FCF5D9A529F0B3BF0F04E677609CDADA11E0\r\n")
 
             elif (self.configuration.ALLOW_WILDCARDS
                   and self.request_contains_wildcard(request)):
@@ -228,7 +231,7 @@ class ControlPortFilter():
 
             else:
                 # Everything else we ignore/block
-                fh.write("510 Request filtered\n")
+                fh.write("510 Request filtered\r\n")
                 logger.warning('Request: %s' % (request.strip()))
                 logger.warning('Answer: 510 Request filtered "%s"' % (request))
 
