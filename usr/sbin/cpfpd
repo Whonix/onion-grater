@@ -214,7 +214,7 @@ class ControlPortFilter():
                     return True
         return False
 
-    def handle(self, sock, address):
+    def stream_server_handler(self, sock, address):
         logger.debug('Getting connection from address "%s" sock "%s"' % (address, sock))
 
         do_break = False
@@ -227,7 +227,7 @@ class ControlPortFilter():
             rline = incoming_socket.readline()
 
             if not rline:
-                logger.debug('handle: incoming_socket.readline failed.')
+                logger.debug('stream_server_handler: incoming_socket.readline failed.')
                 break
 
             # Strip escaped chars and white spaces.
@@ -289,7 +289,7 @@ class ControlPortFilter():
             logger.debug("Trying to start Tor control port filter on IP %s port %s"
                         % (self.configuration.IP, self.configuration.PORT))
             # Accept concurrent connections.
-            server = StreamServer((self.configuration.IP, self.configuration.PORT), self.handle,
+            server = StreamServer((self.configuration.IP, self.configuration.PORT), self.stream_server_handler,
                                 spawn=self.configuration.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT)
 
             logger.debug("Tor control port filter started, listening on IP %s port %s"
