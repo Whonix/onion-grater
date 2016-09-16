@@ -133,17 +133,17 @@ class ControlPortFilter():
         logger.warning('Signal sigterm received. Exiting.')
         sys.exit(143)
 
-    def do_request(self, request, fh):
+    def do_request(self, request, incoming_socket):
         logger.debug('AAA')
         try:
             logger.debug('BBB')
-            self.do_request_real(request, fh)
+            self.do_request_real(request, incoming_socket)
             logger.debug('DDD')
             return True
         except:
             logger.critical('ERROR ', sys.exc_info()[0])
 
-    def do_request_real(self, request, fh):
+    def do_request_real(self, request, incoming_socket):
         logger.debug('CCC')
         # Check if tor socket exists
         if not os.path.exists(self.configuration.SOCKET):
@@ -161,13 +161,13 @@ class ControlPortFilter():
                sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
                #sock.settimeout(10.0)
                sock.connect(self.configuration.SOCKET)
-               readh = sock.makefile("r")
-               writeh = sock.makefile("w")
+               tor_read_socket = sock.makefile("r")
+               tor_write_socket = sock.makefile("w")
 
                # Authenticate
-               writeh.write("AUTHENTICATE " + hexcookie + "\r\n")
-               writeh.flush()
-               answer = readh.readline()
+               tor_write_socket.write("AUTHENTICATE " + hexcookie + "\r\n")
+               tor_write_socket.flush()
+               answer = tor_read_socket.readline()
                answer_strip = answer.strip()
                if not answer_strip == "250 OK":
                    raise UnexpectedAnswer("AUTHENTICATE failed, Tor replied: %s" % (answer_strip))
@@ -177,17 +177,17 @@ class ControlPortFilter():
         try:
             logger.debug('111')
             # Send the request
-            writeh.write(request + '\r\n')
-            writeh.flush()
+            tor_write_socket.write(request + '\r\n')
+            tor_write_socket.flush()
 
             logger.debug('222')
             while True:
                 # Read in a newline terminated line
                 logger.debug('333')
-                answer = readh.readline()
-                #answer = readh.recv()
+                answer = tor_read_socket.readline()
+                #answer = tor_read_socket.recv()
                 if not answer:
-                    logger.debug('do_request: readh.readline failed.')
+                    logger.debug('do_request: tor_read_socket.readline failed.')
                     break
 
                 logger.debug('444')
@@ -197,8 +197,8 @@ class ControlPortFilter():
                 #sock.close()
 
                 logger.debug('Tor answer: %s' % (answer))
-                fh.write(answer)
-                fh.flush()
+                incoming_socket.write(answer)
+                incoming_socket.flush()
                 logger.debug('do_request continue.')
 
             return True
@@ -219,15 +219,15 @@ class ControlPortFilter():
 
         do_break = False
 
-        fh = sock.makefile()
+        incoming_socket = sock.makefile()
         # Keep accepting requests
         while True:
             # Read in a newline terminated line
             # TODO: impose maximum string length.
-            rline = fh.readline()
+            rline = incoming_socket.readline()
 
             if not rline:
-                logger.debug('handle: fh.readline failed.')
+                logger.debug('handle: incoming_socket.readline failed.')
                 break
 
             # Strip escaped chars and white spaces.
@@ -246,20 +246,20 @@ class ControlPortFilter():
                 answer = "250 AUTHCHALLENGE SERVERHASH=D3A6FF5943582E95E3B8C5449AF30EC6A11BBB1513DE0ED9ED50AC6075046F48 SERVERNONCE45CBD16FCF5D9A529F0B3BF0F04E677609CDADA11E0\r\n"
 
             elif request.startswith("quit"):
-                answer = self.do_request(request, fh)
+                answer = self.do_request(request, incoming_socket)
                 do_break = True
 
             elif (request == 'getinfo net/listeners/socks' and self.configuration.LIMIT_GETINFO_NET_LISTENERS_SOCKS):
                 answer = '250-net/listeners/socks="127.0.0.1:9150"\r\n'
 
             elif (self.configuration.ALLOW_WILDCARDS and self.request_contains_wildcard(request)):
-                answer = self.do_request(request, fh)
+                answer = self.do_request(request, incoming_socket)
 
             elif self.configuration.DISABLE_FILTERING:
-                answer = self.do_request(request, fh)
+                answer = self.do_request(request, incoming_socket)
 
             elif request in self.configuration.WHITELIST:
-                answer = self.do_request(request, fh)
+                answer = self.do_request(request, incoming_socket)
 
             else:
                 # Everything else we ignore/block
@@ -268,8 +268,8 @@ class ControlPortFilter():
             answer_strip = answer.strip()
             logger.info('answer: "%s"' % (answer_strip))
 
-            fh.write(answer)
-            fh.flush()
+            incoming_socket.write(answer)
+            incoming_socket.flush()
 
             if do_break == True:
                 break
