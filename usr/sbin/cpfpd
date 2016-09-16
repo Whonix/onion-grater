@@ -314,6 +314,10 @@ if __name__ == "__main__":
 
     # Create daemon.
     cpfp = ControlPortFilter()
+
+    ## For debugging, comment out daemon_runner and use this.
+    #cpfp.run()
+
     daemon_runner = runner.DaemonRunner(cpfp)
 
     # The daemon closes all the file handles by default.
