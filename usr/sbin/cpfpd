@@ -12,6 +12,23 @@
 # If something goes wrong, an error code is returned, and
 # Torbutton will display a warning dialog that New Identity failed.
 
+# issues:
+# - Should the first message not be 'authenticate', then Tor already closes the
+#   connection and subsequent messages are ignored. No real world application
+#   known to have issues with that.
+# - Should Tor unexpectedly close the connection, then the client connection is
+#   not closed.
+# - Tor authentication reply is not checked for success.
+# - Many exception handling TODOs. However it keeps the code shorter and these
+#   exceptions that can happen in corner cases would not prevent new client
+#   connections from being successful.
+
+# test cases:
+# - Tor Browser newnym
+# - tor-arm (with filtering disabled)
+# - python-stem based applications
+# - onionshare
+
 import daemon
 from daemon import runner
 import gevent
@@ -24,6 +41,8 @@ import logging
 import signal
 import sys
 import asyncore
+import select
+import time
 
 class Configuration:
     def read(self):
@@ -122,90 +141,70 @@ class UnexpectedAnswer(Exception):
 
 
 class DoRequestReal(asyncore.dispatcher):
-    """Sends messages to the server and receives responses.
-    """
+    def __init__(self, client_socket):
+        self.configuration = Configuration()
+        self.configuration.read()
 
-    def __init__(self, request, incoming_socket):
-        logger.debug("AAAAAAAAAAAAAA")
+        self.to_send = ""
+        self.client_socket = client_socket
+        self.received_data = []
+        self.chunk_size = self.configuration.LIMIT_STRING_LENGTH
 
-        ## TODO
-        #\r\n
+        asyncore.dispatcher.__init__(self)
+
+        # Connect to the real control port
+        self.create_socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        self.connect(self.configuration.SOCKET)
+
+        return
+
+    def say(self, request):
         self.to_send = request + "\r\n"
 
-        self.incoming_socket = incoming_socket
-        self.received_data = []
-        ## TODO
-        self.chunk_size = 512
-
-        logger.debug("BBBBBBBBB")
-
-        self.configuration = Configuration()
-        message = self.configuration.read()
-        if message is not None:
-            logger.warning(message)
-
-        logger.debug("CCCCCCCCCC")
-
-        # Read authentication cookie
-        with open(self.configuration.AUTH_COOKIE, "rb") as f:
-            rawcookie = f.read(32)
-            self.hexcookie = binascii.hexlify(rawcookie)
-
-            logger.debug('DoRequestReal() init 1')
-
-            logger.debug("DDDDDD")
-            asyncore.dispatcher.__init__(self)
-            logger.debug("EEEEEE")
-
-            # Connect to the real control port
-            self.create_socket(socket.AF_UNIX, socket.SOCK_STREAM)
-            #sock.settimeout(10.0)
-            self.connect(self.configuration.SOCKET)
-
-            #answer_strip = answer.strip()
-            #if not answer_strip == "250 OK":
-                #raise UnexpectedAnswer("AUTHENTICATE failed, Tor replied: %s" % (answer_strip))
-
-            return
-
     def handle_connect(self):
-        logger.debug('handle_connect() 1')
-        self.send("AUTHENTICATE " + self.hexcookie + "\r\n")
         logger.debug('handle_connect() done')
 
     def handle_close(self):
-        logger.debug('handle_close()')
+        logger.debug('handle_close() start')
         self.close()
         received_message = ''.join(self.received_data)
-        logger.debug('RECEIVED "%s"', received_message)
+        ## Prevent extrarenous new lines in logs.
+        output_message = received_message.strip()
+        logger.debug('handle_close(): answer by Tor: %s', output_message)
+        logger.debug('handle_close(): Closing connection. self.client_socket.close()')
+        ## TODO: exception handling
+        self.client_socket.close()
+        logger.debug('handle_close(): Closed connection on sock. self.client_socket: %s', self.client_socket)
         return
 
     def readable(self):
-        logger.debug('readable() -> True')
+        #logger.debug('readable() -> True')
         return True
 
     def writable(self):
-        logger.debug('writable()')
-        logger.debug('writable() -> %s', bool(self.to_send))
-        return bool(self.to_send)
+        if self.to_send == "":
+           #logger.debug('writable empty: %s', self.to_send)
+           return False
+        else:
+           #logger.debug('writable non-empty: %s', self.to_send)
+           return True
 
     def handle_write(self):
-        logger.debug('handle_write start')
+        #logger.debug('handle_write start')
         sent = self.send(self.to_send[:self.chunk_size])
-        logger.debug('handle_write() -> (%d) "%s"', sent, self.to_send[:sent])
+        #logger.debug('handle_write() -> (%d) "%s"', sent, self.to_send[:sent])
         self.to_send = self.to_send[sent:]
-        logger.debug('handle_write done')
+        #logger.debug('handle_write done')
 
     def handle_read(self):
-        logger.debug('handle_read start 1')
         data = self.recv(self.chunk_size)
-        logger.debug('handle_read() -> (%d) "%s"', len(data), data)
+        data_stripped = data.strip()
+        logger.debug('handle_read(): answer by Tor: %s', (data_stripped))
 
-        logger.debug('handle_read start 2')
-        self.incoming_socket.write(data)
-        logger.debug('handle_read start after write')
-        self.incoming_socket.flush()
-        logger.debug('handle_read start after flush')
+        ## TODO: exception handling
+        self.client_socket.write(data)
+        self.client_socket.flush()
+
         self.received_data.append(data)
 
     def handle_error(self):
@@ -226,12 +225,6 @@ class ControlPortFilter():
         logger.warning('Signal sigterm received. Exiting.')
         sys.exit(143)
 
-    def do_request(self, request, incoming_socket):
-        logger.debug('AAA before DoRequestReal')
-        ## TODO: error handling
-        DoRequestReal(request, incoming_socket)
-        logger.debug('AAA111 after DoRequestReal')
-
     def request_contains_wildcard(self, request):
         for item in self.configuration.WHITELIST:
             if '*' in item:
@@ -241,101 +234,124 @@ class ControlPortFilter():
         return False
 
     def stream_server_handler(self, sock, address):
-        logger.debug('Getting connection from address "%s" sock "%s"' % (address, sock))
+        logger.debug('stream_server_handler: Getting connection on sock: %s' % (sock))
 
-        do_break = False
-        need_request = False
+        ## TODO: exception handling
+        client_socket = sock.makefile()
+        sock.setblocking(0)
 
-        incoming_socket = sock.makefile()
-        # Keep accepting requests
+        tor_connection = DoRequestReal(client_socket)
+
         while True:
+            asyncore.loop(timeout=0.1, count=1)
 
-            loop_counter = 0
-            while asyncore.socket_map:
-                loop_counter += 1
-                logger.debug('loop_counter=%s', loop_counter)
-                asyncore.loop(timeout=1, count=2)
-                if loop_counter == 4:
-                      break
-
-            # Read in a newline terminated line
-            # TODO: impose maximum string length.
-            #rline = incoming_socket.readline()
-
-            import select
-            sock.setblocking(0)
-            ready = select.select([sock], [], [], 1)
-            if ready[0]:
-                rline = sock.recv(1024)
+            client_connection_ready = select.select([sock], [], [], 1)
+            if client_connection_ready[0]:
+                # TODO: impose maximum string length.
+                client_line = sock.recv(self.configuration.LIMIT_STRING_LENGTH)
             else:
-                import time
                 time.sleep(0.1)
                 continue
 
-            if not rline:
-                logger.debug('stream_server_handler: incoming_socket.readline failed.')
-                break
+            if not client_line:
+                ## Client probably disconnected.
+                need_request = False
+                do_break = True
+                ## TODO
+                client_line = "quit"
 
             # Strip escaped chars and white spaces.
             # Convert to lowercase.
-            request = rline.lower().strip()
+            request = client_line.lower().strip()
+            logger.info('stream_server_handler: request: %s' % (request))
+            request_startswith = request.split(' ', 1)[0]
 
-            logger.info('request: %s' % (request))
+            # Don't check authentication, since only
+            # safe requests are allowed
+            if request_startswith == "authenticate":
+                try:
+                    authentication_cookie_file_socket = open(self.configuration.AUTH_COOKIE, "rb")
+                    rawcookie = authentication_cookie_file_socket.read(32)
+                    authentication_cookie_file_socket.close()
+                    hexcookie = binascii.hexlify(rawcookie)
+                    request = "AUTHENTICATE " + hexcookie
+                    logger.debug('stream_server_handler: request transformed to: %s' % (request))
+                    need_request = True
+                    do_break = False
+                except:
+                    logger.error("stream_server_handler: Authentication request message generation failed. Hopefully below this line is a better error message.")
+                    exception_msg = str(sys.exc_info()[0])
+                    logger.error(exception_msg)
+                    need_request = False
+                    do_break = True
+                    answer_faked = "515 Authentication failed: control-port-filter-python stream_server_handler authentication message generation failed. exception_msg: " + exception_msg
 
-            # Authentication request.
-            if request.startswith("authenticate"):
-                # Don't check authentication, since only
-                # safe requests are allowed
-                answer = "250 OK\r\n"
+            elif request_startswith == "authchallenge":
+                need_request = False
+                do_break = False
+                answer_faked = "250 AUTHCHALLENGE SERVERHASH=D3A6FF5943582E95E3B8C5449AF30EC6A11BBB1513DE0ED9ED50AC6075046F48 SERVERNONCE45CBD16FCF5D9A529F0B3BF0F04E677609CDADA11E0"
 
-            elif request.startswith("authchallenge"):
-                answer = "250 AUTHCHALLENGE SERVERHASH=D3A6FF5943582E95E3B8C5449AF30EC6A11BBB1513DE0ED9ED50AC6075046F48 SERVERNONCE45CBD16FCF5D9A529F0B3BF0F04E677609CDADA11E0\r\n"
-
-            elif request.startswith("quit"):
+            elif request_startswith == "quit":
                 need_request = True
                 do_break = True
 
             elif (request == 'getinfo net/listeners/socks' and self.configuration.LIMIT_GETINFO_NET_LISTENERS_SOCKS):
-                answer = '250-net/listeners/socks="127.0.0.1:9150"\r\n'
+                need_request = False
+                do_break = False
+                answer_faked = '250-net/listeners/socks="127.0.0.1:9150"'
 
             elif (self.configuration.ALLOW_WILDCARDS and self.request_contains_wildcard(request)):
                 need_request = True
+                do_break = False
 
             elif self.configuration.DISABLE_FILTERING:
                 need_request = True
+                do_break = False
 
             elif request in self.configuration.WHITELIST:
                 need_request = True
+                do_break = False
 
             else:
                 # Everything else we ignore/block
-                answer = "510 Request filtered\r\n"
+                need_request = False
+                do_break = False
+                answer_faked = "510 Request filtered"
 
             if need_request == True:
-                self.do_request(request, incoming_socket)
+                tor_connection.say(request)
+                if request_startswith == "quit":
+                    ## Give it half a second to catch Tor's answer before
+                    ## actually closing the client socket later.
+                    asyncore.loop(timeout=0.1, count=5)
 
             else:
-                answer_strip = answer.strip()
-                logger.info('answer: "%s"' % (answer_strip))
-                incoming_socket.write(answer)
-                incoming_socket.flush()
+                answer_faked = answer_faked + "\r\n"
+                answer_faked_strip = answer_faked.strip()
+                logger.info('stream_server_handler: answer_faked by cpfpy: "%s"' % (answer_faked_strip))
+                ## TODO: exception handling
+                client_socket.write(answer_faked)
+                client_socket.flush()
 
             if do_break == True:
+                logger.debug('stream_server_handler: Closing connection on sock: %s' % (sock))
+                ## TODO: exception handling
+                client_socket.close()
                 break
 
-        logger.debug('End of connection from address "%s" sock "%s"' % (address, sock))
+        logger.debug('stream_server_handler: End of connection on sock: %s' % (sock))
 
     def run(self):
         gevent.signal(signal.SIGTERM, self.signal_sigterm_handler)
 
         self.configuration = Configuration()
-        message = self.configuration.read()
-        if message is not None:
-            logger.warning(message)
+        maybe_warning_message = self.configuration.read()
+        if maybe_warning_message is not None:
+            logger.warning(maybe_warning_message)
 
         # Catch server exceptions.
         try:
-            logger.debug("Trying to start Tor control port filter on IP %s port %s"
+            logger.debug("Trying to start Tor control port filter on    IP %s port %s"
                         % (self.configuration.IP, self.configuration.PORT))
             # Accept concurrent connections.
             server = StreamServer((self.configuration.IP, self.configuration.PORT), self.stream_server_handler,
@@ -353,8 +369,9 @@ class ControlPortFilter():
 
 
 if __name__ == "__main__":
-    # Create logger.
-    logger = logging.getLogger('CPFP log')
+    mypid = os.getpid()
+    log_prefix = "CPFP " + str(mypid) + " log"
+    logger = logging.getLogger(log_prefix)
     logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     handler = logging.FileHandler('/var/log/control-port-filter-python.log')
@@ -365,6 +382,7 @@ if __name__ == "__main__":
     cpfp = ControlPortFilter()
 
     print "start"
+    print mypid
 
     ## For debugging, comment out daemon_runner and use this.
     cpfp.run()
