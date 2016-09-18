@@ -161,6 +161,7 @@ class DoRequestReal(asyncore.dispatcher):
 
     def say(self, request):
         self.to_send = request + "\r\n"
+        self.handle_write()
 
     def handle_connect(self):
         logger.debug('handle_connect() done')
@@ -203,8 +204,7 @@ class DoRequestReal(asyncore.dispatcher):
         logger.debug('handle_read(): answer by Tor: %s', (data_stripped))
 
         ## TODO: exception handling
-        self.client_socket.write(data)
-        self.client_socket.flush()
+        self.client_socket.send(data)
 
         self.received_data.append(data)
 
@@ -214,17 +214,12 @@ class DoRequestReal(asyncore.dispatcher):
             logger.error('ERROR: %s' % (t))
 
 
-class ControlPortFilter():
-    def __init__(self):
-        self.stdin_path = '/dev/null'
-        self.stdout_path = '/dev/null'
-        self.stderr_path = '/dev/null'
-        self.pidfile_path =  '/var/run/control-port-filter-python/pid'
-        self.pidfile_timeout = 5
+class ControlPortFilter(asyncore.dispatcher):
+    def __init__(self, sock, configuration):
+        asyncore.dispatcher.__init__(self, sock=sock)
 
-    def signal_sigterm_handler(self):
-        logger.warning('Signal sigterm received. Exiting.')
-        sys.exit(143)
+        self.configuration = configuration
+        self.tor_connection = DoRequestReal(self)
 
     def request_contains_wildcard(self, request):
         for item in self.configuration.WHITELIST:
@@ -234,26 +229,14 @@ class ControlPortFilter():
                     return True
         return False
 
-    def stream_server_handler(self, sock, address):
-        logger.debug('stream_server_handler: Getting connection on sock: %s' % (sock))
+    def handle_read(self):
+        logger.debug('stream_server_handler: Getting command on sock: %s'
+                     % (self))
 
-        ## TODO: exception handling
-        client_socket = sock.makefile()
-        sock.setblocking(0)
+        # FIXME remove this - left it here to make the diff readable
+        if True:
 
-        tor_connection = DoRequestReal(client_socket)
-
-        while True:
-            asyncore.loop(timeout=0.1, count=1)
-
-            client_connection_ready = select.select([sock], [], [], 1)
-            if client_connection_ready[0]:
-                # TODO: impose maximum string length.
-                client_line = sock.recv(self.configuration.LIMIT_STRING_LENGTH)
-            else:
-                time.sleep(0.1)
-                continue
-
+            client_line = self.recv(self.configuration.LIMIT_STRING_LENGTH)
             if not client_line:
                 ## Client probably disconnected.
                 need_request = False
@@ -320,7 +303,7 @@ class ControlPortFilter():
                 answer_faked = "510 Request filtered"
 
             if need_request == True:
-                tor_connection.say(request)
+                self.tor_connection.say(request)
                 if request_startswith == "quit":
                     ## Give it half a second to catch Tor's answer before
                     ## actually closing the client socket later.
@@ -331,20 +314,38 @@ class ControlPortFilter():
                 answer_faked_strip = answer_faked.strip()
                 logger.info('stream_server_handler: answer_faked by cpfpy: "%s"' % (answer_faked_strip))
                 ## TODO: exception handling
-                client_socket.write(answer_faked)
-                client_socket.flush()
+                self.send(answer_faked)
 
             if do_break == True:
-                logger.debug('stream_server_handler: Closing connection on sock: %s' % (sock))
+                logger.debug('stream_server_handler: Closing connection on '
+                             'sock: %s' % (self))
                 ## TODO: exception handling
-                client_socket.close()
-                break
+                self.close()
 
-        logger.debug('stream_server_handler: End of connection on sock: %s' % (sock))
+    def handle_close(self):
+        logger.debug('stream_server_handler: End of connection on sock: %s' %
+                     (self))
+        self.tor_connection.close()
+
+class ControlPortFilterServer(asyncore.dispatcher):
+    def __init__(self):
+        asyncore.dispatcher.__init__(self)
+
+        self.stdin_path = '/dev/null'
+        self.stdout_path = '/dev/null'
+        self.stderr_path = '/dev/null'
+        self.pidfile_path =  '/var/run/control-port-filter-python/pid'
+        self.pidfile_timeout = 5
+
+        self.connections = []
+
+
+    def handle_accept(self):
+        conn, addr = self.accept()
+        self.connections.append(
+            ControlPortFilter(conn, configuration=self.configuration))
 
     def run(self):
-        gevent.signal(signal.SIGTERM, self.signal_sigterm_handler)
-
         self.configuration = Configuration()
         maybe_warning_message = self.configuration.read()
         if maybe_warning_message is not None:
@@ -355,19 +356,20 @@ class ControlPortFilter():
             logger.debug("Trying to start Tor control port filter on    IP %s port %s"
                         % (self.configuration.IP, self.configuration.PORT))
             # Accept concurrent connections.
-            server = StreamServer((self.configuration.IP, self.configuration.PORT), self.stream_server_handler,
-                                spawn=self.configuration.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT)
+            self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.bind((self.configuration.IP, self.configuration.PORT))
+            # it isn't exactly connection limit - it a queue depth for
+            # connections waiting to be handled
+            self.listen(self.configuration.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT)
 
             logger.debug("Tor control port filter started, listening on IP %s port %s"
                         % (self.configuration.IP, self.configuration.PORT))
-            server.serve_forever()
-            logger.critical("We are after server.serve_forever() which should never happen!")
-
         except IOError as e:
             logger.critical('Server error %s' % (e))
             logger.critical('Exiting.')
             sys.exit(1)
 
+        asyncore.loop()
 
 if __name__ == "__main__":
     mypid = os.getpid()
@@ -380,7 +382,7 @@ if __name__ == "__main__":
     logger.addHandler(handler)
 
     # Create daemon.
-    cpfp = ControlPortFilter()
+    cpfp = ControlPortFilterServer()
 
     print "start"
     print mypid
