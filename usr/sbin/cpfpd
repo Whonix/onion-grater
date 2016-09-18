@@ -32,7 +32,7 @@
 import daemon
 from daemon import runner
 import gevent
-from gevent import socket
+import socket
 from gevent.server import StreamServer
 import binascii
 import os
