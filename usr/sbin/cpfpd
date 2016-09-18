@@ -233,94 +233,91 @@ class ControlPortFilter(asyncore.dispatcher):
         logger.debug('stream_server_handler: Getting command on sock: %s'
                      % (self))
 
-        # FIXME remove this - left it here to make the diff readable
-        if True:
+        client_line = self.recv(self.configuration.LIMIT_STRING_LENGTH)
+        if not client_line:
+            ## Client probably disconnected.
+            need_request = False
+            do_break = True
+            ## TODO
+            client_line = "quit"
 
-            client_line = self.recv(self.configuration.LIMIT_STRING_LENGTH)
-            if not client_line:
-                ## Client probably disconnected.
+        # Strip escaped chars and white spaces.
+        # Convert to lowercase.
+        request = client_line.lower().strip()
+        logger.info('stream_server_handler: request: %s' % (request))
+        request_startswith = request.split(' ', 1)[0]
+
+        # Don't check authentication, since only
+        # safe requests are allowed
+        if request_startswith == "authenticate":
+            try:
+                authentication_cookie_file_socket = open(self.configuration.AUTH_COOKIE, "rb")
+                rawcookie = authentication_cookie_file_socket.read(32)
+                authentication_cookie_file_socket.close()
+                hexcookie = binascii.hexlify(rawcookie)
+                request = "AUTHENTICATE " + hexcookie
+                logger.debug('stream_server_handler: request transformed to: %s' % (request))
+                need_request = True
+                do_break = False
+            except:
+                logger.error("stream_server_handler: Authentication request message generation failed. Hopefully below this line is a better error message.")
+                exception_msg = str(sys.exc_info()[0])
+                logger.error(exception_msg)
                 need_request = False
                 do_break = True
-                ## TODO
-                client_line = "quit"
+                answer_faked = "515 Authentication failed: control-port-filter-python stream_server_handler authentication message generation failed. exception_msg: " + exception_msg
 
-            # Strip escaped chars and white spaces.
-            # Convert to lowercase.
-            request = client_line.lower().strip()
-            logger.info('stream_server_handler: request: %s' % (request))
-            request_startswith = request.split(' ', 1)[0]
+        elif request_startswith == "authchallenge":
+            need_request = False
+            do_break = False
+            answer_faked = "250 AUTHCHALLENGE SERVERHASH=D3A6FF5943582E95E3B8C5449AF30EC6A11BBB1513DE0ED9ED50AC6075046F48 SERVERNONCE45CBD16FCF5D9A529F0B3BF0F04E677609CDADA11E0"
 
-            # Don't check authentication, since only
-            # safe requests are allowed
-            if request_startswith == "authenticate":
-                try:
-                    authentication_cookie_file_socket = open(self.configuration.AUTH_COOKIE, "rb")
-                    rawcookie = authentication_cookie_file_socket.read(32)
-                    authentication_cookie_file_socket.close()
-                    hexcookie = binascii.hexlify(rawcookie)
-                    request = "AUTHENTICATE " + hexcookie
-                    logger.debug('stream_server_handler: request transformed to: %s' % (request))
-                    need_request = True
-                    do_break = False
-                except:
-                    logger.error("stream_server_handler: Authentication request message generation failed. Hopefully below this line is a better error message.")
-                    exception_msg = str(sys.exc_info()[0])
-                    logger.error(exception_msg)
-                    need_request = False
-                    do_break = True
-                    answer_faked = "515 Authentication failed: control-port-filter-python stream_server_handler authentication message generation failed. exception_msg: " + exception_msg
+        elif request_startswith == "quit":
+            need_request = True
+            do_break = True
 
-            elif request_startswith == "authchallenge":
-                need_request = False
-                do_break = False
-                answer_faked = "250 AUTHCHALLENGE SERVERHASH=D3A6FF5943582E95E3B8C5449AF30EC6A11BBB1513DE0ED9ED50AC6075046F48 SERVERNONCE45CBD16FCF5D9A529F0B3BF0F04E677609CDADA11E0"
+        elif (request == 'getinfo net/listeners/socks' and self.configuration.LIMIT_GETINFO_NET_LISTENERS_SOCKS):
+            need_request = False
+            do_break = False
+            answer_faked = '250-net/listeners/socks="127.0.0.1:9150"'
 
-            elif request_startswith == "quit":
-                need_request = True
-                do_break = True
+        elif (self.configuration.ALLOW_WILDCARDS and self.request_contains_wildcard(request)):
+            need_request = True
+            do_break = False
 
-            elif (request == 'getinfo net/listeners/socks' and self.configuration.LIMIT_GETINFO_NET_LISTENERS_SOCKS):
-                need_request = False
-                do_break = False
-                answer_faked = '250-net/listeners/socks="127.0.0.1:9150"'
+        elif self.configuration.DISABLE_FILTERING:
+            need_request = True
+            do_break = False
 
-            elif (self.configuration.ALLOW_WILDCARDS and self.request_contains_wildcard(request)):
-                need_request = True
-                do_break = False
+        elif request in self.configuration.WHITELIST:
+            need_request = True
+            do_break = False
 
-            elif self.configuration.DISABLE_FILTERING:
-                need_request = True
-                do_break = False
+        else:
+            # Everything else we ignore/block
+            need_request = False
+            do_break = False
+            answer_faked = "510 Request filtered"
 
-            elif request in self.configuration.WHITELIST:
-                need_request = True
-                do_break = False
+        if need_request == True:
+            self.tor_connection.say(request)
+            if request_startswith == "quit":
+                ## Give it half a second to catch Tor's answer before
+                ## actually closing the client socket later.
+                asyncore.loop(timeout=0.1, count=5)
 
-            else:
-                # Everything else we ignore/block
-                need_request = False
-                do_break = False
-                answer_faked = "510 Request filtered"
+        else:
+            answer_faked = answer_faked + "\r\n"
+            answer_faked_strip = answer_faked.strip()
+            logger.info('stream_server_handler: answer_faked by cpfpy: "%s"' % (answer_faked_strip))
+            ## TODO: exception handling
+            self.send(answer_faked)
 
-            if need_request == True:
-                self.tor_connection.say(request)
-                if request_startswith == "quit":
-                    ## Give it half a second to catch Tor's answer before
-                    ## actually closing the client socket later.
-                    asyncore.loop(timeout=0.1, count=5)
-
-            else:
-                answer_faked = answer_faked + "\r\n"
-                answer_faked_strip = answer_faked.strip()
-                logger.info('stream_server_handler: answer_faked by cpfpy: "%s"' % (answer_faked_strip))
-                ## TODO: exception handling
-                self.send(answer_faked)
-
-            if do_break == True:
-                logger.debug('stream_server_handler: Closing connection on '
-                             'sock: %s' % (self))
-                ## TODO: exception handling
-                self.close()
+        if do_break == True:
+            logger.debug('stream_server_handler: Closing connection on '
+                         'sock: %s' % (self))
+            ## TODO: exception handling
+            self.close()
 
     def handle_close(self):
         logger.debug('stream_server_handler: End of connection on sock: %s' %
