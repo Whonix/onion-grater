@@ -211,7 +211,7 @@ class DoRequestReal(asyncore.dispatcher):
     def handle_error(self):
         t, v, tb = sys.exc_info()
         if t == socket.error:
-            logger.error('ERROR: %s' (t))
+            logger.error('ERROR: %s' % (t))
 
 
 class ControlPortFilter():
