@@ -170,7 +170,7 @@ class DoRequestReal(asyncore.dispatcher):
         logger.debug('handle_close() start')
         self.close()
         received_message = ''.join(self.received_data)
-        ## Prevent extrarenous new lines in logs.
+        ## Prevent extraneous new lines in logs.
         output_message = received_message.strip()
         logger.debug('handle_close(): answer by Tor: %s', output_message)
         logger.debug('handle_close(): Closing connection. self.client_socket.close()')
