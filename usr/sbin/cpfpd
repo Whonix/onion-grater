@@ -130,6 +130,7 @@ class Configuration:
         self.WHITELIST = ['signal newnym', 'getinfo net/listeners/socks',
                     'getinfo status/circuit-established', 'quit']
         self.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT = 5
+        self.ALLOW_WILDCARDS = False
 
 
 class UnexpectedAnswer(Exception):
