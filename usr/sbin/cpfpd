@@ -395,4 +395,5 @@ if __name__ == "__main__":
     #daemon_runner.daemon_context.files_preserve=[handler.stream]
 
     # Start the daemon
-    #daemon_runner._start()
+    #daemon_runner.parse_args()
+    #daemon_runner.do_action()
