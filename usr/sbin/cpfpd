@@ -220,6 +220,7 @@ class ControlPortFilter(asyncore.dispatcher):
 
         self.configuration = configuration
         self.tor_connection = DoRequestReal(self)
+        self.request_buffer = ''
 
     def request_contains_wildcard(self, request):
         for item in self.configuration.WHITELIST:
@@ -239,11 +240,18 @@ class ControlPortFilter(asyncore.dispatcher):
             need_request = False
             do_break = True
             ## TODO
-            client_line = "quit"
+            request = "quit"
+        else:
+            self.request_buffer += client_line
+            if '\r\n' not in self.request_buffer:
+                # wait for more
+                return
+            request_end = self.request_buffer.find('\r\n')
+            # Strip escaped chars and white spaces.
+            # Convert to lowercase.
+            request = self.request_buffer[:request_end].lower().strip()
+            self.request_buffer = self.request_buffer[request_end + 2:]
 
-        # Strip escaped chars and white spaces.
-        # Convert to lowercase.
-        request = client_line.lower().strip()
         logger.info('stream_server_handler: request: %s' % (request))
         request_startswith = request.split(' ', 1)[0]
 
