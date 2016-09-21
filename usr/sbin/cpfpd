@@ -164,7 +164,7 @@ class TorConnectionHandler(asyncore.dispatcher):
         self.handle_write()
 
     def handle_connect(self):
-        logger.debug('TorConnectionHandler: Getting command on sock: %s'
+        logger.info('TorConnectionHandler: Getting command on sock: %s'
                      % (self))
 
     def handle_close(self):
@@ -173,7 +173,7 @@ class TorConnectionHandler(asyncore.dispatcher):
         received_message = ''.join(self.received_data)
         ## Prevent extraneous new lines in logs.
         output_message = received_message.strip()
-        logger.debug('TorConnectionHandler handle_close(): answer by Tor: %s', output_message)
+        logger.info('TorConnectionHandler handle_close(): answer by Tor: %s', output_message)
         logger.debug('TorConnectionHandler handle_close(): Closing connection. self.client_socket.close()')
         ## TODO: exception handling
         self.client_socket.close()
@@ -202,7 +202,7 @@ class TorConnectionHandler(asyncore.dispatcher):
     def handle_read(self):
         data = self.recv(self.chunk_size)
         data_stripped = data.strip()
-        logger.debug('TorConnectionHandler handle_read(): answer by Tor: %s', (data_stripped))
+        logger.info('TorConnectionHandler handle_read(): answer by Tor: %s', (data_stripped))
 
         ## TODO: exception handling
         self.client_socket.send(data)
@@ -232,7 +232,7 @@ class ControlPortFilter(asyncore.dispatcher):
         return False
 
     def handle_connect(self):
-        logger.debug('client_handler: Getting command on sock: %s'
+        logger.info('client_handler: Getting command on sock: %s'
                      % (self))
 
     def handle_read(self):
@@ -339,13 +339,13 @@ class ControlPortFilter(asyncore.dispatcher):
             self.send(answer_faked)
 
         if do_break == True:
-            logger.debug('client_handler: Closing connection on '
+            logger.info('client_handler: Closing connection on '
                          'sock: %s' % (self))
             ## TODO: exception handling
             self.close()
 
     def handle_close(self):
-        logger.debug('client_handler: End of connection on sock: %s' %
+        logger.info('client_handler: End of connection on sock: %s' %
                      (self))
         self.tor_connection.close()
 
@@ -375,7 +375,7 @@ class ControlPortFilterServer(asyncore.dispatcher):
 
         # Catch server exceptions.
         try:
-            logger.debug("Trying to start Tor control port filter on    IP %s port %s"
+            logger.info("Trying to start Tor control port filter on    IP %s port %s"
                         % (self.configuration.IP, self.configuration.PORT))
             # Accept concurrent connections.
             self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -384,7 +384,7 @@ class ControlPortFilterServer(asyncore.dispatcher):
             # connections waiting to be handled
             self.listen(self.configuration.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT)
 
-            logger.debug("Tor control port filter started, listening on IP %s port %s"
+            logger.info("Tor control port filter started, listening on IP %s port %s"
                         % (self.configuration.IP, self.configuration.PORT))
         except IOError as e:
             logger.critical('Server error %s' % (e))
