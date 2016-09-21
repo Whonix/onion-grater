@@ -247,8 +247,9 @@ class ControlPortFilter(asyncore.dispatcher):
         else:
             self.request_buffer += client_line
             if '\r\n' not in self.request_buffer:
-                # wait for more
+                #logger.debug('client_handler: wait: wait more.')
                 return
+            #logger.debug('client_handler: wait: got enough.')
             request_end = self.request_buffer.find('\r\n')
             # Strip escaped chars and white spaces.
             # Convert to lowercase.
@@ -296,11 +297,11 @@ class ControlPortFilter(asyncore.dispatcher):
             need_request = True
             do_break = False
 
-        elif self.configuration.DISABLE_FILTERING:
+        elif request in self.configuration.WHITELIST:
             need_request = True
             do_break = False
 
-        elif request in self.configuration.WHITELIST:
+        elif self.configuration.DISABLE_FILTERING:
             need_request = True
             do_break = False
 
@@ -309,6 +310,19 @@ class ControlPortFilter(asyncore.dispatcher):
             need_request = False
             do_break = False
             answer_faked = "510 Request filtered"
+
+        #if request_startswith == "add_onion":
+            #ip = "10.137.6.41"
+            #request = request + ":" + ip
+            ## specific example:
+            ## transform from: add_onion new:best port=80,17600
+            ## transform to  : add_onion new:best port=80,10.137.6.41:17600
+            ##
+            ## generic example:
+            ## transform from: add_onion new:best port=*,*
+            ## transform to  : add_onion new:best port=80,ip:17600
+            #request = "add_onion new:best port=80,10.137.6.41:17600"
+            #logger.debug('client_handler: request transformed to: %s' % (request))
 
         if need_request == True:
             self.tor_connection.say(request)
@@ -377,7 +391,25 @@ class ControlPortFilterServer(asyncore.dispatcher):
             logger.critical('Exiting.')
             sys.exit(1)
 
-        asyncore.loop()
+        try:
+            asyncore.loop()
+        except KeyboardInterrupt:
+             logger.info('KeyboardInterrupt.')
+        except asyncore.ExitNow, e:
+             logger.info('asyncore.ExitNow e: %s' % (e))
+
+        logger.info('Shutting down...')
+        asyncore.close_all()
+        print "end"
+        logger.info('End.')
+
+def sigterm_handler(_signo, _stack_frame):
+    print 'Sigterm received.'
+    logger.info('Sigterm received.')
+    asyncore.close_all()
+    print 'End.'
+    logger.info('End.')
+    sys.exit(144)
 
 if __name__ == "__main__":
     mypid = os.getpid()
@@ -394,6 +426,8 @@ if __name__ == "__main__":
 
     print "start"
     print mypid
+
+    signal.signal(signal.SIGTERM, sigterm_handler)
 
     ## For debugging, comment out daemon_runner and use this.
     cpfp.run()
