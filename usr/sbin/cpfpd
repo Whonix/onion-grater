@@ -31,9 +31,7 @@
 
 import daemon
 from daemon import runner
-import gevent
 import socket
-from gevent.server import StreamServer
 import binascii
 import os
 import glob
@@ -41,8 +39,6 @@ import logging
 import signal
 import sys
 import asyncore
-import select
-import time
 
 class Configuration:
     def read(self):
@@ -213,6 +209,7 @@ class TorConnectionHandler(asyncore.dispatcher):
         t, v, tb = sys.exc_info()
         if t == socket.error:
             logger.error('TorConnectionHandler ERROR: %s' % (t))
+            self.close()
 
 
 class ControlPortFilter(asyncore.dispatcher):
@@ -220,8 +217,14 @@ class ControlPortFilter(asyncore.dispatcher):
         asyncore.dispatcher.__init__(self, sock=sock)
 
         self.configuration = configuration
-        self.tor_connection = TorConnectionHandler(self)
         self.request_buffer = ''
+        try:
+            self.tor_connection = TorConnectionHandler(self)
+        except socket.error as e:
+            logger.error(
+                'client_handler: failed to connect to Tor: {!s}'.format(e))
+            self.tor_connection = None
+            self.close()
 
     def request_contains_wildcard(self, request):
         for item in self.configuration.WHITELIST:
@@ -229,6 +232,10 @@ class ControlPortFilter(asyncore.dispatcher):
                 item = item[:len(item)-2]
                 if item in request:
                     return True
+        return False
+
+    def writable(self):
+        # never wait for client socket being writable
         return False
 
     def handle_connect(self):
@@ -347,7 +354,8 @@ class ControlPortFilter(asyncore.dispatcher):
     def handle_close(self):
         logger.info('client_handler: End of connection on sock: %s' %
                      (self))
-        self.tor_connection.close()
+        if self.tor_connection:
+            self.tor_connection.close()
 
 class ControlPortFilterServer(asyncore.dispatcher):
     def __init__(self):
