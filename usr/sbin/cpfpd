@@ -234,6 +234,10 @@ class ControlPortFilter(asyncore.dispatcher):
                     return True
         return False
 
+    def writable(self):
+        # never wait for client socket being writable
+        return False
+
     def handle_connect(self):
         logger.info('client_handler: Getting command on sock: %s'
                      % (self))
