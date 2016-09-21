@@ -31,9 +31,7 @@
 
 import daemon
 from daemon import runner
-import gevent
 import socket
-from gevent.server import StreamServer
 import binascii
 import os
 import glob
@@ -41,8 +39,6 @@ import logging
 import signal
 import sys
 import asyncore
-import select
-import time
 
 class Configuration:
     def read(self):
