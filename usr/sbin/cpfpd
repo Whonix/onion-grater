@@ -13,8 +13,6 @@
 # Torbutton will display a warning dialog that New Identity failed.
 
 # issues:
-# - Should Tor unexpectedly close the connection, then the client connection is
-#   not closed.
 # - Tor authentication reply is not checked for success.
 # - Many exception handling TODOs. However it keeps the code shorter and these
 #   exceptions that can happen in corner cases would not prevent new client
