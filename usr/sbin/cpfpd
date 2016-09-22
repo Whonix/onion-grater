@@ -212,10 +212,11 @@ class TorConnectionHandler(asyncore.dispatcher):
             self.close()
 
 
-class ControlPortFilter(asyncore.dispatcher):
-    def __init__(self, sock, configuration):
+class ControlPortFilterHandler(asyncore.dispatcher):
+    def __init__(self, sock, client_ip, configuration):
         asyncore.dispatcher.__init__(self, sock=sock)
 
+        self.client_ip = client_ip
         self.configuration = configuration
         self.request_buffer = ''
         try:
@@ -243,6 +244,8 @@ class ControlPortFilter(asyncore.dispatcher):
                      % (self))
 
     def handle_read(self):
+        logger.debug('client_handler: handle_read: IP: %s' % (self.client_ip))
+
         client_line = self.recv(self.configuration.LIMIT_STRING_LENGTH)
         if not client_line:
             logger.debug('client_handler: Client probably disconnected.')
@@ -318,9 +321,7 @@ class ControlPortFilter(asyncore.dispatcher):
             do_break = False
             answer_faked = "510 Request filtered"
 
-        #if request_startswith == "add_onion":
-            #ip = "10.137.6.41"
-            #request = request + ":" + ip
+        if request_startswith == "add_onion":
             ## specific example:
             ## transform from: add_onion new:best port=80,17600
             ## transform to  : add_onion new:best port=80,10.137.6.41:17600
@@ -328,8 +329,26 @@ class ControlPortFilter(asyncore.dispatcher):
             ## generic example:
             ## transform from: add_onion new:best port=*,*
             ## transform to  : add_onion new:best port=80,ip:17600
-            #request = "add_onion new:best port=80,10.137.6.41:17600"
-            #logger.debug('client_handler: request transformed to: %s' % (request))
+
+            request_transformed = ""
+            try:
+                if request_startswith == "add_onion":
+                    for some_parameter in request.split():
+                        if some_parameter.split("=")[0] == "port":
+                            ports = some_parameter.split("=")[1]
+                            ports_split = ports.split(",")
+                            ports_parameter = "port=" + ports_split[0] + "," + self.client_ip + ":" + ports_split[1]
+                            request_transformed = request_transformed + " " + ports_parameter
+                        else:
+                            request_transformed = request_transformed + " " + some_parameter
+
+                ## Removed leading space.
+                request_transformed = request_transformed.strip()
+                request = request_transformed
+                logger.debug('client_handler: request transformed to: %s' % (request))
+            except:
+                exception_msg = str(sys.exc_info()[0])
+                logger.error("client_handler: Could not transform add_onion command. exception_msg: " + exception_msg)
 
         if need_request == True:
             self.tor_connection.say(request)
@@ -369,11 +388,11 @@ class ControlPortFilterServer(asyncore.dispatcher):
 
         self.connections = []
 
-
     def handle_accept(self):
         conn, addr = self.accept()
+        client_ip = str(addr[0])
         self.connections.append(
-            ControlPortFilter(conn, configuration=self.configuration))
+            ControlPortFilterHandler(conn, client_ip, configuration=self.configuration))
 
     def run(self):
         self.configuration = Configuration()
@@ -383,37 +402,49 @@ class ControlPortFilterServer(asyncore.dispatcher):
 
         # Catch server exceptions.
         try:
-            logger.info("Trying to start Tor control port filter on    IP %s port %s"
+            logger.info("ControlPortFilterServer: Trying to start Tor control port filter on    IP %s port %s"
                         % (self.configuration.IP, self.configuration.PORT))
             # Accept concurrent connections.
             self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
+
+            ## TODO: May not be the cleanest solution. We should properly terminate sockets on shutdown.
+            self.set_reuse_addr()
+
             self.bind((self.configuration.IP, self.configuration.PORT))
             # it isn't exactly connection limit - it a queue depth for
             # connections waiting to be handled
             self.listen(self.configuration.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT)
 
-            logger.info("Tor control port filter started, listening on IP %s port %s"
+            logger.info("ControlPortFilterServer: Tor control port filter started, listening on IP %s port %s"
                         % (self.configuration.IP, self.configuration.PORT))
         except IOError as e:
-            logger.critical('Server error %s' % (e))
-            logger.critical('Exiting.')
+            logger.critical('ControlPortFilterServer: Server error %s' % (e))
+            logger.critical('ControlPortFilterServer: Exiting.')
             sys.exit(1)
 
         try:
             asyncore.loop()
         except KeyboardInterrupt:
-             logger.info('KeyboardInterrupt.')
+             logger.info('ControlPortFilterServer: KeyboardInterrupt.')
         except asyncore.ExitNow, e:
-             logger.info('asyncore.ExitNow e: %s' % (e))
+             logger.info('ControlPortFilterServer: asyncore.ExitNow e: %s' % (e))
 
-        logger.info('Shutting down...')
+        logger.info('ControlPortFilterServer: Shutting down...')
         asyncore.close_all()
-        print "end"
-        logger.info('End.')
+        print "ControlPortFilterServer: end"
+        logger.info('ControlPortFilterServer: End.')
 
 def sigterm_handler(_signo, _stack_frame):
     print 'Sigterm received.'
     logger.info('Sigterm received.')
+    asyncore.close_all()
+    print 'End.'
+    logger.info('End.')
+    sys.exit(144)
+
+def sigint_handler(_signo, _stack_frame):
+    print 'Sigint received.'
+    logger.info('Sigint received.')
     asyncore.close_all()
     print 'End.'
     logger.info('End.')
@@ -436,6 +467,7 @@ if __name__ == "__main__":
     print mypid
 
     signal.signal(signal.SIGTERM, sigterm_handler)
+    signal.signal(signal.SIGINT, sigint_handler)
 
     ## For debugging, comment out daemon_runner and use this.
     cpfp.run()
