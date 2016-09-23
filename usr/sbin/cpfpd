@@ -82,6 +82,9 @@ class Configuration:
                                     if k == 'CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT':
                                         self.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT = int(value.strip())
 
+                                    if k == 'ADD_ONION_INJECT_IP':
+                                        self.ADD_ONION_INJECT_IP = value.strip() == 'true'
+
                 if not conf_found:
                     self.set_default()
                     return ('No valid file found in user configuration folder "/etc/cpfpy.d".'\
@@ -121,6 +124,7 @@ class Configuration:
                     'getinfo status/circuit-established', 'quit']
         self.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT = 5
         self.ALLOW_WILDCARDS = False
+        self.ADD_ONION_INJECT_IP = True
 
 
 class UnexpectedAnswer(Exception):
@@ -243,11 +247,8 @@ class ControlPortFilterHandler(asyncore.dispatcher):
         client_line = self.recv(self.configuration.LIMIT_STRING_LENGTH)
         if not client_line:
             logger.debug('client_handler: Client probably disconnected.')
-            logger.debug('client_handler: request transformed to: quit')
-            need_request = False
-            do_break = True
-            ## TODO
-            request = "quit"
+            self.close()
+            return
         else:
             self.request_buffer += client_line
             if '\r\n' not in self.request_buffer:
@@ -262,6 +263,9 @@ class ControlPortFilterHandler(asyncore.dispatcher):
 
         logger.info('client_handler: request: %s' % (request))
         request_startswith = request.split(' ', 1)[0]
+
+        # TODO: If we were to add some bogus line here, we would get 100% cpu and no exception.
+        #client_line = x
 
         # Don't check authentication, since only
         # safe requests are allowed
@@ -315,34 +319,35 @@ class ControlPortFilterHandler(asyncore.dispatcher):
             do_break = False
             answer_faked = "510 Request filtered"
 
-        if request_startswith == "add_onion":
-            ## specific example:
-            ## transform from: add_onion new:best port=80,17600
-            ## transform to  : add_onion new:best port=80,10.137.6.41:17600
-            ##
-            ## generic example:
-            ## transform from: add_onion new:best port=*,*
-            ## transform to  : add_onion new:best port=80,ip:17600
+        if self.configuration.ADD_ONION_INJECT_IP == True:
+            if request_startswith == "add_onion":
+                ## specific example:
+                ## transform from: add_onion new:best port=80,17600
+                ## transform to  : add_onion new:best port=80,10.137.6.41:17600
+                ##
+                ## generic example:
+                ## transform from: add_onion new:best port=*,*
+                ## transform to  : add_onion new:best port=80,ip:17600
 
-            request_transformed = ""
-            try:
-                if request_startswith == "add_onion":
-                    for some_parameter in request.split():
-                        if some_parameter.split("=")[0] == "port":
-                            ports = some_parameter.split("=")[1]
-                            ports_split = ports.split(",")
-                            ports_parameter = "port=" + ports_split[0] + "," + self.client_ip + ":" + ports_split[1]
-                            request_transformed = request_transformed + " " + ports_parameter
-                        else:
-                            request_transformed = request_transformed + " " + some_parameter
+                request_transformed = ""
+                try:
+                    if request_startswith == "add_onion":
+                        for some_parameter in request.split():
+                            if some_parameter.split("=")[0] == "port":
+                                ports = some_parameter.split("=")[1]
+                                ports_split = ports.split(",")
+                                ports_parameter = "port=" + ports_split[0] + "," + self.client_ip + ":" + ports_split[1]
+                                request_transformed = request_transformed + " " + ports_parameter
+                            else:
+                                request_transformed = request_transformed + " " + some_parameter
 
-                ## Removed leading space.
-                request_transformed = request_transformed.strip()
-                request = request_transformed
-                logger.debug('client_handler: request transformed to: %s' % (request))
-            except:
-                exception_msg = str(sys.exc_info()[0])
-                logger.error("client_handler: Could not transform add_onion command. exception_msg: " + exception_msg)
+                    ## Removed leading space.
+                    request_transformed = request_transformed.strip()
+                    request = request_transformed
+                    logger.debug('client_handler: request transformed to: %s' % (request))
+                except:
+                    exception_msg = str(sys.exc_info()[0])
+                    logger.error("client_handler: Could not transform add_onion command. exception_msg: " + exception_msg)
 
         if need_request == True:
             self.tor_connection.say(request)
@@ -370,6 +375,12 @@ class ControlPortFilterHandler(asyncore.dispatcher):
         if self.tor_connection:
             self.tor_connection.close()
 
+    def handle_error(self):
+        t, v, tb = sys.exc_info()
+        if t == socket.error:
+            logger.error('client_handler ERROR: %s' % (t))
+            self.close()
+
 class ControlPortFilterServer(asyncore.dispatcher):
     def __init__(self):
         asyncore.dispatcher.__init__(self)
@@ -387,6 +398,12 @@ class ControlPortFilterServer(asyncore.dispatcher):
         client_ip = str(addr[0])
         self.connections.append(
             ControlPortFilterHandler(conn, client_ip, configuration=self.configuration))
+
+    def handle_error(self):
+        t, v, tb = sys.exc_info()
+        if t == socket.error:
+            logger.error('ControlPortFilterServer: ERROR: %s' % (t))
+            self.close()
 
     def run(self):
         self.configuration = Configuration()
@@ -444,6 +461,10 @@ def sigint_handler(_signo, _stack_frame):
     logger.info('End.')
     sys.exit(144)
 
+def handle_exception(exc_type, exc_value, exc_traceback):
+    print "Uncaught exception"
+    logger.error("Uncaught exception", exc_info=(exc_type, exc_value, exc_traceback))
+
 if __name__ == "__main__":
     mypid = os.getpid()
     log_prefix = "CPFP " + str(mypid) + " log"
@@ -462,6 +483,7 @@ if __name__ == "__main__":
 
     signal.signal(signal.SIGTERM, sigterm_handler)
     signal.signal(signal.SIGINT, sigint_handler)
+    sys.excepthook = handle_exception
 
     ## For debugging, comment out daemon_runner and use this.
     cpfp.run()
