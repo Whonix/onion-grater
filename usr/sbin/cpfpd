@@ -393,6 +393,11 @@ class ControlPortFilterHandler(asyncore.dispatcher):
                     exception_msg = str(sys.exc_info()[0])
                     logger.error("client_handler: matching add_onion for own IPs failed! exception_msg: " + exception_msg)
 
+            if "nonanonymous" in request:
+                need_request = False
+                answer_faked = '510 Request filtered: add_onion contains "NonAnonymous"!'
+                logger.error('510 Request filtered: add_onion contains "NonAnonymous"!')
+
         if need_request == True:
             self.tor_connection.say(request)
             if request_startswith == "quit":
