@@ -13,7 +13,7 @@ Wants==network.target
 Type=simple
 User=debian-tor
 Group=debian-tor
-ExecStart=/usr/sbin/cpfpd start
+ExecStart=/usr/sbin/cpfpd
 PIDFile=/run/%p/pid
 SuccessExitStatus=143
 
