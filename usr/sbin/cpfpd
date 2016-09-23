@@ -23,8 +23,6 @@
 # - python-stem based applications
 # - onionshare
 
-import daemon
-from daemon import runner
 import socket
 import binascii
 import os
@@ -33,84 +31,9 @@ import logging
 import signal
 import sys
 import asyncore
+import commands,re,socket
 
 class Configuration:
-    def read(self):
-        # Read and override configuration from files
-        if os.path.exists('/etc/cpfpy.d'):
-            files = sorted(glob.glob('/etc/cpfpy.d/*.conf'))
-
-            if files:
-                conf_found = False
-                RequestList = ''
-                for conf in files:
-                    if not conf.endswith('~') and conf.count('.dpkg-') == 0:
-                        conf_found = True
-                        with open(conf) as c:
-                            for line in c:
-                                if '=' in line:
-                                    k, value = line.split('=')
-
-                                    if k == 'CONTROL_PORT_FILTER_DISABLE_FILTERING':
-                                        self.DISABLE_FILTERING = value.strip() == 'true'
-
-                                    if k == 'CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH':
-                                        self.LIMIT_STRING_LENGTH = int(value.strip())
-
-                                    if k == 'CONTROL_PORT_FILTER_ALLOW_WILDCARDS':
-                                        self.ALLOW_WILDCARDS = value.strip() == 'true'
-
-                                    if k ==  'CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS':
-                                        self.LIMIT_GETINFO_NET_LISTENERS_SOCKS = value.strip() == 'true'
-
-                                    if k == 'CONTROL_PORT_FILTER_WHITELIST':
-                                        # concatenate values from files, add a comma
-                                        RequestList = RequestList + value.strip() + ','
-
-                                    if k == 'CONTROL_PORT_FILTER_PORT':
-                                        self.PORT = int(value.strip())
-
-                                    if k == 'CONTROL_PORT_FILTER_IP':
-                                        self.IP = str(value.strip())
-
-                                    if k == 'CONTROL_PORT_SOCKET':
-                                        self.SOCKET = str(value.strip())
-
-                                    if k == 'CONTROL_PORT_AUTH_COOKIE':
-                                        self.AUTH_COOKIE = str(value.strip())
-
-                                    if k == 'CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT':
-                                        self.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT = int(value.strip())
-
-                                    if k == 'ADD_ONION_INJECT_IP':
-                                        self.ADD_ONION_INJECT_IP = value.strip() == 'true'
-
-                if not conf_found:
-                    self.set_default()
-                    return ('No valid file found in user configuration folder "/etc/cpfpy.d".'\
-                            ' Running with default configuration.')
-
-                # Disable limit.
-                if self.LIMIT_STRING_LENGTH == -1:
-                    # "sock.recv()" requires an argument. 64 KB, arbitrary.
-                    self.LIMIT_STRING_LENGTH = 65536
-
-                self.WHITELIST = RequestList.split(',')
-                # Remove last element (comma)
-                self.WHITELIST.pop()
-                # Remove duplicates
-                self.WHITELIST = list(set(self.WHITELIST))
-
-            else:
-                self.set_default()
-                return('No file found in user configuration folder "/etc/cpfpy.d".'\
-                        ' Running with default configuration.')
-
-        else:
-            self.set_default()
-            return('User configuration folder "/etc/cpfpy.d" does not exist.'\
-                    ' Running with default configuration.')
-
     def set_default(self):
         # Default control port filer configuration
         self.IP = '10.152.152.10'
@@ -125,14 +48,83 @@ class Configuration:
         self.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT = 5
         self.ALLOW_WILDCARDS = False
         self.ADD_ONION_INJECT_IP = True
+        self.ONION_REJECT_OWN_IPS = True
 
+    def read(self):
+        self.set_default()
 
-class UnexpectedAnswer(Exception):
-    def __init__(self, msg):
-        self.msg = msg
+        # Read and override configuration from files
+        if not os.path.exists('/etc/cpfpy.d'):
+            return ('Configuration folder "/etc/cpfpy.d" does not exist.'\
+                    ' Running with default configuration.')
 
-    def __str__(self):
-        return "[UnexpectedAnswer] " + self.msg
+        files = sorted(glob.glob('/etc/cpfpy.d/*.conf'))
+
+        if not files:
+            return ('No files in configuration folder "/etc/cpfpy.d".'\
+                    ' Running with default configuration.')
+
+        conf_found = False
+        RequestList = ''
+        for conf in files:
+            if conf.endswith('.conf'):
+                conf_found = True
+                with open(conf) as c:
+                    for line in c:
+                        if '=' in line:
+                            k, value = line.split('=')
+
+                            if k == 'CONTROL_PORT_FILTER_DISABLE_FILTERING':
+                                self.DISABLE_FILTERING = value.strip() == 'true'
+
+                            if k == 'CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH':
+                                self.LIMIT_STRING_LENGTH = int(value.strip())
+
+                            if k == 'CONTROL_PORT_FILTER_ALLOW_WILDCARDS':
+                                self.ALLOW_WILDCARDS = value.strip() == 'true'
+
+                            if k ==  'CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS':
+                                self.LIMIT_GETINFO_NET_LISTENERS_SOCKS = value.strip() == 'true'
+
+                            if k == 'CONTROL_PORT_FILTER_WHITELIST':
+                                # concatenate values from files, add a comma
+                                RequestList = RequestList + value.strip() + ','
+
+                            if k == 'CONTROL_PORT_FILTER_PORT':
+                                self.PORT = int(value.strip())
+
+                            if k == 'CONTROL_PORT_FILTER_IP':
+                                self.IP = str(value.strip())
+
+                            if k == 'CONTROL_PORT_SOCKET':
+                                self.SOCKET = str(value.strip())
+
+                            if k == 'CONTROL_PORT_AUTH_COOKIE':
+                                self.AUTH_COOKIE = str(value.strip())
+
+                            if k == 'CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT':
+                                self.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT = int(value.strip())
+
+                            if k == 'ADD_ONION_INJECT_IP':
+                                self.ADD_ONION_INJECT_IP = value.strip() == 'true'
+
+                            if k == 'ONION_REJECT_OWN_IPS':
+                                self.ONION_REJECT_OWN_IPS = value.strip() == 'true'
+
+        # Disable limit.
+        if self.LIMIT_STRING_LENGTH == -1:
+            # "sock.recv()" requires an argument. 64 KB, arbitrary.
+            self.LIMIT_STRING_LENGTH = 65536
+
+        self.WHITELIST = RequestList.split(',')
+        # Remove last element (comma)
+        self.WHITELIST.pop()
+        # Remove duplicates
+        self.WHITELIST = list(set(self.WHITELIST))
+
+        if not conf_found:
+            return ('No valid configuration file found in configuration folder "/etc/cpfpy.d" ending with ".conf".'\
+                    ' Running with default configuration.')
 
 
 class TorConnectionHandler(asyncore.dispatcher):
@@ -224,6 +216,31 @@ class ControlPortFilterHandler(asyncore.dispatcher):
                 'client_handler: failed to connect to Tor: {!s}'.format(e))
             self.tor_connection = None
             self.close()
+
+    def ip_list_own(self):
+        ## http://stackoverflow.com/a/10377262/2605155
+
+        ## A generator that returns stripped lines of output from "ip address show"
+        iplines=(line.strip() for line in commands.getoutput("ip address show").split('\n'))
+
+        ## Turn that into a list of IPv4 and IPv6 address/mask strings
+        addresses1=reduce(lambda a,v:a+v,(re.findall(r"inet ([\d.]+/\d+)",line)+re.findall(r"inet6 ([\:\da-f]+/\d+)",line) for line in iplines))
+        ## addresses1 now looks like ['127.0.0.1/8', '::1/128', '10.160.114.60/23', 'fe80::1031:3fff:fe00:6dce/64']
+
+        ## Get a list of IPv4 addresses as (IPstring,subnetsize) tuples
+        ipv4s=[(ip,int(subnet)) for ip,subnet in (addr.split('/') for addr in addresses1 if '.' in addr)]
+        ## ipv4s now looks like [('127.0.0.1', 8), ('10.160.114.60', 23)]
+
+        ## Get IPv6 addresses
+        ipv6s=[(ip,int(subnet)) for ip,subnet in (addr.split('/') for addr in addresses1 if ':' in addr)]
+
+        ip_list = []
+        for ipv4_or_ipv6 in ipv4s, ipv6s:
+          for own_ip_tulple in ipv4_or_ipv6:
+              own_ip_address = own_ip_tulple[0]
+              ip_list.append(own_ip_address)
+
+        return ip_list
 
     def request_contains_wildcard(self, request):
         for item in self.configuration.WHITELIST:
@@ -325,8 +342,8 @@ class ControlPortFilterHandler(asyncore.dispatcher):
             do_break = False
             answer_faked = "510 Request filtered"
 
-        if self.configuration.ADD_ONION_INJECT_IP == True:
-            if request_startswith == "add_onion":
+        if request_startswith == "add_onion":
+            if self.configuration.ADD_ONION_INJECT_IP == True:
                 ## specific example:
                 ## transform from: add_onion new:best port=80,17600
                 ## transform to  : add_onion new:best port=80,10.137.6.41:17600
@@ -352,8 +369,29 @@ class ControlPortFilterHandler(asyncore.dispatcher):
                     request = request_transformed
                     logger.debug('client_handler: request transformed to: %s' % (request))
                 except:
+                    need_request = False
+                    answer_faked = "510 Request filtered: IP transformation failed"
                     exception_msg = str(sys.exc_info()[0])
                     logger.error("client_handler: Could not transform add_onion command. exception_msg: " + exception_msg)
+
+            ## Test cases.
+            #request = "add_onion new:best port=80,127.0.0.1:17600"
+
+            if self.configuration.ONION_REJECT_OWN_IPS == True:
+                try:
+                    my_ips_list = self.ip_list_own()
+                    for own_ip in my_ips_list:
+                       logger.error('client_handler: own_ip: %s' % (own_ip))
+                       if own_ip in request:
+                           need_request = False
+                           answer_faked = "510 Request filtered: matching add_onion for own IPs failed!"
+                           logger.error('client_handler: own_ip in request, blocking! own_ip: %s' % (own_ip))
+                           break
+                except:
+                    need_request = False
+                    answer_faked = "510 Request filtered: matching add_onion for own IPs failed!"
+                    exception_msg = str(sys.exc_info()[0])
+                    logger.error("client_handler: matching add_onion for own IPs failed! exception_msg: " + exception_msg)
 
         if need_request == True:
             self.tor_connection.say(request)
@@ -390,13 +428,6 @@ class ControlPortFilterHandler(asyncore.dispatcher):
 class ControlPortFilterServer(asyncore.dispatcher):
     def __init__(self):
         asyncore.dispatcher.__init__(self)
-
-        self.stdin_path = '/dev/null'
-        self.stdout_path = '/dev/null'
-        self.stderr_path = '/dev/null'
-        self.pidfile_path =  '/var/run/control-port-filter-python/pid'
-        self.pidfile_timeout = 5
-
         self.connections = []
 
     def handle_accept(self):
@@ -406,6 +437,7 @@ class ControlPortFilterServer(asyncore.dispatcher):
             ControlPortFilterHandler(conn, client_ip, configuration=self.configuration))
 
     def handle_error(self):
+        logger.error('ControlPortFilterServer: ERROR')
         t, v, tb = sys.exc_info()
         if t == socket.error:
             logger.error('ControlPortFilterServer: ERROR: %s' % (t))
@@ -448,27 +480,21 @@ class ControlPortFilterServer(asyncore.dispatcher):
 
         logger.info('ControlPortFilterServer: Shutting down...')
         asyncore.close_all()
-        print "ControlPortFilterServer: end"
         logger.info('ControlPortFilterServer: End.')
 
 def sigterm_handler(_signo, _stack_frame):
-    print 'Sigterm received.'
     logger.info('Sigterm received.')
     asyncore.close_all()
-    print 'End.'
     logger.info('End.')
     sys.exit(144)
 
 def sigint_handler(_signo, _stack_frame):
-    print 'Sigint received.'
     logger.info('Sigint received.')
     asyncore.close_all()
-    print 'End.'
     logger.info('End.')
     sys.exit(144)
 
 def handle_exception(exc_type, exc_value, exc_traceback):
-    print "Uncaught exception"
     logger.error("Uncaught exception", exc_info=(exc_type, exc_value, exc_traceback))
 
 if __name__ == "__main__":
@@ -476,30 +502,16 @@ if __name__ == "__main__":
     log_prefix = "CPFP " + str(mypid) + " log"
     logger = logging.getLogger(log_prefix)
     logger.setLevel(logging.DEBUG)
+
     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-    handler = logging.FileHandler('/var/log/control-port-filter-python.log')
+    handler = logging.StreamHandler(sys.stdout)
     handler.setFormatter(formatter)
     logger.addHandler(handler)
 
-    # Create daemon.
     cpfp = ControlPortFilterServer()
-
-    print "start"
-    print mypid
 
     signal.signal(signal.SIGTERM, sigterm_handler)
     signal.signal(signal.SIGINT, sigint_handler)
     sys.excepthook = handle_exception
 
-    ## For debugging, comment out daemon_runner and use this.
     cpfp.run()
-
-    #daemon_runner = runner.DaemonRunner(cpfp)
-
-    # The daemon closes all the file handles by default.
-    # Preserve the logger.
-    #daemon_runner.daemon_context.files_preserve=[handler.stream]
-
-    # Start the daemon
-    #daemon_runner.parse_args()
-    #daemon_runner.do_action()
