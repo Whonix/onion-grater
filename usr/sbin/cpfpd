@@ -251,6 +251,12 @@ class ControlPortFilterHandler(asyncore.dispatcher):
             return
         else:
             self.request_buffer += client_line
+
+            if self.request_buffer.__len__() > self.configuration.LIMIT_STRING_LENGTH:
+                logger.error('client_handler: Excessive string length!')
+                self.close()
+                return
+
             if '\r\n' not in self.request_buffer:
                 #logger.debug('client_handler: wait: wait more.')
                 return
