@@ -1,522 +1,657 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
-## Copyright (C) Amnesia <amnesia at boum dot org>
-## Copyright (C) 2014 troubadour <trobador@riseup.net>
-## Copyright (C) 2014 Patrick Schleizer <adrelanos@riseup.net>
-## See the file COPYING for copying conditions.
+# This filter proxy allows fine-grained access whitelists of commands
+# (and their argunents) and events on a per-application basis, stored
+# in:
+#
+#     /etc/tor-controlport-filter.d/
+#
+# who are pretty self-explanatory as long as you understand the Tor
+# ControlPort language. The format is based on YAML where the
+# top-level is supposed to be a list, where each element is a
+# dictionary looking something like this:
+#
+#     - name: blabla
+#       match-exe-paths:
+#         - path_to_executable
+#         ...
+#       match-users:
+#         - user
+#         ...
+#       match-hosts:
+#         - host
+#         ...
+#       commands:
+#         command:
+#           - command_arg_rule
+#           ...
+#         ...
+#       confs:
+#         conf:
+#           - conf_arg_rule
+#            ...
+#         ...
+#       events:
+#         event:
+#           event_option: event_option_value
+#           ...
+#         ...
+#
+# `name` (optional) is a string which gives an internal name, useful
+# for debugging. When not given, filters will default to the name of
+# the file (excluding extension) they were read from (so there can be
+# duplicates!). It is advisable to define one filter per file, and
+# give helpful filenames instead of using this field.
+#
+# A filter is matched if for each of the relevant `match-*` rules at
+# least one of the elements match the client. For local (loopback)
+# clients the following match rules are needed:
+#
+# * `match-exe-paths`: a list of strings, each describing the path to
+#   the binary or script of the client with `*` matching
+#   anything. While this matcher always works for binaries, it only
+#   works for scripts with an enabled AppArmor profile (not
+#   necessarily enforced, complain mode is good enough).
+#
+# * `match-users`: a list of strings, each describing the user of the
+#   client with `*` matching anything.
+#
+# For remote (non-local) clients, the following match rules are
+# needed:
+#
+# * match-hosts: a list of strings, each describing the IPv4 address
+#   of the client with `*` matching anything.
+#
+# A filter can serve both local and remote clients by having all
+# `match-*` rules.
+#
+# `commands` (optional) is a list where each item is a dictionary with
+# the obligatory `pattern` key, which is a regular expression that is
+# matched against the full argument part of the command. The default
+# behavior is to just proxy the line through if matched, but it can be
+# altered with these keys:
+#
+# * `replacement`: this rewrites the arguments. The value is a Python
+#   format string (str.format()) which will be given the match groups
+#   from the match of `pattern`. The rewritten command is then proxied
+#   without the need to match any rule. There are also some special
+#   patterns that will be replaced as follows:
+#
+#   - {client-address}: the client's IP address
+#   - {client-port}: the client's port
+#   - {server-address}: the server's IP address
+#   - {server-port}: the server's (listening) port
+#
+# * `response`: a list of dictionaries, where the `pattern` and
+#   `replacement` keys work exactly as for commands arguments, but now
+#   for the response. Note that this means that the response is left
+#   intact if `pattern` doesn't match it, and if many `pattern`:s
+#   match, only the first one (in the order listed) will trigger a
+#   replacement.
+#
+# If a simple regex (as string) is given, it is assumed to be the
+# `pattern` which allows a short-hand for this common type of rule.
+#
+# Note that to allow a command to be run without arguments, the empty
+# string must be explicitly given as a `pattern`. Hence, an empty
+# argument list does not allow any use of the command.
+#
+# `confs` (optional) is a dictionary, and it's just syntactic sugar to
+# generate GETCONF/SETCONF rules. If a key exists, GETCONF of the
+# keyname is allowed, and if it has a non-empty list as value, those
+# values are allowed to be set. The empty string means that resetting
+# it is allowed. This is very useful for applications that like to
+# SETCONF on multiple configurations at the same time.
+#
+# `events` (optional) is a dictionary where the key represents the
+# event. If a key exists the event is allowed. The value is another
+# dictionary of options:
+#
+# * `suppress`: a boolean determining whether we should just fool the
+#   client that it has subscribed to the event (i.e. the client
+#   request is not filtered) while we suppress them.
+#
+# * `response`: a dictionary, where the `pattern` and `replacement`
+#   keys work exactly as for `response` for commands, but now for the
+#   events.
+#
+# `restrict-stream-events` (optional) is a boolean, and if set any
+# STREAM events sent to the client (after it has subscribed to them)
+# will be restricted to those belonging to the client itself. This
+# option only works for local clients and will be unset for remote
+# clients.
 
-# This filter proxy should allow Torbutton to request a
-# new Tor circuit, without exposing dangerous control requests
-# like "GETINFO address" to applications running as a local user.
-
-# If something goes wrong, an error code is returned, and
-# Torbutton will display a warning dialog that New Identity failed.
-
-# issues:
-# - Many exception handling TODOs. However it keeps the code shorter and these
-#   exceptions that can happen in corner cases would not prevent new client
-#   connections from being successful.
-
-# test cases:
-# - Tor Browser newnym
-# - tor-arm (with filtering disabled)
-# - python-stem based applications
-# - onionshare
-
-import socket
-import binascii
-import os
+import argparse
 import glob
-import logging
-import signal
+import ipaddress
+import os.path
+import psutil
+import re
+import socketserver
+import stem
+import stem.control
 import sys
-import asyncore
-import commands,re,socket
+import textwrap
+import yaml
 
-class Configuration:
-    def set_default(self):
-        # Default control port filer configuration
-        self.IP = '10.152.152.10'
-        self.PORT = 9052
-        self.SOCKET = '/var/run/tor/control'
-        self.AUTH_COOKIE = '/var/run/tor/control.authcookie'
-        self.DISABLE_FILTERING = False
-        self.LIMIT_STRING_LENGTH = 16384
-        self.LIMIT_GETINFO_NET_LISTENERS_SOCKS = True
-        self.WHITELIST = ['signal newnym', 'getinfo net/listeners/socks',
-                    'getinfo status/circuit-established', 'quit']
-        self.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT = 5
-        self.ALLOW_WILDCARDS = False
-        self.ADD_ONION_INJECT_IP = True
-        self.ONION_REJECT_OWN_IPS = True
+DEFAULT_LISTEN_ADDRESS = 'localhost'
+DEFAULT_LISTEN_PORT = 9051
+DEFAULT_COOKIE_PATH = '/var/run/tor/control.authcookie'
+DEFAULT_CONTROL_SOCKET_PATH = '/var/run/tor/control'
 
-    def read(self):
-        self.set_default()
-
-        # Read and override configuration from files
-        if not os.path.exists('/etc/cpfpy.d'):
-            return ('Configuration folder "/etc/cpfpy.d" does not exist.'\
-                    ' Running with default configuration.')
-
-        files = sorted(glob.glob('/etc/cpfpy.d/*.conf'))
-
-        if not files:
-            return ('No files in configuration folder "/etc/cpfpy.d".'\
-                    ' Running with default configuration.')
-
-        conf_found = False
-        RequestList = ''
-        for conf in files:
-            if conf.endswith('.conf'):
-                conf_found = True
-                with open(conf) as c:
-                    for line in c:
-                        if '=' in line:
-                            k, value = line.split('=')
-
-                            if k == 'CONTROL_PORT_FILTER_DISABLE_FILTERING':
-                                self.DISABLE_FILTERING = value.strip() == 'true'
-
-                            if k == 'CONTROL_PORT_FILTER_LIMIT_STRING_LENGTH':
-                                self.LIMIT_STRING_LENGTH = int(value.strip())
-
-                            if k == 'CONTROL_PORT_FILTER_ALLOW_WILDCARDS':
-                                self.ALLOW_WILDCARDS = value.strip() == 'true'
-
-                            if k ==  'CONTROL_PORT_FILTER_LIMIT_GETINFO_NET_LISTENERS_SOCKS':
-                                self.LIMIT_GETINFO_NET_LISTENERS_SOCKS = value.strip() == 'true'
-
-                            if k == 'CONTROL_PORT_FILTER_WHITELIST':
-                                # concatenate values from files, add a comma
-                                RequestList = RequestList + value.strip() + ','
-
-                            if k == 'CONTROL_PORT_FILTER_PORT':
-                                self.PORT = int(value.strip())
-
-                            if k == 'CONTROL_PORT_FILTER_IP':
-                                self.IP = str(value.strip())
-
-                            if k == 'CONTROL_PORT_SOCKET':
-                                self.SOCKET = str(value.strip())
-
-                            if k == 'CONTROL_PORT_AUTH_COOKIE':
-                                self.AUTH_COOKIE = str(value.strip())
-
-                            if k == 'CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT':
-                                self.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT = int(value.strip())
-
-                            if k == 'ADD_ONION_INJECT_IP':
-                                self.ADD_ONION_INJECT_IP = value.strip() == 'true'
-
-                            if k == 'ONION_REJECT_OWN_IPS':
-                                self.ONION_REJECT_OWN_IPS = value.strip() == 'true'
-
-        # Disable limit.
-        if self.LIMIT_STRING_LENGTH == -1:
-            # "sock.recv()" requires an argument. 64 KB, arbitrary.
-            self.LIMIT_STRING_LENGTH = 65536
-
-        self.WHITELIST = RequestList.split(',')
-        # Remove last element (comma)
-        self.WHITELIST.pop()
-        # Remove duplicates
-        self.WHITELIST = list(set(self.WHITELIST))
-
-        if not conf_found:
-            return ('No valid configuration file found in configuration folder "/etc/cpfpy.d" ending with ".conf".'\
-                    ' Running with default configuration.')
+# Limit the length of a line, to prevent DoS attacks trying to
+# crash this filter proxy by sending infinitely long lines.
+MAX_LINESIZE = 1024
 
 
-class TorConnectionHandler(asyncore.dispatcher):
-    def __init__(self, client_socket):
-        self.configuration = Configuration()
-        self.configuration.read()
+class NoRewriteMatch(RuntimeError):
+    pass
 
-        self.to_send = ""
-        self.client_socket = client_socket
-        self.received_data = []
-        self.chunk_size = self.configuration.LIMIT_STRING_LENGTH
 
-        asyncore.dispatcher.__init__(self)
+def log(msg):
+    print(msg, file=sys.stderr)
+    sys.stderr.flush()
 
-        # Connect to the real control port
-        self.create_socket(socket.AF_UNIX, socket.SOCK_STREAM)
-        self.connect(self.configuration.SOCKET)
 
-        return
+def pid_of_laddr(address):
+    try:
+        return next(conn for conn in psutil.net_connections() \
+                    if conn.laddr == address).pid
+    except StopIteration:
+        return None
 
-    def say(self, request):
-        self.to_send = request + "\r\n"
-        self.handle_write()
 
-    def handle_connect(self):
-        logger.info('TorConnectionHandler: Getting command on sock: %s'
-                     % (self))
-
-    def handle_close(self):
-        logger.debug('TorConnectionHandler handle_close() begin')
-        self.close()
-        received_message = ''.join(self.received_data)
-        ## Prevent extraneous new lines in logs.
-        output_message = received_message.strip()
-        logger.info('TorConnectionHandler handle_close(): answer by Tor: %s', output_message)
-        logger.debug('TorConnectionHandler handle_close(): Closing connection. self.client_socket.close()')
-        ## TODO: exception handling
-        self.client_socket.close()
-        logger.debug('TorConnectionHandler handle_close(): Closed connection on sock. self.client_socket: %s', self.client_socket)
-        return
-
-    def readable(self):
-        #logger.debug('TorConnectionHandler readable() -> True')
-        return True
-
-    def writable(self):
-        if self.to_send == "":
-           #logger.debug('TorConnectionHandler writable empty: %s', self.to_send)
-           return False
+def exe_path_of_pid(pid):
+    # Here we leverage AppArmor's in-kernel solution for determining
+    # the exact executable invoked. Looking at /proc/pid/exe when an
+    # interpreted script is running will just point to the
+    # interpreter's binary, which is not fine-grained enough, but
+    # AppArmor will be aware of which script is running for processes
+    # using one of its profiles. However, we fallback to /proc/pid/exe
+    # in case there is no AppArmor profile, so the only unsupported
+    # mode here is unconfined scripts.
+    enabled_aa_profile_re = r'^(/.+) \((?:complain|enforce)\)$'
+    with open('/proc/{}/attr/current'.format(str(pid)), "rb") as fh:
+        aa_profile_status = str(fh.read().strip(), 'UTF-8')
+        exe_path_match = re.match(enabled_aa_profile_re, aa_profile_status)
+        if exe_path_match:
+            return exe_path_match.group(1)
         else:
-           #logger.debug('TorConnectionHandler writable non-empty: %s', self.to_send)
-           return True
-
-    def handle_write(self):
-        #logger.debug('TorConnectionHandler handle_write begin')
-        sent = self.send(self.to_send[:self.chunk_size])
-        #logger.debug('TorConnectionHandler handle_write() -> (%d) "%s"', sent, self.to_send[:sent])
-        self.to_send = self.to_send[sent:]
-        #logger.debug('TorConnectionHandler handle_write end')
-
-    def handle_read(self):
-        data = self.recv(self.chunk_size)
-        data_stripped = data.strip()
-        logger.info('TorConnectionHandler handle_read(): answer by Tor: %s', (data_stripped))
-
-        ## TODO: exception handling
-        self.client_socket.send(data)
-
-        self.received_data.append(data)
-
-    def handle_error(self):
-        t, v, tb = sys.exc_info()
-        if t == socket.error:
-            logger.error('TorConnectionHandler ERROR: %s' % (t))
-            self.close()
+            return psutil.Process(pid).exe()
 
 
-class ControlPortFilterHandler(asyncore.dispatcher):
-    def __init__(self, sock, client_ip, configuration):
-        asyncore.dispatcher.__init__(self, sock=sock)
+def match_and_parse_filter(filters, matchers):
+    filter_name = None
+    allowed_commands = {}
+    allowed_events = {}
+    restrict_stream_events = False
+    matched_filters = [filter_ for filter_ in filters \
+                       if all(any(val == expected_val or val == '*' \
+                                  for val in filter_.get(key, [])) \
+                              for key, expected_val in matchers)]
+    if len(matched_filters) > 0:
+        matched_filter = matched_filters[0]
+        filter_name = matched_filter['name']
+        status = 'loaded filter: {}'.format(filter_name)
+        if len(matched_filters) > 1:
+            status = 'multiple filters matched, ' + status
 
-        self.client_ip = client_ip
-        self.configuration = configuration
-        self.request_buffer = ''
-        try:
-            self.tor_connection = TorConnectionHandler(self)
-        except socket.error as e:
-            logger.error(
-                'client_handler: failed to connect to Tor: {!s}'.format(e))
-            self.tor_connection = None
-            self.close()
+        # Parse `commands`
+        commands = matched_filter.get('commands', {}) or {}
+        for cmd in commands:
+            allowed_args = commands[cmd]
+            # An empty argument list allows nothing, but will
+            # make some code below easier than if it can be
+            # None as well.
+            if allowed_args == None:
+                allowed_args = []
+            for i in range(len(allowed_args)):
+                if isinstance(allowed_args[i], str):
+                    allowed_args[i] = {'pattern': allowed_args[i]}
+            allowed_commands[cmd.upper()] = allowed_args
 
-    def ip_list_own(self):
-        ## http://stackoverflow.com/a/10377262/2605155
+        # Prase `confs`, which is just syntactic sugar
+        confs = matched_filter.get('confs', {}) or {}
+        combined_getconf_rule = {'pattern': "(" + "|".join([
+            key for key in confs]) + ")"}
+        setconf_reset_part = "\s*|\s*".join([
+            key for key in confs if isinstance(confs[key], list) and \
+                                    '' in confs[key]]
+        )
+        setconf_assignment_part = "\s*|\s*".join([
+            "{}{}".format(
+                key, "=({})".format("|".join(confs[key]))
+            ) for key in confs if isinstance(confs[key], list) and \
+                                  len(confs[key]) > 0])
+        setconf_parts = []
+        for part in [setconf_reset_part, setconf_assignment_part]:
+            if part and part != '':
+                setconf_parts.append(part)
+        combined_setconf_rule = {
+            'pattern': "({})+".format("\s*|\s*".join(setconf_parts))
+        }
+        for cmd, rule in [('GETCONF', combined_getconf_rule),
+                          ('SETCONF', combined_setconf_rule)]:
+            if rule['pattern'] != "()+":
+                if cmd not in allowed_commands:
+                    allowed_commands[cmd] = []
+                allowed_commands[cmd].append(rule)
 
-        ## A generator that returns stripped lines of output from "ip address show"
-        iplines=(line.strip() for line in commands.getoutput("ip address show").split('\n'))
+        # Parse `events`
+        events = matched_filter.get('events', {}) or {}
+        for event in events:
+            opts = events[event]
+            # Same as for the `commands` argument list, let's
+            # add an empty dict to simplify later code.
+            if opts == None:
+                opts = {}
+            allowed_events[event.upper()] = opts
 
-        ## Turn that into a list of IPv4 and IPv6 address/mask strings
-        addresses1=reduce(lambda a,v:a+v,(re.findall(r"inet ([\d.]+/\d+)",line)+re.findall(r"inet6 ([\:\da-f]+/\d+)",line) for line in iplines))
-        ## addresses1 now looks like ['127.0.0.1/8', '::1/128', '10.160.114.60/23', 'fe80::1031:3fff:fe00:6dce/64']
+        # Parse `restrict-stream-events`
+        restrict_stream_events = bool(matched_filter.get(
+            'restrict-stream-events', False
+        ))
+    else:
+        status = 'no matching filter found, using an empty one'
+    return (status, filter_name, allowed_commands,
+            allowed_events, restrict_stream_events)
 
-        ## Get a list of IPv4 addresses as (IPstring,subnetsize) tuples
-        ipv4s=[(ip,int(subnet)) for ip,subnet in (addr.split('/') for addr in addresses1 if '.' in addr)]
-        ## ipv4s now looks like [('127.0.0.1', 8), ('10.160.114.60', 23)]
 
-        ## Get IPv6 addresses
-        ipv6s=[(ip,int(subnet)) for ip,subnet in (addr.split('/') for addr in addresses1 if ':' in addr)]
+def handle_controlport_session(controller, readh, writeh, client_desc, client_pid, client_address, server_address, allowed_commands, allowed_events, restrict_stream_events = False):
 
-        ip_list = []
-        for ipv4_or_ipv6 in ipv4s, ipv6s:
-          for own_ip_tulple in ipv4_or_ipv6:
-              own_ip_address = own_ip_tulple[0]
-              ip_list.append(own_ip_address)
+    def _log(line, format_multiline=False, sep = ': '):
+        line = line.strip()
+        if format_multiline and "\n" in line:
+            sep += "(multi-line)\n"
+            line = textwrap.indent(line, ' '*4)
+        log(client_desc + sep + line)
 
-        return ip_list
+    def debug_log_send(line):
+        if global_args.print_responses:
+            _log(line, format_multiline=True, sep=': <- ')
 
-    def request_contains_wildcard(self, request):
-        for item in self.configuration.WHITELIST:
-            if '*' in item:
-                item = item[:len(item)-2]
-                if item in request:
-                    return True
-        return False
+    def debug_log_recv(line):
+        if global_args.print_requests:
+            _log(line, format_multiline=True, sep=': -> ')
 
-    def writable(self):
-        # never wait for client socket being writable
-        return False
-
-    def handle_connect(self):
-        logger.info('client_handler: Getting command on sock: %s'
-                     % (self))
-
-    def handle_read(self):
-        logger.debug('client_handler: handle_read: IP: %s' % (self.client_ip))
-
-        client_line = self.recv(self.configuration.LIMIT_STRING_LENGTH)
-        if not client_line:
-            logger.debug('client_handler: Client probably disconnected.')
-            self.close()
+    def debug_log_rewrite(kind, old, new):
+        if kind not in ['command', 'received event', 'response'] or \
+           (kind == 'command' and not global_args.print_responses) or \
+           (kind in ['received event', 'response'] and \
+            not global_args.print_requests):
             return
+        if new != old:
+            old = textwrap.indent(old.strip(), ' '*4)
+            new = textwrap.indent(new.strip(), ' '*4)
+            _log("rewrote {}:\n{}\nto:\n{}".format(kind, old, new),
+                 format_multiline=False)
+
+    def respond(line, raw=False):
+        if line.isspace(): return
+        debug_log_send(line)
+        writeh.write(bytes(line, 'ascii'))
+        if not raw: writeh.write(bytes("\r\n", 'ascii'))
+        writeh.flush()
+
+    def get_rule(cmd, arg_str):
+        allowed_args = allowed_commands.get(cmd, [])
+        return next((rule for rule in allowed_args \
+                     if re.match(rule['pattern'] + "$", arg_str)), None)
+
+    def proxy_line(line, args_rewriter = None, response_rewriter = None):
+        if args_rewriter:
+            new_line = args_rewriter(line)
+            debug_log_rewrite('command', line, new_line)
+            line = new_line
+        response = controller.msg(line.strip()).raw_content()
+        if response_rewriter:
+            new_response = response_rewriter(response)
+            debug_log_rewrite('response', response, new_response)
+            response = new_response
+        respond(response, raw=True)
+
+    def filter_line(line):
+        _log("command filtered: {}".format(line))
+        respond("510 Command filtered")
+
+    def rewrite_line(replacers, line):
+        builtin_replacers = {
+            'client-address': client_address[0],
+            'client-port':    str(client_address[1]),
+            'server-address': server_address[0],
+            'server-port':    str(server_address[1]),
+        }
+        terminator = ''
+        if line[-2:] == "\r\n":
+            terminator = "\r\n"
+            line = line[:-2]
+        for r in replacers:
+            log("line: '{}'".format(line))
+            log("r: '{}'".format(r))
+            log("pattern: '{}'".format(r['pattern']))
+            log("replacement: '{}'".format(r['replacement']))
+            match = re.match(r['pattern'] + "$", line)
+            log("match: '{}'".format(match))
+            if match:
+                return r['replacement'].format(
+                    *match.groups(), **builtin_replacers
+                ) + terminator
+        raise NoRewriteMatch()
+
+    def rewrite_matched_line(replacers, line):
+        try:
+            return rewrite_line(replacers, line)
+        except NoRewriteMatch:
+            return line
+
+    def rewrite_matched_lines(replacers, lines):
+        split_lines = lines.strip().split("\r\n")
+        return "\r\n".join([rewrite_matched_line(replacers, line) \
+                            for line in split_lines]) + "\r\n"
+
+    def event_cb(event, event_rewriter = None):
+        if restrict_stream_events and \
+           isinstance(event, stem.response.events.StreamEvent) and \
+           not global_args.disable_filtering:
+            if event.id not in client_streams:
+                if event.status in [stem.StreamStatus.NEW,
+                                    stem.StreamStatus.NEWRESOLVE] and \
+                   client_pid == pid_of_laddr((event.source_address,
+                                               event.source_port)):
+                    client_streams.add(event.id)
+                else:
+                    return
+            elif event.status in [stem.StreamStatus.FAILED,
+                                  stem.StreamStatus.CLOSED]:
+                client_streams.remove(event.id)
+        raw_event_content = event.raw_content()
+        if event_rewriter:
+            new_raw_event_content = event_rewriter(raw_event_content)
+            debug_log_rewrite(
+                'received event', raw_event_content, new_raw_event_content
+            )
+            raw_event_content = new_raw_event_content
+        respond(raw_event_content, raw=True)
+
+    def update_event_subscriptions(events):
+        if not global_args.disable_filtering and \
+           any(event not in allowed_events for event in events):
+            filter_line(line)
+            return
+        for listener, event in subscribed_event_listeners:
+            if event not in events:
+                controller.remove_event_listener(listener)
+                subscribed_event_listeners.remove((listener, event))
+                if global_args.print_responses:
+                    _log("unsubscribed to event '{}'".format(event))
+        for event in events:
+            if any(event == event_ for _, event_ in subscribed_event_listeners):
+                if global_args.print_responses:
+                    _log("already subscribed to event '{}'".format(event))
+                continue
+            rule = allowed_events.get(event, {}) or {}
+            if not rule.get('suppress', False) or \
+               global_args.disable_filtering:
+                event_rewriter = None
+                if 'response' in rule:
+                    replacers = rule['response']
+                    def _event_rewriter(line):
+                        return rewrite_matched_line(replacers, line)
+                    event_rewriter = _event_rewriter
+                def _event_cb(event):
+                    event_cb(event, event_rewriter=event_rewriter)
+                controller.add_event_listener(
+                    _event_cb, getattr(stem.control.EventType, event)
+                )
+                subscribed_event_listeners.append((_event_cb, event))
+                if global_args.print_responses:
+                    _log("subscribed to event '{}'".format(event))
+            else:
+                if global_args.print_responses:
+                    _log("suppressed subscription to event '{}'".format(event))
+        respond("250 OK")
+
+    subscribed_event_listeners = []
+    client_streams = set()
+    while True:
+        binary_line = readh.readline(MAX_LINESIZE)
+        if binary_line == b'':
+            # Deal with clients that close the socket without a QUIT.
+            break
+        line = str(binary_line, 'ascii')
+        if line.isspace():
+            _log('ignoring received empty (or whitespace-only) line')
+            continue
+        match = re.match(r'(\S+)(\s*)([^\r\n]*)\r?\n$', line)
+        if not match:
+            _log("received bad line (escapes made explicit): " + repr(line))
+            # Hopefully the next line is ok...
+            continue
+        debug_log_recv(line)
+        cmd, cmd_arg_sep, arg_str = match.groups()
+        args = arg_str.split()
+        cmd = cmd.upper()
+
+        if cmd == "PROTOCOLINFO":
+            # Stem call PROTOCOLINFO before authenticating. Tell the
+            # client that there is no authentication.
+            respond("250-PROTOCOLINFO 1")
+            respond("250-AUTH METHODS=NULL")
+            respond("250-VERSION Tor=\"{}\"".format(controller.get_version()))
+            respond("250 OK")
+
+        elif cmd == "AUTHENTICATE":
+            # We have already authenticated, and the filtered port is
+            # access-restricted according to our filter instead.
+            respond("250 OK")
+
+        elif cmd == "QUIT":
+            respond("250 closing connection")
+            break
+
+        elif cmd == "SETEVENTS":
+            # The control language doesn't care about case for
+            # the event type.
+            events = [event.upper() for event in args]
+            update_event_subscriptions(events)
+
         else:
-            self.request_buffer += client_line
+            rule = get_rule(cmd, arg_str)
+            if rule == None and global_args.disable_filtering:
+                rule = {}
+            if rule != None:
+                args_rewriter = None
+                response_rewriter = None
 
-            if self.request_buffer.__len__() > self.configuration.LIMIT_STRING_LENGTH:
-                logger.error('client_handler: Excessive string length!')
-                self.close()
-                return
+                if 'response' in rule:
+                    def _response_rewriter(lines):
+                        return rewrite_matched_lines(rule['response'], lines)
+                    response_rewriter = _response_rewriter
 
-            if '\r\n' not in self.request_buffer:
-                #logger.debug('client_handler: wait: wait more.')
-                return
-            #logger.debug('client_handler: wait: got enough.')
-            request_end = self.request_buffer.find('\r\n')
-            # Strip escaped chars and white spaces.
-            # Convert to lowercase.
-            request = self.request_buffer[:request_end].lower().strip()
-            self.request_buffer = self.request_buffer[request_end + 2:]
+                if 'replacement' in rule:
+                    def _args_rewriter(line):
+                        # We also want to match the command in `line`
+                        # and add it back to the replacement string.
+                        # We make sure to keep the exact white spaces
+                        # separating the command and arguments, to not
+                        # rewrite the line unnecessarily.
+                        prefix = cmd + cmd_arg_sep
+                        replacer = {
+                            'pattern':     prefix + rule['pattern'],
+                            'replacement': prefix + rule['replacement']
+                        }
+                        return rewrite_line([replacer], line)
+                    args_rewriter = _args_rewriter
 
-        logger.info('client_handler: request: %s' % (request))
-        request_startswith = request.split(' ', 1)[0]
+                proxy_line(line, args_rewriter=args_rewriter,
+                           response_rewriter=response_rewriter)
+            else:
+                filter_line(line)
 
-        # TODO: If we were to add some bogus line here, we would get 100% cpu and no exception.
-        #client_line = x
 
-        # Don't check authentication, since only
-        # safe requests are allowed
-        if request_startswith == "authenticate":
+class FilteredControlPortProxyHandler(socketserver.StreamRequestHandler):
+
+    def setup(self):
+        super(type(self), self).setup()
+        self.filters = []
+        for filter_file in glob.glob('/etc/tor-controlport-filter.d/*.yml'):
             try:
-                authentication_cookie_file_socket = open(self.configuration.AUTH_COOKIE, "rb")
-                rawcookie = authentication_cookie_file_socket.read(32)
-                authentication_cookie_file_socket.close()
-                hexcookie = binascii.hexlify(rawcookie)
-                request = "AUTHENTICATE " + hexcookie
-                logger.debug('client_handler: request transformed to: %s' % (request))
-                need_request = True
-                do_break = False
-            except:
-                logger.error("client_handler: Authentication request message generation failed. Hopefully below this line is a better error message.")
-                exception_msg = str(sys.exc_info()[0])
-                logger.error(exception_msg)
-                need_request = False
-                do_break = True
-                answer_faked = "515 Authentication failed: control-port-filter-python client_handler authentication message generation failed. exception_msg: " + exception_msg
+                with open(filter_file, "rb") as fh:
+                    filters = yaml.load(fh.read())
+                    name = re.sub(r'\.yml$', '', os.path.basename(filter_file))
+                    for filter_ in filters:
+                        if name not in filter_:
+                            filter_['name'] = name
+                    self.filters += filters
+            except (yaml.parser.ParserError, yaml.scanner.ScannerError):
+                log("filter '{}' has bad YAML and was not loaded!"
+                    .format(filter_file))
 
-        elif request_startswith == "authchallenge":
-            need_request = False
-            do_break = False
-            answer_faked = "250 AUTHCHALLENGE SERVERHASH=D3A6FF5943582E95E3B8C5449AF30EC6A11BBB1513DE0ED9ED50AC6075046F48 SERVERNONCE45CBD16FCF5D9A529F0B3BF0F04E677609CDADA11E0"
+    def connect_to_real_control_port(self):
+        with open(global_args.control_cookie_path, "rb") as f:
+            cookie = f.read()
+        controller = stem.control.Controller.from_socket_file(
+            global_args.control_socket_path
+        )
+        controller.authenticate(cookie)
+        return controller
 
-        elif request_startswith == "quit":
-            need_request = True
-            do_break = True
-
-        elif (request == 'getinfo net/listeners/socks' and self.configuration.LIMIT_GETINFO_NET_LISTENERS_SOCKS):
-            need_request = False
-            do_break = False
-            answer_faked = '250-net/listeners/socks="127.0.0.1:9150"'
-
-        elif (self.configuration.ALLOW_WILDCARDS and self.request_contains_wildcard(request)):
-            need_request = True
-            do_break = False
-
-        elif request in self.configuration.WHITELIST:
-            need_request = True
-            do_break = False
-
-        elif self.configuration.DISABLE_FILTERING:
-            need_request = True
-            do_break = False
-
+    def handle(self):
+        client_host = self.client_address[0]
+        local_connection = ipaddress.ip_address(client_host).is_loopback
+        if local_connection:
+            client_pid = pid_of_laddr(self.client_address)
+            # Deal with the race between looking up the PID, and the
+            # client being killed before we find the PID.
+            if not client_pid: return
+            client_exe_path = exe_path_of_pid(client_pid)
+            client_user = psutil.Process(client_pid).username()
+            matchers = [
+                ('match-exe-paths', client_exe_path),
+                ('match-users',     client_user),
+            ]
         else:
-            # Everything else we ignore/block
-            need_request = False
-            do_break = False
-            answer_faked = "510 Request filtered"
-
-        if request_startswith == "add_onion":
-            if self.configuration.ADD_ONION_INJECT_IP == True:
-                ## specific example:
-                ## transform from: add_onion new:best port=80,17600
-                ## transform to  : add_onion new:best port=80,10.137.6.41:17600
-                ##
-                ## generic example:
-                ## transform from: add_onion new:best port=*,*
-                ## transform to  : add_onion new:best port=80,ip:17600
-
-                request_transformed = ""
-                try:
-                    if request_startswith == "add_onion":
-                        for some_parameter in request.split():
-                            if some_parameter.split("=")[0] == "port":
-                                ports = some_parameter.split("=")[1]
-                                ports_split = ports.split(",")
-                                ports_parameter = "port=" + ports_split[0] + "," + self.client_ip + ":" + ports_split[1]
-                                request_transformed = request_transformed + " " + ports_parameter
-                            else:
-                                request_transformed = request_transformed + " " + some_parameter
-
-                    ## Removed leading space.
-                    request_transformed = request_transformed.strip()
-                    request = request_transformed
-                    logger.debug('client_handler: request transformed to: %s' % (request))
-                except:
-                    need_request = False
-                    answer_faked = "510 Request filtered: IP transformation failed"
-                    exception_msg = str(sys.exc_info()[0])
-                    logger.error("client_handler: Could not transform add_onion command. exception_msg: " + exception_msg)
-
-            ## Test cases.
-            #request = "add_onion new:best port=80,127.0.0.1:17600"
-
-            if self.configuration.ONION_REJECT_OWN_IPS == True:
-                try:
-                    my_ips_list = self.ip_list_own()
-                    for own_ip in my_ips_list:
-                       logger.error('client_handler: own_ip: %s' % (own_ip))
-                       if own_ip in request:
-                           need_request = False
-                           answer_faked = "510 Request filtered: matching add_onion for own IPs failed!"
-                           logger.error('client_handler: own_ip in request, blocking! own_ip: %s' % (own_ip))
-                           break
-                except:
-                    need_request = False
-                    answer_faked = "510 Request filtered: matching add_onion for own IPs failed!"
-                    exception_msg = str(sys.exc_info()[0])
-                    logger.error("client_handler: matching add_onion for own IPs failed! exception_msg: " + exception_msg)
-
-            if "nonanonymous" in request:
-                need_request = False
-                answer_faked = '510 Request filtered: add_onion contains "NonAnonymous"!'
-                logger.error('510 Request filtered: add_onion contains "NonAnonymous"!')
-
-        if need_request == True:
-            self.tor_connection.say(request)
-            if request_startswith == "quit":
-                ## Give it half a second to catch Tor's answer before
-                ## actually closing the client socket later.
-                asyncore.loop(timeout=0.1, count=5)
-
+            client_pid = None
+            matchers = [
+                ('match-hosts', client_host),
+            ]
+        status, filter_name, allowed_commands, \
+            allowed_events, restrict_stream_events = \
+                match_and_parse_filter(self.filters, matchers)
+        if local_connection:
+            client_desc = '{} (pid: {}, user: {}, port: {}, filter: {})'.format(
+                client_exe_path, client_pid, client_user,
+                self.client_address[1], filter_name
+            )
         else:
-            answer_faked = answer_faked + "\r\n"
-            answer_faked_strip = answer_faked.strip()
-            logger.info('client_handler: answer_faked by cpfpy: "%s"' % (answer_faked_strip))
-            ## TODO: exception handling
-            self.send(answer_faked)
-
-        if do_break == True:
-            logger.info('client_handler: Closing connection on '
-                         'sock: %s' % (self))
-            ## TODO: exception handling
-            self.close()
-
-    def handle_close(self):
-        logger.info('client_handler: End of connection on sock: %s' %
-                     (self))
-        if self.tor_connection:
-            self.tor_connection.close()
-
-    def handle_error(self):
-        t, v, tb = sys.exc_info()
-        if t == socket.error:
-            logger.error('client_handler ERROR: %s' % (t))
-            self.close()
-
-class ControlPortFilterServer(asyncore.dispatcher):
-    def __init__(self):
-        asyncore.dispatcher.__init__(self)
-        self.connections = []
-
-    def handle_accept(self):
-        conn, addr = self.accept()
-        client_ip = str(addr[0])
-        self.connections.append(
-            ControlPortFilterHandler(conn, client_ip, configuration=self.configuration))
-
-    def handle_error(self):
-        logger.error('ControlPortFilterServer: ERROR')
-        t, v, tb = sys.exc_info()
-        if t == socket.error:
-            logger.error('ControlPortFilterServer: ERROR: %s' % (t))
-            self.close()
-
-    def run(self):
-        self.configuration = Configuration()
-        maybe_warning_message = self.configuration.read()
-        if maybe_warning_message is not None:
-            logger.warning(maybe_warning_message)
-
-        # Catch server exceptions.
+            client_desc = '{1}:{2} (filter: {0})'.format(
+                filter_name, *self.client_address
+            )
+        if restrict_stream_events and not local_connection:
+            log(
+                "{}: filter '{}' has `restrict-stream-events` set " +
+                "and we are remote so the option was disabled"
+                .format(client_desc, filter_name)
+            )
+            restrict_stream_events = False
+        log('{} connected: {}'.format(client_desc, status))
+        if global_args.debug:
+            log('Final rules:')
+            log(yaml.dump({
+                'commands': allowed_commands,
+                'events': allowed_events,
+                'restrict-stream-events': restrict_stream_events,
+            }))
+        disconnect_reason = "client quit"
+        controller = None
         try:
-            logger.info("ControlPortFilterServer: Trying to start Tor control port filter on    IP %s port %s"
-                        % (self.configuration.IP, self.configuration.PORT))
-            # Accept concurrent connections.
-            self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
+            controller = self.connect_to_real_control_port()
+            handle_controlport_session(controller, self.rfile, self.wfile,
+                                       client_desc, client_pid,
+                                       self.client_address,
+                                       self.server.server_address,
+                                       allowed_commands, allowed_events,
+                                       restrict_stream_events
+            )
+        except (ConnectionResetError, BrokenPipeError) as err:
+            # Handle clients disconnecting abruptly
+            disconnect_reason = str(err)
+        except stem.SocketError:
+            # Handle client closing its socket abruptly
+            disconnect_reason = "Client closed its socket"
+        except stem.SocketClosed:
+            # Handle Tor closing its socket abruptly
+            disconnect_reason = "Tor closed its socket"
+        finally:
+            if controller:
+                controller.close()
+            log('{} disconnected: {}'.format(client_desc, disconnect_reason))
 
-            ## TODO: May not be the cleanest solution. We should properly terminate sockets on shutdown.
-            self.set_reuse_addr()
 
-            self.bind((self.configuration.IP, self.configuration.PORT))
-            # it isn't exactly connection limit - it a queue depth for
-            # connections waiting to be handled
-            self.listen(self.configuration.CONTROL_PORT_FILTER_CONCURRENT_CONNECTIONS_LIMIT)
+class FilteredControlPortProxy(socketserver.ThreadingTCPServer):
+    # So we can restart when the listening port if in TIME_WAIT state
+    # after an abrupt shutdown.
+    allow_reuse_address = True
+    # So all server threads immediately quit when the main thread
+    # quits.
+    daemon_threads = True
 
-            logger.info("ControlPortFilterServer: Tor control port filter started, listening on IP %s port %s"
-                        % (self.configuration.IP, self.configuration.PORT))
-        except IOError as e:
-            logger.critical('ControlPortFilterServer: Server error %s' % (e))
-            logger.critical('ControlPortFilterServer: Exiting.')
-            sys.exit(1)
 
-        try:
-            asyncore.loop()
-        except KeyboardInterrupt:
-             logger.info('ControlPortFilterServer: KeyboardInterrupt.')
-        except asyncore.ExitNow, e:
-             logger.info('ControlPortFilterServer: asyncore.ExitNow e: %s' % (e))
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--listen-address",
+        type=str, metavar='ADDR', default=DEFAULT_LISTEN_ADDRESS,
+        help="specifies the address on which the server listens " +
+             "(default: {})".format(DEFAULT_LISTEN_ADDRESS)
+    )
+    parser.add_argument(
+        "--listen-port",
+        type=int, metavar='PORT', default=DEFAULT_LISTEN_PORT,
+        help="specifies the port on which the server listens " +
+             "(default: {})".format(DEFAULT_LISTEN_PORT)
+    )
+    parser.add_argument(
+        "--control-cookie-path",
+        type=str, metavar='PATH', default=DEFAULT_COOKIE_PATH,
+        help="specifies the path to Tor's control authentication cookie " +
+             "(default: {})".format(DEFAULT_COOKIE_PATH)
+    )
+    parser.add_argument(
+        "--control-socket-path",
+        type=str, metavar='PATH', default=DEFAULT_CONTROL_SOCKET_PATH,
+        help="specifies the path to Tor's control socket " +
+             "(default: {})".format(DEFAULT_CONTROL_SOCKET_PATH)
+    )
+    parser.add_argument(
+        "--complain",
+        action='store_true', default=False,
+        help="disables all filtering and just prints the commands sent " +
+             "by the client"
+    )
+    parser.add_argument(
+        "--debug",
+        action='store_true', default=False,
+        help="prints all requests and responses"
+    )
+    # We put the argparse results in the global scope since it's
+    # awkward to extend socketserver so additional data can be sent to
+    # the request handler, where we need access to the arguments.
+    global global_args
+    global_args = parser.parse_args()
+    # Deal with overlapping functionality between arguments
+    global_args.__dict__['disable_filtering'] = global_args.complain
+    global_args.__dict__['print_requests'] = global_args.complain or \
+                                             global_args.debug
+    global_args.__dict__['print_responses'] = global_args.debug
+    address = (global_args.listen_address, global_args.listen_port)
+    server = FilteredControlPortProxy(address, FilteredControlPortProxyHandler)
+    log("Tor control port filter started, listening on {}:{}".format(*address))
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
 
-        logger.info('ControlPortFilterServer: Shutting down...')
-        asyncore.close_all()
-        logger.info('ControlPortFilterServer: End.')
-
-def sigterm_handler(_signo, _stack_frame):
-    logger.info('Sigterm received.')
-    asyncore.close_all()
-    logger.info('End.')
-    sys.exit(144)
-
-def sigint_handler(_signo, _stack_frame):
-    logger.info('Sigint received.')
-    asyncore.close_all()
-    logger.info('End.')
-    sys.exit(144)
-
-def handle_exception(exc_type, exc_value, exc_traceback):
-    logger.error("Uncaught exception", exc_info=(exc_type, exc_value, exc_traceback))
 
 if __name__ == "__main__":
-    mypid = os.getpid()
-    log_prefix = "CPFP " + str(mypid) + " log"
-    logger = logging.getLogger(log_prefix)
-    logger.setLevel(logging.DEBUG)
-
-    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-    handler = logging.StreamHandler(sys.stdout)
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-
-    cpfp = ControlPortFilterServer()
-
-    signal.signal(signal.SIGTERM, sigterm_handler)
-    signal.signal(signal.SIGINT, sigint_handler)
-    sys.excepthook = handle_exception
-
-    cpfp.run()
+    main()
