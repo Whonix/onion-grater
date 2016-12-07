@@ -1,6 +1,0 @@
-/var/log/control-port-filter-python.log {
-    rotate 1
-    weekly
-    compress
-    missingok
-}
