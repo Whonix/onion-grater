@@ -6,7 +6,7 @@ Wants==network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/lib/tor-controlport-filter
+ExecStart=/usr/lib/tor-controlport-filter
 
 User=tor-controlport-filter
 Group=tor-controlport-filter
