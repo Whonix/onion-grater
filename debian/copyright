@@ -20,12 +20,12 @@ License: GPL-3+
  License version 3 can be found in the file
  `/usr/share/common-licenses/GPL-3'.
 
-Files: usr/sbin/cpfpd
+Files: usr/lib/tor-controlport-filter
 Copyright: (C) Amnesia <amnesia at boum dot org>
            (C) 2014 troubadour <trobador@riseup.net>
            (C) 2014 Patrick Schleizer <adrelanos@riseup.net>
 Comment:
- https://git-tails.immerda.ch/tails/tree/config/chroot_local-includes/usr/local/sbin/tor-controlport-filter?id=84d6433c6412e82395097fa63316955e88649ab7
+ https://git-tails.immerda.ch/tails/tree/config/chroot_local-includes/usr/local/lib/tor-controlport-filter?h=feature/7870-include_onionshare&id=b420c546d2fe2183ea87c799c646794d2095bbc9
  https://git-tails.immerda.ch/tails/plain/config/chroot_local-includes/usr/local/sbin/tor-controlport-filter
 License: GPL-3+
  This program is free software: you can redistribute it and/or modify
