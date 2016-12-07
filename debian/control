@@ -16,9 +16,8 @@ Standards-Version: 3.9.6
 
 Package: control-port-filter-python
 Architecture: all
-Pre-Depends: tor
 Depends: ${misc:Depends}, ${python:Depends},
- python (>= 3.0), python3-psutil, python3-stem, python3-yaml
+ tor, python (>= 3.0), python3-psutil, python3-stem, python3-yaml
 Conflicts: control-port-filter
 Description: Whitelisting filter for dangerous Tor control protocol commands
  Filters out Tor control protocol commands that are dangerous for anonymity
