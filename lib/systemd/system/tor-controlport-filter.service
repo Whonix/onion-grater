@@ -1,14 +1,41 @@
 [Unit]
 Description=Tor control port filter proxy
 Documentation=https://tails.boum.org/contribute/design/
+After=network.target
+Wants==network.target
 
 [Service]
 Type=simple
 ExecStart=/usr/local/lib/tor-controlport-filter
+
+User=tor-controlport-filter
+Group=tor-controlport-filter
+SuccessExitStatus=143
+TimeoutSec=30
+Restart=always
+
+## TODO: Watchdog disabled. cpfpd would need to implement the sd_notify protocol.
+##       https://phabricator.whonix.org/T274
+#WatchdogSec=1m
+
 PrivateDevices=yes
 PrivateTmp=yes
 ProtectHome=yes
 ProtectSystem=full
+
+NoNewPrivileges=yes
+
+SystemCallFilter=close
+SystemCallFilter=open
+SystemCallFilter=link
+SystemCallFilter=access
+SystemCallFilter=kill
+SystemCallFilter=ioctl
+SystemCallFilter=readlink
+SystemCallFilter=stat64
+SystemCallFilter=getsockopt
+
+SystemCallArchitectures=native
 
 [Install]
 WantedBy=multi-user.target
