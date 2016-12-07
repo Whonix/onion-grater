@@ -3,6 +3,8 @@ Description=Tor control port filter proxy
 Documentation=https://tails.boum.org/contribute/design/
 After=network.target
 Wants==network.target
+ConditionPathExists=!/var/run/qubes-service/whonix-template
+ConditionPathExists=!/var/run/qubes/this-is-templatevm
 
 [Service]
 Type=simple
