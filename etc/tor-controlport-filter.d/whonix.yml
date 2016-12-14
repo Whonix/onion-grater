@@ -10,7 +10,7 @@
       - 'NEWNYM'
     GETINFO:
       - 'status/circuit-established'
-      - 'status/bootstrap-phase'
+      - 'version'
       - pattern: 'net/listeners/socks'
         response:
         - pattern:     '250-net/listeners/socks=".*"'
