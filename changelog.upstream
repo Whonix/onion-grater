@@ -1,3 +1,15 @@
+commit cf0535fcd46464bdbdd86c2cd258e17ee7f6d171
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Dec 14 20:12:34 2016 +0000
+
+    improve etc/tor-controlport-filter.d/whonix.yml
+
+commit 8e948e1378775356e331985d1374c6c373051fde
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Dec 10 01:55:10 2016 +0000
+
+    bumped changelog version
+
 commit 0245aff533b7d73ad963f65ea77202ba9737348c
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 23:06:20 2016 +0000
