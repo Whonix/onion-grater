@@ -133,6 +133,9 @@ import stem.control
 import sys
 import textwrap
 import yaml
+import socket
+import fcntl
+import struct
 
 DEFAULT_LISTEN_ADDRESS = 'localhost'
 DEFAULT_LISTEN_PORT = 9051
@@ -256,6 +259,13 @@ def match_and_parse_filter(filters, matchers):
     return (status, filter_name, allowed_commands,
             allowed_events, restrict_stream_events)
 
+def get_ip_address(ifname):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    return socket.inet_ntoa(fcntl.ioctl(
+        s.fileno(),
+        0x8915,  # SIOCGIFADDR
+        struct.pack('256s', bytes(ifname[:15], 'utf-8'))
+    )[20:24])
 
 def handle_controlport_session(controller, readh, writeh, client_desc, client_pid, client_address, server_address, allowed_commands, allowed_events, restrict_stream_events = False):
 
@@ -611,6 +621,14 @@ def main():
         help="specifies the port on which the server listens " +
              "(default: {})".format(DEFAULT_LISTEN_PORT)
     )
+    
+    parser.add_argument(
+        "--listen-interface",
+        type=str, metavar='INTERFACE',
+        help="specifies the interface on which the server listens " +
+             "(default: NULL)"
+    )
+
     parser.add_argument(
         "--control-cookie-path",
         type=str, metavar='PATH', default=DEFAULT_COOKIE_PATH,
@@ -644,7 +662,16 @@ def main():
     global_args.__dict__['print_requests'] = global_args.complain or \
                                              global_args.debug
     global_args.__dict__['print_responses'] = global_args.debug
-    address = (global_args.listen_address, global_args.listen_port)
+  
+    if global_args.listen_interface:
+        ip_address = get_ip_address(global_args.listen_interface)
+        if global_args.debug:
+            log("IP address for interface {} : {}".format( 
+                                 global_args.listen_interface,ip_address))
+    else:
+        ip_address = global_args.listen_address
+    address = (ip_address, global_args.listen_port)
+ 
     server = FilteredControlPortProxy(address, FilteredControlPortProxyHandler)
     log("Tor control port filter started, listening on {}:{}".format(*address))
     try:
