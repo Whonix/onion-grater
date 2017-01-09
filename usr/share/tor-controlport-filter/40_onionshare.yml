@@ -1,0 +1,68 @@
+## This file is part of Whonix.
+## Copyright (C) 2016 - 2016 Patrick Schleizer <adrelanos@riseup.net>
+## See the file COPYING for copying conditions
+
+## tested with onionshare v0.9.2-67-g12acb89
+## tested with tor 0.2.9.8-2~d80.jessie+1
+
+## Tor's reply ClientAuth
+## 250-ClientAuth=onionshare:xxxKEYBLOBxxxxxxxxxxxx
+## is left intact because onionshare's button 'Copy HidServAuth' coppies the
+## following into the clipboard, which is a usability feature.
+## HidServAuth domainxxxxxxxxxx.onion xxxKEYBLOBxxxxxxxxxxxx
+## Otherwise the user would have to extract it from tor-controlport-filter
+## logs.
+
+## Tor's reply PrivateKey gets redacted.
+
+## HS_DESC CREATED, UPLOAD, UPLOADED, HiddenService descriptors content and
+## HsDir gets redacted.
+
+---
+- match-exe-paths:
+    - '*'
+  match-users:
+    - '*'
+  match-hosts:
+    - '*'
+  commands:
+    GETINFO:
+      - 'onions/current'
+    GETCONF:
+      - 'hiddenservicesinglehopmode'
+    ADD_ONION:
+      ## {{{ Requried for regular onion services.
+      - pattern:     'NEW:BEST Port=80,(176[0-5][0-9])'
+        replacement: 'NEW:BEST Port=80,{client-address}:{} Flags=DiscardPK'
+      ## }}}
+
+      ## {{{ requried for stealth onion services.
+      ## onionshare creates this dummy probably to test if Tor supports the BasicAuth option.
+      - pattern:     'NEW:BEST Flags=BasicAuth Port=1,1 ClientAuth=onionshare'
+        replacement: 'NEW:BEST Flags=BasicAuth Port=1,{client-address}:1 ClientAuth=onionshare Flags=DiscardPK'
+      ## Flags=DiscardPK would break it.
+      - pattern: 'NEW:BEST Flags=BasicAuth Port=80,(176[0-5][0-9]) ClientAuth=onionshare'
+        replacement: 'NEW:BEST Flags=BasicAuth Port=80,{client-address}:{} ClientAuth=onionshare'
+        response:
+        - pattern:     '250-PrivateKey=(\S+):\S+'
+          replacement: '250-PrivateKey={}:redacted'
+      ## }}}
+    DEL_ONION:
+      - '.+'
+  confs:
+    __owningcontrollerprocess:
+  events:
+    SIGNAL:
+      suppress: true
+    CONF_CHANGED:
+      suppress: true
+    HS_DESC:
+      response:
+        - pattern:     '650 HS_DESC CREATED (\S+) (\S+) (\S+) \S+ (.+)'
+          replacement: '650 HS_DESC CREATED {} {} {} redacted {}'
+        - pattern:     '650 HS_DESC UPLOAD (\S+) (\S+) .*'
+          replacement: '650 HS_DESC UPLOAD {} {} redacted redacted'
+        - pattern:     '650 HS_DESC UPLOADED (\S+) (\S+) .+'
+          replacement: '650 HS_DESC UPLOADED {} {} redacted'
+        - pattern:     '.*'
+          replacement: ''
