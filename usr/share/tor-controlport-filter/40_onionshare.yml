@@ -31,12 +31,12 @@
     GETCONF:
       - 'hiddenservicesinglehopmode'
     ADD_ONION:
-      ## {{{ Requried for regular onion services.
+      ## {{{ Required for regular onion services.
       - pattern:     'NEW:BEST Port=80,(176[0-5][0-9])'
         replacement: 'NEW:BEST Port=80,{client-address}:{} Flags=DiscardPK'
       ## }}}
 
-      ## {{{ requried for stealth onion services.
+      ## {{{ Required for stealth onion services.
       ## onionshare creates this dummy probably to test if Tor supports the BasicAuth option.
       - pattern:     'NEW:BEST Flags=BasicAuth Port=1,1 ClientAuth=onionshare'
         replacement: 'NEW:BEST Flags=BasicAuth Port=1,{client-address}:1 ClientAuth=onionshare Flags=DiscardPK'
