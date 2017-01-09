@@ -203,20 +203,22 @@ def merge_yml(final_obj, parsing_obj):
                     pass
                     # Override case 
     else: # Non Dictionary case - LIST 
+        pattern_final_obj = {}  
         if(final_obj != parsing_obj): #Only when the LIST are different
             # Specially handle GETINFO case which contains pattern and response 
             for ele in final_obj:
                 if(type(ele) is dict):
                     if all (k in ele for k in ('pattern','response')):
                         pattern_final_obj = ele 
-           
+          
             # If pattern is same, no need for this whole LIST
-            # We will use the higher priority pattern,response 
+            # We will use the higher priority pattern,response
             for ele in parsing_obj:
                 if(type(ele) is dict):
-                    if all (k in ele for k in ('pattern','response')):
-                        if pattern_final_obj['pattern'] == ele['pattern']:
-                            parsing_obj.remove(ele)
+                    if all (k in ele for k in ('pattern','response')): 
+                        if 'pattern' in pattern_final_obj: 
+                            if pattern_final_obj['pattern'] == ele['pattern']:
+                                parsing_obj.remove(ele)
                 
             # Add without duplicates
             final_obj += [ele for ele in parsing_obj if ele not in final_obj]
@@ -566,6 +568,7 @@ class FilteredControlPortProxyHandler(socketserver.StreamRequestHandler):
             if name not in filter_:
                 filter_['name'] = "merged_filter_files" 
         self.filters = merged_filter
+        log("Merged Filter File is {} \n".format(merged_filter)) 
 
     def connect_to_real_control_port(self):
         with open(global_args.control_cookie_path, "rb") as f:
