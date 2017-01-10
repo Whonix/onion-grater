@@ -3,6 +3,7 @@
 ## See the file COPYING for copying conditions
 
 ## TODO: restrict number of ports / instances
+##       https://github.com/ricochet-im/ricochet/issues/30#issuecomment-271646818
 
 ---
 - match-exe-paths:
@@ -15,8 +16,6 @@
     GETINFO:
       - pattern: 'status/circuit-established status/bootstrap-phase net/listeners/socks'
         response:
-        - pattern:     '250-net/listeners/socks=".*"'
-          replacement: '250-net/listeners/socks="127.0.0.1:9150"'
         - pattern:     '250-status/bootstrap-phase=*'
           replacement: '250-status/bootstrap-phase=NOTICE BOOTSTRAP PROGRESS=100 TAG=done SUMMARY="Done"'
         - pattern:     '250-net/listeners/socks=".*"'
