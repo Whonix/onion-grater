@@ -1,3 +1,9 @@
+control-port-filter-python (3:2.0-1) unstable; urgency=medium
+
+  * New upstream version (local package).
+
+ -- Patrick Schleizer <adrelanos@riseup.net>  Thu, 12 Jan 2017 02:49:24 +0000
+
 control-port-filter-python (3:1.9-1) unstable; urgency=medium
 
   * New upstream version (local package).

@@ -1,3 +1,104 @@
+commit cdf1c35b5241396db86e2dc5e17d41f98557c7f3
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jan 10 23:19:44 2017 +0000
+
+    add 40_zeronet.yml to examples
+
+commit c7231b54fe0a17cad68342a8385eb2035bea61d3
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jan 10 17:59:38 2017 +0000
+
+    remove rules duplication; comment
+
+commit 611c974a9f349ad4a136a2baf479e86276690eca
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jan 10 16:32:22 2017 +0000
+
+    add ricochet config to examples folder
+    
+    https://phabricator.whonix.org/T444
+
+commit 6b51c6cc3e18a1d2c09bcef994b088adeebc1ff7
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Jan 9 20:56:43 2017 +0100
+
+    workaround for 'bug, ADD_ONION tries port 0?'
+    
+    https://github.com/micahflee/onionshare/issues/343
+
+commit 69bffd76788fa2ec2c497fe48083cd072043cb55
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Jan 9 20:53:46 2017 +0100
+
+    fix path usr/share/tor-controlport-filter/40_onionshare.yml -> usr/share/tor-controlport-filter/examples/40_onionshare.yml
+
+commit d875118428fe7877a14afcc6c5065b807c1cdfe7
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Jan 9 19:47:16 2017 +0100
+
+    typo
+
+commit 5178234b805ca549f47f25958d67286923eb076d
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Jan 9 19:39:49 2017 +0100
+
+    renamed etc/tor-controlport-filter.d/whonix.yml -> etc/tor-controlport-filter.d/30_whonix.yml
+    
+    https://phabricator.whonix.org/T576
+
+commit 008e642c04e099f1807e9766396d1d2ffa063f5a
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Jan 9 19:35:32 2017 +0100
+
+    https://phabricator.whonix.org/T594
+    
+    add usr/share/tor-controlport-filter/40_onionshare.yml
+
+commit 2c647edd23457516338092aa0654472df73a3310
+Merge: 501f2fc 98eaef3
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Jan 9 15:33:55 2017 +0100
+
+    Merge remote-tracking branch 'joy/master'
+
+commit 98eaef3dc7eb23ab9ec90297f1eccab74646f684
+Author: joysn <joysn1980@yahoo.com>
+Date:   Mon Jan 9 11:58:06 2017 +0000
+
+    https://phabricator.whonix.org/T576
+    
+    Fix error pointed by Patrick
+
+commit 22ce6ba6ff6513e45d9166e6004d8748fd407eb0
+Author: joysn <joysn1980@yahoo.com>
+Date:   Thu Dec 22 12:18:27 2016 +0000
+
+    add /etc/tor-controlport-filter.d configuration drop-in snippet configuration
+    extension feature
+    
+    https://phabricator.whonix.org/T576
+
+commit 501f2fcb80087aff4d702e84a78136709d69e3c5
+Merge: 5e44fa7 8a67063
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Dec 18 01:55:23 2016 +0100
+
+    Merge remote-tracking branch 'joy/master'
+
+commit 5e44fa70351641e5028191bc7018bfcf96bc761e
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Dec 16 16:19:05 2016 +0000
+
+    bumped changelog version
+
+commit 8a67063dc68b1011e42a8d05f5e1f5889e460e69
+Author: Joy SN <joysn1980@yahoo.com>
+Date:   Fri Dec 16 12:45:01 2016 +0530
+
+    add --listen-interface
+    
+    https://phabricator.whonix.org/T579
+
 commit cf0535fcd46464bdbdd86c2cd258e17ee7f6d171
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 14 20:12:34 2016 +0000
