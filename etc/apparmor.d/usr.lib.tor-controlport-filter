@@ -4,23 +4,22 @@
 ## The attach_disconnected flag prevents a denied
 ## message on /dev/null -> disconnected path.
 
-/usr/sbin/cpfpd flags=(attach_disconnected) {
+/usr/lib/tor-controlport-filter flags=(attach_disconnected) {
   #include <abstractions/base>
   #include <abstractions/python>
 
   ## This script doesn't really need to read the interpreter that's running it.
   deny /usr/bin/python{2,3}.[0-7]* r,
 
-  /etc/cpfpy.d/ r,
-  /etc/cpfpy.d/* r,
+  /etc/tor-controlport-filter.d/ r,
+  /etc/tor-controlport-filter.d/* r,
+  /usr/local/etc/tor-controlport-filter.d/ r,
+  /usr/local/etc/tor-controlport-filter.d/* r,
 
   /run/tor/control.authcookie r,
-  /run/control-port-filter-python/* rwlk,
 
   /tmp/* rwk,
   /var/tmp/* rwk,
 
-  /var/log/control-port-filter-python.log rwk,
-
-  /usr/sbin/cpfpd r,
+  /usr/lib/tor-controlport-filter r,
 }
