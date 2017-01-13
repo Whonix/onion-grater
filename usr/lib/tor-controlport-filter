@@ -556,7 +556,7 @@ class FilteredControlPortProxyHandler(socketserver.StreamRequestHandler):
         for filter_file in filter_files: 
             try:
                 with open(filter_file, "rb") as fh:
-                    filters = yaml.load(fh.read())
+                    filters = yaml.safe_load(fh.read())
                     for i in range(len(filters)):
                         merged_filter_dict = merge_yml(merged_filter_dict,filters[i]) 
             except (yaml.parser.ParserError, yaml.scanner.ScannerError):
