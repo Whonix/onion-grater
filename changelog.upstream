@@ -1,3 +1,71 @@
+commit ec5426e7f61cb70e276321105ed31a132c1b7506
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Jan 15 12:31:15 2017 +0000
+
+    override lintian copyright false positive
+
+commit 28ab97962a900513905c78252d42caf7c78bbf3c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Jan 15 07:55:28 2017 +0000
+
+    use --home /nonexistent to fix lintian warning
+
+commit 20e28436f48c1806b33a203947e6f62d34fe45ed
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Jan 15 08:35:30 2017 +0100
+
+    packaging, bumped Standards-Version from 3.9.6 to 3.9.8 for jessie support
+
+commit 482a30e8473efe43028c9536481856737eefc103
+Merge: 07a6ab6 774bb69
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Jan 13 14:33:58 2017 +0000
+
+    Merge remote-tracking branch 'joy/master'
+
+commit 774bb69e6812fac01ca1e40ba6721961950e5475
+Author: joysn <joysn1980@yahoo.com>
+Date:   Fri Jan 13 11:32:36 2017 +0000
+
+    Makesure that python exceptions are logged and found using
+    sudo journalctl -f -u tor-controlport-filter
+    
+    https://phabricator.whonix.org/T603
+
+commit 07a6ab605b549487414a61920086648bd14b7f22
+Merge: b2f5ca1 34070b3
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Jan 12 20:14:07 2017 +0000
+
+    Merge remote-tracking branch 'joy/master'
+
+commit 34070b35c91b7262697dbefec3944b496d0da18d
+Author: joysn <joysn1980@yahoo.com>
+Date:   Thu Jan 12 10:59:36 2017 +0000
+
+    Modify the tor-controlport-filter profile for apparmor.d
+    https://phabricator.whonix.org/T587
+
+commit b2f5ca1a00c5ca6d19a02122b170ad32d8e56aa6
+Merge: fbfd25b 3685f36
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Jan 12 10:13:06 2017 +0000
+
+    Merge remote-tracking branch 'joy/master'
+
+commit 3685f36aecea638ba2fb73d7daa31423fd396e4e
+Author: joysn <joysn1980@yahoo.com>
+Date:   Thu Jan 12 09:39:16 2017 +0000
+
+    renaming usr.sbin.cpfpd to usr.lib.tor-controlport-filter
+    https://phabricator.whonix.org/T587
+
+commit fbfd25b5821e8a3f8be6c50cea373e0922342d95
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Jan 12 02:49:24 2017 +0000
+
+    bumped changelog version
+
 commit cdf1c35b5241396db86e2dc5e17d41f98557c7f3
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Jan 10 23:19:44 2017 +0000
@@ -1022,7 +1090,7 @@ Date:   Sun May 3 21:31:51 2015 +0000
     Merge remote-tracking branch 'troubadoour/master' into mtest
     
     Conflicts:
-    	etc/init.d/control-port-filter-python
+            etc/init.d/control-port-filter-python
 
 commit 56834009d345861e381d4316bdabdfe0b8f18ace
 Author: troubadoour <trobador@riseup.net>
@@ -1416,8 +1484,8 @@ Date:   Fri Feb 6 23:52:30 2015 +0000
     Merge remote-tracking branch 'origin/master' into x
     
     Removed Conflicts:
-    	man/cpfpy.8.ronn
-    	usr/bin/cpfpy
+            man/cpfpy.8.ronn
+            usr/bin/cpfpy
 
 commit cb3017ba257aa581ed0ca8e9a0a5db86e5ea4b1c
 Author: Patrick Schleizer <adrelanos@riseup.net>
