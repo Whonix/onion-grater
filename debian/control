@@ -12,7 +12,7 @@ Build-Depends: debhelper (>= 9), faketime, genmkfile, dh-systemd, dh-python,
 Homepage: https://www.whonix.org/wiki/Dev/CPFP
 Vcs-Browser: https://github.com/troubadoour/control-port-filter-python
 Vcs-Git: https://github.com/troubadoour/control-port-filter-python.git
-Standards-Version: 3.9.6
+Standards-Version: 3.9.8
 
 Package: control-port-filter-python
 Architecture: all
