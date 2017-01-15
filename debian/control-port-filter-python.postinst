@@ -18,7 +18,7 @@ true "
 
 case "$1" in
     configure)
-       adduser --system --quiet --group --no-create-home tor-controlport-filter
+       adduser --home /nonexistent --quiet --system --group tor-controlport-filter
        adduser tor-controlport-filter debian-tor
     ;;
 

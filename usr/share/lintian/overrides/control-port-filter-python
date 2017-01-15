@@ -1,3 +1,0 @@
-# lintian false-positive
-# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=733595
-control-port-filter-python: maintainer-script-should-not-use-adduser-system-without-home
