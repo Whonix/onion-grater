@@ -29,7 +29,7 @@ Date:   Fri Jan 13 11:32:36 2017 +0000
 
     Makesure that python exceptions are logged and found using
     sudo journalctl -f -u tor-controlport-filter
-    
+
     https://phabricator.whonix.org/T603
 
 commit 07a6ab605b549487414a61920086648bd14b7f22
@@ -83,7 +83,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Jan 10 16:32:22 2017 +0000
 
     add ricochet config to examples folder
-    
+
     https://phabricator.whonix.org/T444
 
 commit 6b51c6cc3e18a1d2c09bcef994b088adeebc1ff7
@@ -91,7 +91,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Jan 9 20:56:43 2017 +0100
 
     workaround for 'bug, ADD_ONION tries port 0?'
-    
+
     https://github.com/micahflee/onionshare/issues/343
 
 commit 69bffd76788fa2ec2c497fe48083cd072043cb55
@@ -111,7 +111,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Jan 9 19:39:49 2017 +0100
 
     renamed etc/tor-controlport-filter.d/whonix.yml -> etc/tor-controlport-filter.d/30_whonix.yml
-    
+
     https://phabricator.whonix.org/T576
 
 commit 008e642c04e099f1807e9766396d1d2ffa063f5a
@@ -119,7 +119,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Jan 9 19:35:32 2017 +0100
 
     https://phabricator.whonix.org/T594
-    
+
     add usr/share/tor-controlport-filter/40_onionshare.yml
 
 commit 2c647edd23457516338092aa0654472df73a3310
@@ -134,7 +134,7 @@ Author: joysn <joysn1980@yahoo.com>
 Date:   Mon Jan 9 11:58:06 2017 +0000
 
     https://phabricator.whonix.org/T576
-    
+
     Fix error pointed by Patrick
 
 commit 22ce6ba6ff6513e45d9166e6004d8748fd407eb0
@@ -143,7 +143,7 @@ Date:   Thu Dec 22 12:18:27 2016 +0000
 
     add /etc/tor-controlport-filter.d configuration drop-in snippet configuration
     extension feature
-    
+
     https://phabricator.whonix.org/T576
 
 commit 501f2fcb80087aff4d702e84a78136709d69e3c5
@@ -164,7 +164,7 @@ Author: Joy SN <joysn1980@yahoo.com>
 Date:   Fri Dec 16 12:45:01 2016 +0530
 
     add --listen-interface
-    
+
     https://phabricator.whonix.org/T579
 
 commit cf0535fcd46464bdbdd86c2cd258e17ee7f6d171
@@ -184,7 +184,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 23:06:20 2016 +0000
 
     fix systemd unit file syntax error
-    
+
     https://phabricator.whonix.org/T573
 
 commit 169b6c6180a204e6382934e07512ea81200aba91
@@ -192,7 +192,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 20:28:22 2016 +0000
 
     add Whonix default config
-    
+
     https://phabricator.whonix.org/T573
 
 commit bd6b10386f6c85b083cea3b95b6bacd9d439b78a
@@ -200,7 +200,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 19:56:32 2016 +0000
 
     adjust for don't run inside Qubes TemplateVM
-    
+
     https://phabricator.whonix.org/T573
 
 commit a063841e36cf3602e7c4e68f8783aaef17ae6954
@@ -208,7 +208,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 19:51:33 2016 +0000
 
     adjust debian/rules and debian/control for python3
-    
+
     https://phabricator.whonix.org/T573
 
 commit cc5836ccb5d21e24ce457c5d1f9919435f616511
@@ -216,7 +216,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 19:48:38 2016 +0000
 
     fix lintian false-positive
-    
+
     https://phabricator.whonix.org/T573
 
 commit 0a1494d6e064ef253d680d3086e865e6d0dbc5b9
@@ -224,7 +224,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 19:45:52 2016 +0000
 
     add debian postinst to create user tor-controlport-filter with member debian-tor
-    
+
     https://phabricator.whonix.org/T573
 
 commit 6635f29699877049722cddf4d80c5d76e406a8f2
@@ -232,7 +232,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 19:36:56 2016 +0000
 
     adjust file location in copyright files
-    
+
     https://phabricator.whonix.org/T573
 
 commit b58447a77e2ab9fbf59969d58af8e6f7a1f47774
@@ -240,7 +240,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 19:33:47 2016 +0000
 
     fix python build depends
-    
+
     https://phabricator.whonix.org/T573
 
 commit 4e4b103680873b7711ee475f9e6271907ef826d6
@@ -254,7 +254,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 20:21:24 2016 +0100
 
     normal dependency rather than pre-dependency on tor package should do
-    
+
     https://phabricator.whonix.org/T573
 
 commit dd80fd2658d329eeed0bb42e7d8b87f338b60406
@@ -262,7 +262,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 20:19:39 2016 +0100
 
     adjust systemd unit file ExecStart=/usr/lib/tor-controlport-filter
-    
+
     https://phabricator.whonix.org/T573
 
 commit 6e48680ef2aeda4fa2b38f926accf096d37067d1
@@ -270,7 +270,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 20:17:40 2016 +0100
 
     remove man page since no longer in /usr
-    
+
     https://phabricator.whonix.org/T573
 
 commit 80542aa94dceb09f8d3158aea88a0e1cb7362ea5
@@ -278,7 +278,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 20:16:52 2016 +0100
 
     move usr/sbin/cpfpd -> usr/lib/tor-controlport-filter
-    
+
     https://phabricator.whonix.org/T573
 
 commit 2c615e544744b9431c65330b6c49772752aa785a
@@ -286,7 +286,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 20:14:37 2016 +0100
 
     adjust debian dependency list
-    
+
     https://phabricator.whonix.org/T573
 
 commit 21526163ef3b21de4e0105710b1fefc7f266016b
@@ -294,7 +294,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 20:12:27 2016 +0100
 
     remove logrotate since using journal now
-    
+
     https://phabricator.whonix.org/T573
 
 commit 8a5e396422ac099952eb57cb75859cb0242c3580
@@ -302,7 +302,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 20:09:51 2016 +0100
 
     remove legacy Whonix cpfpy config file
-    
+
     https://phabricator.whonix.org/T573
 
 commit 8ae1d312985cdb457c37b4a0ae0597e678d3f103
@@ -316,7 +316,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 20:00:38 2016 +0100
 
     add tor-controlport-filter.service
-    
+
     https://phabricator.whonix.org/T573
 
 commit d431e92f78d946ce26b16f4fe14fd45dd84049d9
@@ -324,7 +324,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 19:56:40 2016 +0100
 
     move from Whonix control-port-filter-python to tor-controlport-filter by Tails
-    
+
     https://phabricator.whonix.org/T573
 
 commit 99e8395fbafcb7789c7d1b5cbf7410ed65192e9a
@@ -338,7 +338,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Sep 23 20:12:56 2016 +0000
 
     reject add_onion requests that do include the NonAnonymous keyword
-    
+
     https://phabricator.whonix.org/T448
 
 commit 828f35426349d6ead53013afbe89ee712befae38
@@ -346,7 +346,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Sep 23 19:45:08 2016 +0000
 
     remove postinst, no longer needed
-    
+
     since no longer using DaemonRunner
 
 commit 401870a472451bd51450a43d97736243c09224b3
@@ -360,7 +360,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Sep 23 19:41:28 2016 +0000
 
     remove control-port-filter-python.conf
-    
+
     no longer required since DaemonRunner was removed
 
 commit b0154ce609778b7faedbd4155616472d96ceb314
@@ -368,7 +368,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Sep 23 19:39:58 2016 +0000
 
     remove start parameter from ExecStart since no longer needed
-    
+
     since DaemonRunner was removed
 
 commit 88aafe059bb05dd1175148d00f635db6ff020cbd
@@ -418,7 +418,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Sep 22 23:48:25 2016 +0000
 
     remove issue comment since solved
-    
+
     Should Tor authentication fail, this is logged and cpfpy closes client connection.
 
 commit 9c325f5fa953f395c5dd38d3b2eb3114beb1bcc4
@@ -426,7 +426,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Sep 22 23:43:31 2016 +0000
 
     remove issue comment since solved
-    
+
     should Tor close the connection, cpfpy will also close client connection
 
 commit a1374dc4cd10cad93b38e963f21d0c07405ff602
@@ -434,7 +434,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Sep 22 23:37:58 2016 +0000
 
     remove issue comment since non-issue
-    
+
     Both real Tor control port and cpfpy close the connection if commands are sent
     when the client is not yet authenticated. (With the exception of authenticate,
     authchallenge and protocolinfo so there is parity.)
@@ -460,7 +460,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Sep 21 23:08:52 2016 +0200
 
     Merge pull request #5 from marmarek/development
-    
+
     Fix 100% CPU usage bug and other things
 
 commit 36f69be421490b3b71e089010344c33eac310ae4
@@ -468,7 +468,7 @@ Author: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
 Date:   Wed Sep 21 23:04:36 2016 +0200
 
     Do not wait for client connection being writable
-    
+
     There is nothing buffered to write. This commit fixes 100% CPU usage -
     it was looping and calling handle_write, which does not exist.
 
@@ -518,7 +518,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Sep 20 21:12:34 2016 +0000
 
     Merge pull request #4 from marmarek/development
-    
+
     buffer incoming request
 
 commit 353cb41fac87d348fab06e357a0fbb0b007d360e
@@ -526,7 +526,7 @@ Author: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
 Date:   Mon Sep 19 00:14:35 2016 +0200
 
     buffer incoming request
-    
+
     https://phabricator.whonix.org/T448
 
 commit 7eda59671bc52c2bdf2bea1b9580fbb39272ffac
@@ -540,7 +540,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Sep 18 02:45:49 2016 +0000
 
     removed now obsolete loop
-    
+
     https://phabricator.whonix.org/T448
 
 commit 62e13d03d75497dc8f05fb80c1735b2e572b3c66
@@ -556,7 +556,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Sep 18 02:42:32 2016 +0000
 
     Merge pull request #3 from marmarek/development
-    
+
     Switch to asyncore for client side too
 
 commit c73d397041ac9c0aab1c03d254e6aded509a24b0
@@ -594,7 +594,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sat Sep 17 23:48:07 2016 +0000
 
     work towards support for Tor control protocol events (setevent) by Control Port Filter Proxy
-    
+
     https://phabricator.whonix.org/T448
 
 commit e073189f6f96380b66b577d02cb6f87fe4761a82
@@ -602,7 +602,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sat Sep 17 02:45:10 2016 +0000
 
     work towards support for Tor control protocol events (setevent) by Control Port Filter Proxy
-    
+
     https://phabricator.whonix.org/T448
 
 commit b349bea05298707181b2980a7e836681ea9e9d57
@@ -628,7 +628,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Sep 16 17:30:19 2016 +0000
 
     work towards support for Tor control protocol events (setevent) by Control Port Filter Proxy
-    
+
     https://phabricator.whonix.org/T448
 
 commit 419e41938dbbd90d4e6c14992d4061e0b03ac0b4
@@ -645,7 +645,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Sep 16 14:55:50 2016 +0000
 
     remove getinfo status/bootstrap-phase from built-in defaults
-    
+
     since no longer required
 
 commit 74c913fe730e4247b59eca4a1c82a0546441c216
@@ -653,9 +653,9 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Sep 16 14:51:09 2016 +0000
 
     add support for python-stem based applications using Tor Control Socket authentication
-    
+
     by adding protocolinfo to whitelist
-    
+
     https://forums.whonix.org/t/control-port-filter-proxy-python-cpfpy-anon-ws-disable-stacked-tor/533/157?u=patrick
 
 commit 7fe75ffab2a5a6ce0716abbe6c496ca15dbc6cda
@@ -663,7 +663,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Sep 14 19:21:15 2016 +0000
 
     add support for python-stem Tor control socket based authentication
-    
+
     - also accept AUTHCHALLANGE Tor control port command
     - correctly terminate answers with CRLF
 
@@ -672,7 +672,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Aug 22 22:53:10 2016 +0000
 
     no longer allow the workstation to read tor_bootstrap_status
-    
+
     for better security
 
 commit 4e07a03ad533a58cb3e3df7404d8d71af8bbb2f3
@@ -694,7 +694,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Aug 14 23:19:42 2016 +0000
 
     Merge pull request #2 from HulaHoopWhonix/patch-3
-    
+
     Update control-port-filter-python.service
 
 commit aeed87e051b1b798f3f3721542c0d0d29f772f90
@@ -703,7 +703,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Aug 14 23:19:20 2016 +0000
 
     Merge pull request #1 from HulaHoopWhonix/patch-1
-    
+
     Tested deny read interpreter rule. Works ok
 
 commit 3a5f7caeaabeae39fd5efd1aae0b9e93b2bcaa21
@@ -805,9 +805,9 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Nov 30 19:48:20 2015 +0000
 
     Only source configuration files that end with the '.conf' extension.
-    
+
     Thanks to @nrgaway for the suggestion!
-    
+
     https://phabricator.whonix.org/T286
 
 commit 1e47a1f6dfda480472d82f72ddc10a836c884c15
@@ -833,7 +833,7 @@ Author: HulaHoopWhonix <bancfc@openmailbox.org>
 Date:   Sat Jun 20 14:35:43 2015 +0000
 
     Update control-port-filter-python.service
-    
+
     syscall whitelist added.
     /usr /boot and /etc are read-only.
     access to /home /run/user is denied.
@@ -1088,7 +1088,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun May 3 21:31:51 2015 +0000
 
     Merge remote-tracking branch 'troubadoour/master' into mtest
-    
+
     Conflicts:
             etc/init.d/control-port-filter-python
 
@@ -1482,7 +1482,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Feb 6 23:52:30 2015 +0000
 
     Merge remote-tracking branch 'origin/master' into x
-    
+
     Removed Conflicts:
             man/cpfpy.8.ronn
             usr/bin/cpfpy
