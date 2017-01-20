@@ -20,24 +20,24 @@ Restart=always
 ##       https://phabricator.whonix.org/T274
 #WatchdogSec=1m
 
-PrivateDevices=yes
-PrivateTmp=yes
-ProtectHome=yes
-ProtectSystem=full
+#PrivateDevices=yes
+#PrivateTmp=yes
+#ProtectHome=yes
+#ProtectSystem=full
 
-NoNewPrivileges=yes
+#NoNewPrivileges=yes
 
-SystemCallFilter=close
-SystemCallFilter=open
-SystemCallFilter=link
-SystemCallFilter=access
-SystemCallFilter=kill
-SystemCallFilter=ioctl
-SystemCallFilter=readlink
-SystemCallFilter=stat64
-SystemCallFilter=getsockopt
+#SystemCallFilter=close
+#SystemCallFilter=open
+#SystemCallFilter=link
+#SystemCallFilter=access
+#SystemCallFilter=kill
+#SystemCallFilter=ioctl
+#SystemCallFilter=readlink
+#SystemCallFilter=stat64
+#SystemCallFilter=getsockopt
 
-SystemCallArchitectures=native
+#SystemCallArchitectures=native
 
 [Install]
 WantedBy=multi-user.target
