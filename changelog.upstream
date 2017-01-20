@@ -1,3 +1,15 @@
+commit e6f5e023ad9bedfa039f51d066c7eac54f731261
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Jan 20 17:47:34 2017 +0100
+
+    disable systemd hardening since broken in stretch, re-enable later
+
+commit 0b913027567f446684c7839e26f0b234d85e41ce
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jan 17 13:08:29 2017 +0100
+
+    bumped changelog version
+
 commit 9a23ebb13b8b32a71378ecb0cb199cf921275c47
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Jan 17 13:05:22 2017 +0100
