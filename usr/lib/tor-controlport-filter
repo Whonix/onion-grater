@@ -583,13 +583,13 @@ class FilteredControlPortProxyHandler(socketserver.StreamRequestHandler):
             client_exe_path = exe_path_of_pid(self.client_pid)
             client_user = psutil.Process(self.client_pid).username()
             matchers = [
-                ('exe-paths', client_exe_path),
-                ('users',     client_user),
+                ('match-exe-paths', client_exe_path),
+                ('match-users',     client_user),
             ]
         else:
             self.client_pid = None
             matchers = [
-                ('hosts', client_host),
+                ('match-hosts', client_host),
             ]
         self.match_and_parse_filter(matchers)
         if local_connection:
