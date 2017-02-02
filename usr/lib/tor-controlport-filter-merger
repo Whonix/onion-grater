@@ -78,7 +78,7 @@ def main():
 
    merged_filter = [merged_filter_dict,]
 
-   # Get the list of files name wothout path
+   # Get the list of files name without path
    file_names = ''
    for i in range(len(filter_files)):
       file_names += ' '+filter_files[i].split('/')[-1]
