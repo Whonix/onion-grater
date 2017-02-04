@@ -6,11 +6,11 @@
 ##       https://github.com/ricochet-im/ricochet/issues/30#issuecomment-271646818
 
 ---
-- match-exe-paths:
+- exe-paths:
     - '*'
-  match-users:
+  users:
     - '*'
-  match-hosts:
+  hosts:
     - '*'
   commands:
     GETINFO:

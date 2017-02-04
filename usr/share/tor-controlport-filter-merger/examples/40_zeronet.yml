@@ -3,11 +3,11 @@
 ## See the file COPYING for copying conditions
 
 ---
-- match-exe-paths:
+- exe-paths:
     - '*'
-  match-users:
+  users:
     - '*'
-  match-hosts:
+  hosts:
     - '*'
   commands:
     ADD_ONION:

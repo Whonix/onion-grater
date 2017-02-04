@@ -1,9 +1,9 @@
 ---
-- match-exe-paths:
+- exe-paths:
     - '*'
-  match-users:
+  users:
     - '*'
-  match-hosts:
+  hosts:
     - '*'
   commands:
     SIGNAL:
