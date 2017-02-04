@@ -88,15 +88,6 @@ def main():
       if name not in filter_:
          filter_['name'] = "merged_filter_files: " + file_names
 
-   # Replace matched-exe-paths, matched-hosts and matched-users
-   for i in range(len(merged_filter)):
-      if 'match-exe-paths' in merged_filter[i].keys():
-         merged_filter[i]['exe-paths'] = merged_filter[i].pop('match-exe-paths')
-      if 'match-hosts' in merged_filter[i].keys():
-         merged_filter[i]['hosts'] = merged_filter[i].pop('match-hosts')
-      if 'match-users' in merged_filter[i].keys():
-         merged_filter[i]['users'] = merged_filter[i].pop('match-users')
-
    ## Merged Filter
    #print(merged_filter)
 
