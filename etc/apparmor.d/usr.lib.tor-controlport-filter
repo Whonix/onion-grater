@@ -21,5 +21,9 @@
   /tmp/* rwk,
   /var/tmp/* rwk,
 
+  /usr/lib/ r,
   /usr/lib/tor-controlport-filter r,
+
+  @{PROC}/[0-9]*/status r,
+  @{PROC}/[0-9]*/mounts r,
 }
