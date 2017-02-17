@@ -1,4 +1,6 @@
-# Last Modified: Mon Jun  8 20:19:11 UTC 2015
+## Copyright (C) 2015 - 2017 Patrick Schleizer <adrelanos@riseup.net>
+## See the file COPYING for copying conditions.
+
 #include <tunables/global>
 
 ## The attach_disconnected flag prevents a denied

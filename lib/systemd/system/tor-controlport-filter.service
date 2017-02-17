@@ -1,3 +1,6 @@
+## Copyright (C) 2015 - 2017 Patrick Schleizer <adrelanos@riseup.net>
+## See the file COPYING for copying conditions.
+
 [Unit]
 Description=Tor control port filter proxy
 Documentation=https://tails.boum.org/contribute/design/
