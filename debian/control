@@ -7,8 +7,7 @@ Section: misc
 Priority: optional
 Maintainer: troubadour <trobador@riseup.net>
 Uploaders: Patrick Schleizer <adrelanos@riseup.net>
-Build-Depends: debhelper (>= 9), genmkfile, dh-systemd, dh-python,
- python3, ruby-ronn, dh-apparmor
+Build-Depends: debhelper (>= 9), genmkfile, dh-systemd, ruby-ronn, dh-apparmor
 Homepage: https://www.whonix.org/wiki/Dev/CPFP
 Vcs-Browser: https://github.com/troubadoour/control-port-filter-python
 Vcs-Git: https://github.com/troubadoour/control-port-filter-python.git
@@ -16,7 +15,7 @@ Standards-Version: 3.9.8
 
 Package: control-port-filter-python
 Architecture: all
-Depends: ${misc:Depends}, ${python3:Depends},
+Depends: ${misc:Depends},
  adduser, tor, python3, python3-psutil, python3-stem, python3-yaml
 Conflicts: control-port-filter
 Description: Whitelisting filter for dangerous Tor control protocol commands
