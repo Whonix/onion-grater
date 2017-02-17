@@ -22,7 +22,6 @@ License: GPL-3+
 
 Files: usr/lib/tor-controlport-filter
 Copyright: (C) Amnesia <amnesia at boum dot org>
-           (C) 2014 troubadour <trobador@riseup.net>
            (C) 2014 - 2017 Patrick Schleizer <adrelanos@riseup.net>
 Comment:
  https://git-tails.immerda.ch/tails/tree/config/chroot_local-includes/usr/local/lib/tor-controlport-filter?h=feature/7870-include_onionshare&id=b420c546d2fe2183ea87c799c646794d2095bbc9
