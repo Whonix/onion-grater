@@ -1,3 +1,53 @@
+commit 1614e8c672cfeb77927902258513aede6014a34d
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Feb 14 17:30:29 2017 +0000
+
+    "$@"
+
+commit a234d73e9b70399a66f9f3cf2a3c08ebbaefd078
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Feb 13 18:21:12 2017 +0000
+
+    rm_conffile /etc/apparmor.d/usr.sbin.cpfpd
+
+commit 11fb4e8d5c93e444e89ee879e487e0f7f22eab64
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Feb 13 18:19:00 2017 +0000
+
+    apparmor fixes
+
+commit 1345b4f5d80a8848455370cbb693dc110b4b7c4d
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Feb 13 17:25:41 2017 +0000
+
+    readme
+
+commit c6504a809cd42df376e72aeb2362bbd420158d7d
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 10 15:47:50 2017 +0000
+
+    remove faketime from Build-Depends:
+    
+    since no longer used for reproducible builds
+
+commit b274982294ce4113ef43397676626139f3060763
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 10 15:35:22 2017 +0000
+
+    remove debian/gain-root-command workaround
+
+commit 23b2ba3faa27bd416211a53636f9fdb6cd6d2718
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 10 15:25:25 2017 +0000
+
+    packaging simplification ruby-ronn (>= 0.7.3) -> ruby-ronn
+
+commit 977f599a9ca09e980a854ac34ccdd899f9bd3871
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Feb 6 02:07:23 2017 +0000
+
+    bumped changelog version
+
 commit 06edefea40cc98135dcdd52da23652db2bd634c0
 Merge: d6ac95e 7b28225
 Author: Patrick Schleizer <adrelanos@riseup.net>
