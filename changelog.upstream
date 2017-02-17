@@ -1,3 +1,77 @@
+commit 8b623da0b59bb28485dfa6ec4d06a72fcea4c469
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 17 14:59:44 2017 +0000
+
+    copyright
+
+commit 5dfa17d2183731b897150bed93caf2148554361d
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 17 14:58:10 2017 +0000
+
+    remove "This file is part of Whonix." from copyright
+    
+    since not needed
+
+commit 0f5fcb1272218eae697b54b73b8989b15ff689f6
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 17 14:56:27 2017 +0000
+
+    copyright
+
+commit 3f928e0243aefc6255ac25839e3cc09e76b98197
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 17 14:52:53 2017 +0000
+
+    fix copyright year
+
+commit 2b1062b12e41eb52aa241538996b8a85ba6cf3d5
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 17 14:51:38 2017 +0000
+
+    remove troubadour from copyright
+    
+    because current version is no longer based on troubadour's version
+
+commit a8e40cced492938d31b072099a9c68aeb6b26f21
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 17 14:50:23 2017 +0000
+
+    minor
+
+commit efcabddb2746dc40b8863b2e31767763b0c34c64
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 17 14:49:26 2017 +0000
+
+    update debian/watch
+
+commit 446db64556bd80e7c30c6c08261fbfd9e5200767
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 17 14:49:00 2017 +0000
+
+    update copyright
+
+commit 1c50ebbd584238828e6552331da67be9dc0d7c1b
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 17 14:45:14 2017 +0000
+
+    update maintainer
+
+commit 1204bb4004a2a4475a06194cbc6376fa079ca3f9
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 17 14:40:17 2017 +0000
+
+    remove dh-python from package build since not required
+    
+    removes the following warning
+    
+    dpkg-gencontrol: warning: Depends field of package control-port-filter-python: unknown substitution variable ${python3:Depends}
+
+commit 77f9a48acfa37bf3be600013c01dcdf81ecb544f
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 17 13:49:55 2017 +0000
+
+    bumped changelog version
+
 commit 1614e8c672cfeb77927902258513aede6014a34d
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Feb 14 17:30:29 2017 +0000
