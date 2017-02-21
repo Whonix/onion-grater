@@ -662,16 +662,16 @@ class FilteredControlPortProxy(socketserver.ThreadingTCPServer):
     daemon_threads = True
 
     # Keep count of serving thread
-    thread_cnt = 0                    
+    thread_cnt = 0
     # Interval to be used for polling to check if thread is active (in sec)
-    poll_cnt = 30                     
+    poll_cnt = 30
 
     def service_actions(self):
         self.thread_cnt += 1
         if self.thread_cnt == self.poll_cnt*2:
             log("Serving Thread active")
             n.notify("STATUS=Serving Thread active")
-            self.thread_cnt = 0 
+            self.thread_cnt = 0
 
 def main():
     parser = argparse.ArgumentParser()
