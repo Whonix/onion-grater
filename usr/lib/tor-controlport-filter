@@ -136,6 +136,9 @@ import struct
 import sys
 import textwrap
 import yaml
+import sdnotify
+
+n = sdnotify.SystemdNotifier()
 
 DEFAULT_LISTEN_ADDRESS = 'localhost'
 DEFAULT_LISTEN_PORT = 9051
@@ -662,12 +665,13 @@ class FilteredControlPortProxy(socketserver.ThreadingTCPServer):
     thread_cnt = 0                    
     # Interval to be used for polling to check if thread is active (in sec)
     poll_cnt = 30                     
-  
+
     def service_actions(self):
         self.thread_cnt += 1
         if self.thread_cnt == self.poll_cnt*2:
-            self.thread_cnt = 0
             log("Serving Thread active")
+            n.notify("STATUS=Serving Thread active")
+            self.thread_cnt = 0 
 
 def main():
     parser = argparse.ArgumentParser()
@@ -732,8 +736,10 @@ def main():
     address = (ip_address, global_args.listen_port)
     server = FilteredControlPortProxy(address, FilteredControlPortProxyHandler)
     log("Tor control port filter started, listening on {}:{}".format(*address))
+    n.notify("READY=1")
     try:
         log("Serving Thread started")
+        n.notify("STATUS=Serving Thread started")
         server.serve_forever()
     except KeyboardInterrupt:
         pass

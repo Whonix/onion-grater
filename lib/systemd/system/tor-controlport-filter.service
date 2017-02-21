@@ -13,6 +13,8 @@ ConditionPathExists=!/var/run/qubes/this-is-templatevm
 Type=simple
 ExecStart=/usr/lib/tor-controlport-filter
 
+Type=notify
+
 User=tor-controlport-filter
 Group=tor-controlport-filter
 SuccessExitStatus=143
