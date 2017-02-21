@@ -10,10 +10,8 @@ ConditionPathExists=!/var/run/qubes-service/whonix-template
 ConditionPathExists=!/var/run/qubes/this-is-templatevm
 
 [Service]
-Type=simple
-ExecStart=/usr/lib/tor-controlport-filter
-
 Type=notify
+ExecStart=/usr/lib/tor-controlport-filter
 
 User=tor-controlport-filter
 Group=tor-controlport-filter
