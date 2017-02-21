@@ -658,6 +658,16 @@ class FilteredControlPortProxy(socketserver.ThreadingTCPServer):
     # quits.
     daemon_threads = True
 
+    # Keep count of serving thread
+    thread_cnt = 0                    
+    # Interval to be used for polling to check if thread is active (in sec)
+    poll_cnt = 30                     
+  
+    def service_actions(self):
+        self.thread_cnt += 1
+        if self.thread_cnt == self.poll_cnt*2:
+            self.thread_cnt = 0
+            log("Serving Thread active")
 
 def main():
     parser = argparse.ArgumentParser()
@@ -723,6 +733,7 @@ def main():
     server = FilteredControlPortProxy(address, FilteredControlPortProxyHandler)
     log("Tor control port filter started, listening on {}:{}".format(*address))
     try:
+        log("Serving Thread started")
         server.serve_forever()
     except KeyboardInterrupt:
         pass
