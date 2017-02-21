@@ -16,10 +16,9 @@ ExecStart=/usr/lib/tor-controlport-filter
 User=tor-controlport-filter
 Group=tor-controlport-filter
 SuccessExitStatus=143
+WatchdogSec=10
 TimeoutSec=30
 Restart=always
-
-WatchdogSec=10
 
 #PrivateDevices=yes
 #PrivateTmp=yes
