@@ -19,9 +19,7 @@ SuccessExitStatus=143
 TimeoutSec=30
 Restart=always
 
-## TODO: Watchdog disabled. cpfpd would need to implement the sd_notify protocol.
-##       https://phabricator.whonix.org/T274
-#WatchdogSec=1m
+WatchdogSec=10
 
 #PrivateDevices=yes
 #PrivateTmp=yes
