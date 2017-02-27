@@ -1,3 +1,72 @@
+commit 61455a4162b7fa5527d526f61a72ae1d74ff8034
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Feb 21 22:47:24 2017 +0000
+
+    add python3-sdnotify to Depends
+    
+    https://phabricator.whonix.org/T274
+
+commit e176f6ebab9cd4f69824b556d83abfb08d6d85e0
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Feb 21 17:53:43 2017 +0000
+
+    minor
+
+commit 5f0468a48bd14628ae144a6b7881a30bb09f80ed
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Feb 21 17:52:43 2017 +0000
+
+    enable systemd WatchdogSec=10
+    
+    move sd_notify READY=0 into service_actions to prevent race condition
+    
+    https://phabricator.whonix.org/T274
+
+commit a68fb8199f709bd18290e423502ffc261f2b96a6
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Feb 21 17:38:19 2017 +0000
+
+    fix, remove duplicate Type= in systemd unit file
+
+commit 219373ba55f8ebbb3b0372bc5298b4048c5515ec
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Feb 21 17:36:55 2017 +0000
+
+    notify systemd sd_notify with thread counter
+    
+    don't log thread active to keep logs small
+
+commit a0b72aa0c5e07ff38b48d5fd22f68ab8f4cc1cac
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Feb 21 17:14:12 2017 +0000
+
+    remove trailing spaces
+
+commit a109edd2586b9f4389332e94b5e63d676ee367fc
+Merge: 11cbf5e e568c7a
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Feb 21 17:05:03 2017 +0000
+
+    Merge remote-tracking branch 'joysn/master'
+
+commit e568c7a3e464119ae22efc42ae9f827c104d925f
+Author: Joy SN <joysn1980@yahoo.com>
+Date:   Tue Feb 21 11:07:08 2017 +0000
+
+    use sd_notify to publish the start and other status
+
+commit 8929b0da163a6c472199a14df0354b7f4d2d3909
+Author: Joy SN <joysn1980@yahoo.com>
+Date:   Tue Feb 21 09:07:26 2017 +0000
+
+    tor-controlport-filter thread status systemd message
+
+commit 11cbf5e25feba35fc0196da1c28859c1e1d54d93
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 17 15:14:58 2017 +0000
+
+    bumped changelog version
+
 commit 8b623da0b59bb28485dfa6ec4d06a72fcea4c469
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Feb 17 14:59:44 2017 +0000
