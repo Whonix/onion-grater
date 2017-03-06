@@ -18,6 +18,9 @@
         response:
         - pattern:     '250-net/listeners/socks=".*"'
           replacement: '250-net/listeners/socks="127.0.0.1:9150"'
+      - 'consensus/valid-after'
+      - 'consensus/valid-until'
+      - 'consensus/fresh-until'
   confs:
     __owningcontrollerprocess:
   events:
