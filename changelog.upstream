@@ -1,3 +1,23 @@
+commit a6b9eba31088bc3dea2eb2c92f9fdbca1232c7ad
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Mar 6 19:13:08 2017 +0000
+
+    etc/tor-controlport-filter-merger.d/30_whonix.yml allow by default:
+    
+          - 'consensus/valid-after'
+          - 'consensus/valid-until'
+          - 'consensus/fresh-until'
+    
+    For sdwdate Tor Consensus Time Sanity Check.
+    
+    https://phabricator.whonix.org/T151
+
+commit e00186003ed4bf9bf07ae76349c54c081db028c5
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Feb 27 01:39:20 2017 +0000
+
+    bumped changelog version
+
 commit 61455a4162b7fa5527d526f61a72ae1d74ff8034
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Feb 21 22:47:24 2017 +0000
