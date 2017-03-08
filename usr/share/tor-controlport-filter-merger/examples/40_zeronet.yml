@@ -10,7 +10,9 @@
     - '*'
   commands:
     ADD_ONION:
-      - pattern:     'NEW:(\S+) port=15441'
+      - pattern:     'NEW:(\S+) Port=15441,15441'
         replacement: 'NEW:{} Port=15441,{client-address}:15441'
     DEL_ONION:
       - '.+'
+    GETCONF:
+      - 'hiddenservicesinglehopmode'
