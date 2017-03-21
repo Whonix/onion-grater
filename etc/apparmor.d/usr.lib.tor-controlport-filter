@@ -15,8 +15,6 @@
 
   /etc/onion-grater.d/ r,
   /etc/onion-grater.d/* r,
-  /usr/local/etc/onion-grater.d/ r,
-  /usr/local/etc/onion-grater.d/* r,
 
   /run/tor/control.authcookie r,
 
