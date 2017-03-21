@@ -13,10 +13,10 @@
   ## This script doesn't really need to read the interpreter that's running it.
   deny /usr/bin/python{2,3}.[0-7]* r,
 
-  /etc/tor-controlport-filter.d/ r,
-  /etc/tor-controlport-filter.d/* r,
-  /usr/local/etc/tor-controlport-filter.d/ r,
-  /usr/local/etc/tor-controlport-filter.d/* r,
+  /etc/onion-grater.d/ r,
+  /etc/onion-grater.d/* r,
+  /usr/local/etc/onion-grater.d/ r,
+  /usr/local/etc/onion-grater.d/* r,
 
   /run/tor/control.authcookie r,
 
