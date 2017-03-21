@@ -4,7 +4,7 @@
 # (and their argunents) and events on a per-application basis, stored
 # in:
 #
-#     /etc/tor-controlport-filter.d/
+#     /etc/onion-grater.d/
 #
 # that are pretty self-explanatory as long as you understand the Tor
 # ControlPort language. The format is expressed in YAML where the
@@ -142,8 +142,8 @@ n = sdnotify.SystemdNotifier()
 
 DEFAULT_LISTEN_ADDRESS = 'localhost'
 DEFAULT_LISTEN_PORT = 9051
-DEFAULT_COOKIE_PATH = '/var/run/tor/control.authcookie'
-DEFAULT_CONTROL_SOCKET_PATH = '/var/run/tor/control'
+DEFAULT_COOKIE_PATH = '/run/tor/control.authcookie'
+DEFAULT_CONTROL_SOCKET_PATH = '/run/tor/control'
 
 
 class NoRewriteMatch(RuntimeError):
@@ -481,7 +481,7 @@ class FilteredControlPortProxyHandler(socketserver.StreamRequestHandler):
         self.restrict_stream_events = False
         self.server_address = self.server.server_address
         self.subscribed_event_listeners = []
-        for filter_file in glob.glob('/etc/tor-controlport-filter.d/*.yml'):
+        for filter_file in glob.glob('/etc/onion-grater.d/*.yml'):
             try:
                 with open(filter_file, "rb") as fh:
                     filters = yaml.safe_load(fh.read())
