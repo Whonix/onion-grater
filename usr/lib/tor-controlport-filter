@@ -408,6 +408,24 @@ class FilteredControlPortProxySession:
                 self.respond("250 closing connection")
                 break
 
+            elif cmd == "GETINFO" and arg_str.strip() in ['config/names', 'info/names']:
+                arg = arg_str.strip()
+                if arg == 'config/names':
+                    test_cmd = 'GETCONF'
+                elif arg == 'info/names':
+                    test_cmd = 'GETINFO'
+                def conf_matches(lines):
+                    response = ['250+{}='.format(arg)]
+                    for line in lines.strip().split("\n")[1:-2]:
+                        name = line.split()[0]
+                        if self.get_rule(test_cmd, name):
+                            response.append(line)
+                    response.append('.')
+                    response.append('250 OK')
+                    response.append('')
+                    return "\n".join(response)
+                self.proxy_line(line, response_rewriter=conf_matches)
+
             elif cmd == "SETEVENTS":
                 # The control language doesn't care about case for
                 # the event type.
