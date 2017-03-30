@@ -1,3 +1,96 @@
+commit 30c1de54f9feaa26464842241e217be6edf3b464
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Mar 30 01:37:13 2017 +0000
+
+    return "\n".join(response) -> return '\r\n'.join(response)
+    
+    as suggested
+    
+    https://github.com/meejah/txtorcon/issues/215#issuecomment-290182519
+
+commit ce4aa36ec780df3a41d0fef6e17916697a5da6fd
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Mar 30 01:34:19 2017 +0000
+
+    clean up old config files
+
+commit 7d7dc2a60fb6f3f60740aa889b5f1479c9e18cdb
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Mar 30 01:30:36 2017 +0000
+
+    cleanup, remove no longer needed build dependency ruby-ronn
+    
+    since we no longer ship a manpage
+
+commit dd9a17d9f8637f11ec48ef2821068cf66be996b8
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Mar 30 01:29:55 2017 +0000
+
+    minor
+
+commit 954aa69786a3f303612c749e3574d44b3f4252e4
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Mar 30 03:22:26 2017 +0200
+
+    Replaces: control-port-filter-python
+
+commit f58613fcff84e6237a9b29b8101034b633275fe6
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Mar 30 02:58:30 2017 +0200
+
+    change project name to onion-grater
+
+commit a5e47230a03ab8f6d9225dd8f14d9ee1bc381ed6
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Mar 30 02:50:16 2017 +0200
+
+    rename strings to new project name onion-grater
+
+commit c7272c0bcb9249efc8533a3109fd28b4358e0183
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Mar 29 13:46:50 2017 +0200
+
+    merge feature/getinfo-config-names from the new upstream repo (note
+    the name change!) found at: https://git-tails.immerda.ch/onion-grater by anonym
+    
+    https://github.com/meejah/txtorcon/issues/215#issuecomment-288235451
+
+commit 4a8b29be65fd0d7d7de5adb5662ab3a0a4107069
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Mar 21 15:21:59 2017 +0100
+
+    allow AppArmor /run/tor/control rw
+    
+    so it keeps working when AppArmor starts moderating socket file access
+
+commit d843dd6e9df4a83a0782e1e06b18a39eac94f63f
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Mar 21 15:21:00 2017 +0100
+
+    cleanup
+
+commit 08019c74a842fb8f1a1a6f99a27254620e46f613
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Mar 21 15:20:12 2017 +0100
+
+    update config location to new upstream default /etc/onion-grater.d/
+    
+    https://github.com/meejah/txtorcon/issues/215#issuecomment-287792764
+
+commit b00ab0d83c2fb59ab68dc5ee24650f079ce3f17c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Mar 21 15:16:23 2017 +0100
+
+    import upstream changes from https://git-tails.immerda.ch/onion-grater
+    
+    https://github.com/meejah/txtorcon/issues/215#issuecomment-287792764
+
+commit a42e032804491a547b4eb432cd4b906cb7821010
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Mar 9 00:35:22 2017 +0000
+
+    bumped changelog version
+
 commit 4cff9682cc8a25f96e7b7ab510ed9dc74a3d4b5b
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Mar 8 00:36:09 2017 +0000
