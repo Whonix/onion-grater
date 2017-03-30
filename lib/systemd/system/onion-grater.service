@@ -11,10 +11,10 @@ ConditionPathExists=!/var/run/qubes/this-is-templatevm
 
 [Service]
 Type=notify
-ExecStart=/usr/lib/tor-controlport-filter
+ExecStart=/usr/lib/onion-grater
 
-User=tor-controlport-filter
-Group=tor-controlport-filter
+User=onion-grater
+Group=onion-grater
 SuccessExitStatus=143
 WatchdogSec=10
 TimeoutSec=30

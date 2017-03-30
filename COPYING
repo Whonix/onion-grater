@@ -20,7 +20,7 @@ License: GPL-3+
  License version 3 can be found in the file
  `/usr/share/common-licenses/GPL-3'.
 
-Files: usr/lib/tor-controlport-filter
+Files: usr/lib/onion-grater
 Copyright: (C) Amnesia <amnesia at boum dot org>
            (C) 2016 - 2017 Patrick Schleizer <adrelanos@riseup.net>
 Comment:

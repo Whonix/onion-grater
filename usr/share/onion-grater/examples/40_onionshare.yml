@@ -9,7 +9,7 @@
 ## is left intact because onionshare's button 'Copy HidServAuth' coppies the
 ## following into the clipboard, which is a usability feature.
 ## HidServAuth domainxxxxxxxxxx.onion xxxKEYBLOBxxxxxxxxxxxx
-## Otherwise the user would have to extract it from tor-controlport-filter
+## Otherwise the user would have to extract it from onion-grater
 ## logs.
 
 ## Tor's reply PrivateKey gets redacted.

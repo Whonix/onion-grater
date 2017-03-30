@@ -6,7 +6,7 @@
 ## The attach_disconnected flag prevents a denied
 ## message on /dev/null -> disconnected path.
 
-/usr/lib/tor-controlport-filter flags=(attach_disconnected) {
+/usr/lib/onion-grater flags=(attach_disconnected) {
   #include <abstractions/base>
   #include <abstractions/python>
 
@@ -23,7 +23,7 @@
   /var/tmp/* rwk,
 
   /usr/lib/ r,
-  /usr/lib/tor-controlport-filter r,
+  /usr/lib/onion-grater r,
 
   @{PROC}/[0-9]*/status r,
   @{PROC}/[0-9]*/mounts r,
