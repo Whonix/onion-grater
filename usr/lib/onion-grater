@@ -423,7 +423,7 @@ class FilteredControlPortProxySession:
                     response.append('.')
                     response.append('250 OK')
                     response.append('')
-                    return "\n".join(response)
+                    return '\r\n'.join(response)
                 self.proxy_line(line, response_rewriter=conf_matches)
 
             elif cmd == "SETEVENTS":
