@@ -1,17 +1,17 @@
 ## Copyright (C) 2012 - 2017 Patrick Schleizer <adrelanos@riseup.net>
 ## See the file COPYING for copying conditions.
 
-Source: control-port-filter-python
+Source: onion-grater
 Section: misc
 Priority: optional
 Maintainer: Patrick Schleizer <adrelanos@riseup.net>
 Build-Depends: debhelper (>= 9), genmkfile, dh-systemd, ruby-ronn, dh-apparmor
 Homepage: https://www.whonix.org/wiki/Dev/CPFP
-Vcs-Browser: https://github.com/Whonix/control-port-filter-python
-Vcs-Git: https://github.com/Whonix/control-port-filter-python.git
+Vcs-Browser: https://github.com/Whonix/onion-grater
+Vcs-Git: https://github.com/Whonix/onion-grater.git
 Standards-Version: 3.9.8
 
-Package: control-port-filter-python
+Package: onion-grater
 Architecture: all
 Depends: ${misc:Depends},
  adduser, tor, python3, python3-psutil, python3-stem, python3-yaml,

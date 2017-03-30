@@ -3,4 +3,4 @@
 
 version=3
 opts=filenamemangle=s/.+\/v?(.*)\.tar\.gz/<project>-$1.tar.gz/ \
-  https://github.com/Whonix/control-port-filter-python/tags .*/v?(\d[\d\.]+)\.tar\.gz
+  https://github.com/Whonix/onion-grater/tags .*/v?(\d[\d\.]+)\.tar\.gz

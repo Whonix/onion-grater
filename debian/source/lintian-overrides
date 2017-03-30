@@ -2,4 +2,4 @@
 debian-watch-may-check-gpg-signature
 
 ## https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=779676
-control-port-filter-python source: dep5-copyright-license-name-not-unique
+onion-grater source: dep5-copyright-license-name-not-unique
