@@ -1,3 +1,15 @@
+commit fa29f3d798162cb582dd64d0d663b55967e6abcb
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Mar 30 17:14:10 2017 +0000
+
+    usr/share/onion-grater/examples/ -> usr/share/onion-grater-merger/examples/
+
+commit 71123c501007b914e65aeed6c7aeb5cad137ea89
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Mar 30 15:29:17 2017 +0000
+
+    bumped changelog version
+
 commit 2b7475f38b68c7188616037415e47a05031336ed
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Mar 30 13:44:58 2017 +0000
