@@ -31,6 +31,12 @@
   /usr/lib/ r,
   /usr/lib/onion-grater r,
 
+  @{PROC}/ r,
   @{PROC}/[0-9]*/status r,
   @{PROC}/[0-9]*/mounts r,
+  @{PROC}/[0-9]*/net/tcp r,
+  @{PROC}/[0-9]*/net/tcp6 r,
+  @{PROC}/[0-9]*/net/udp r,
+  @{PROC}/[0-9]*/net/udp6 r,
+  @{PROC}/[0-9]*/fd/ r,
 }
