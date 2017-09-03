@@ -13,6 +13,12 @@
   ## This script doesn't really need to read the interpreter that's running it.
   deny /usr/bin/python{2,3}.[0-7]* r,
 
+  /etc/resolv.conf.anondist r,
+  /etc/host.conf r,
+  /etc/hosts r,
+  /etc/nsswitch.conf r,
+  /etc/gai.conf r,
+
   /etc/onion-grater.d/ r,
   /etc/onion-grater.d/* r,
 
