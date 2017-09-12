@@ -1,3 +1,21 @@
+commit 31fc34d1fa8bdd91b8b389a12ec7e6311f7ab850
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Sep 3 12:31:36 2017 +0000
+
+    more apparmor fixes
+
+commit d461ccab0c5eb38a5b5ba00528fbf3655334422b
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Sep 3 11:54:32 2017 +0000
+
+    apparmor fixes
+
+commit 7bfd1e4688606441073aac77e786721ef5e53cd6
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Jul 26 14:34:28 2017 +0000
+
+    bumped changelog version
+
 commit fa29f3d798162cb582dd64d0d663b55967e6abcb
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Mar 30 17:14:10 2017 +0000
