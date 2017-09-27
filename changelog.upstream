@@ -1,3 +1,15 @@
+commit 170835cf9b33767a03bcd6dc244e6ed07998dd29
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Sep 24 12:41:03 2017 +0200
+
+    /etc/resolv.conf r,
+
+commit 996edd320ea2ed142fcc58063fdeb069db8e51c6
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Sep 12 02:59:17 2017 +0200
+
+    bumped changelog version
+
 commit 31fc34d1fa8bdd91b8b389a12ec7e6311f7ab850
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Sep 3 12:31:36 2017 +0000
