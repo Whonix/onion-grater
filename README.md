@@ -16,7 +16,7 @@ is installed on a Anonymity Distribution Workstations. For example it then
 allows running a unmodified Tor Browser Bundle from The Tor Project without
 Tor over Tor and with functional New Identity and about:tor.
 
-This control-port-filter is written in Python. The original Python code
+This control port filter is written in Python. The original Python code
 was forked from the Tails version of control port filter.
 
 This package is produced independently of, and carries no guarantee from,
