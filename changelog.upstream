@@ -1,3 +1,19 @@
+commit 7ec2e8d5dfcba2984d6daf5ca90446aaaf1bdfe2
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Feb 25 23:23:33 2018 +0100
+
+    fix for onionshare 1.2
+    
+    Thanks to @troubadour for the fix!
+    
+    https://forums.whonix.org/t/feature-request-onionshare-support
+
+commit c50ad941f5f82c24eb35ddea54ee70e81632c98c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Feb 1 15:10:03 2018 +0000
+
+    bumped changelog version
+
 commit af3b702258e0465c97cd5bc7860def93a3c97dfe
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Jan 29 15:50:31 2018 +0000
