@@ -31,22 +31,20 @@
       - 'hiddenservicesinglehopmode'
     ADD_ONION:
       ## {{{ Required for regular onion services.
-      - pattern:     'NEW:BEST Port=80,(176[0-5][0-9])'
-        replacement: 'NEW:BEST Port=80,{client-address}:{} Flags=DiscardPK'
-      - pattern:     'NEW:RSA1024 Port=80,(176[0-5][0-9])'
-        replacement: 'NEW:RSA1024 Port=80,{client-address}:{} Flags=DiscardPK'
+      - pattern:     'NEW:(\S+) Port=80,(176[0-5][0-9])'
+        replacement: 'NEW:{} Port=80,{client-address}:{} Flags=DiscardPK'
       ## }}}
 
       ## {{{ Required for stealth onion services.
       ## onionshare creates this dummy probably to test if Tor supports the BasicAuth option.
-      - pattern:     'NEW:BEST Flags=BasicAuth Port=1,1 ClientAuth=onionshare'
-        replacement: 'NEW:BEST Flags=BasicAuth Port=1,{client-address}:1 ClientAuth=onionshare Flags=DiscardPK'
+      - pattern:     'NEW:(\S+) Flags=BasicAuth Port=1,1 ClientAuth=onionshare'
+        replacement: 'NEW:{} Flags=BasicAuth Port=1,{client-address}:1 ClientAuth=onionshare Flags=DiscardPK'
       ## https://github.com/micahflee/onionshare/issues/343
-      - pattern:     'NEW:BEST Port=80,0'
-        replacement: 'NEW:BEST Port=80,{client-address}:1 Flags=DiscardPK'
+      - pattern:     'NEW:(\S+) Port=80,0'
+        replacement: 'NEW:{} Port=80,{client-address}:1 Flags=DiscardPK'
       ## Flags=DiscardPK would break it.
-      - pattern: 'NEW:BEST Flags=BasicAuth Port=80,(176[0-5][0-9]) ClientAuth=onionshare'
-        replacement: 'NEW:BEST Flags=BasicAuth Port=80,{client-address}:{} ClientAuth=onionshare'
+      - pattern:     'NEW:(\S+) Flags=BasicAuth Port=80,(176[0-5][0-9]) ClientAuth=onionshare'
+        replacement: 'NEW:{} Flags=BasicAuth Port=80,{client-address}:{} ClientAuth=onionshare'
         response:
         - pattern:     '250-PrivateKey=(\S+):\S+'
           replacement: '250-PrivateKey={}:redacted'
