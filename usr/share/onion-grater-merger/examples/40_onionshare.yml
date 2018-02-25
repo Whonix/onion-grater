@@ -33,6 +33,8 @@
       ## {{{ Required for regular onion services.
       - pattern:     'NEW:BEST Port=80,(176[0-5][0-9])'
         replacement: 'NEW:BEST Port=80,{client-address}:{} Flags=DiscardPK'
+      - pattern:     'NEW:RSA1024 Port=80,(176[0-5][0-9])'
+        replacement: 'NEW:RSA1024 Port=80,{client-address}:{} Flags=DiscardPK'
       ## }}}
 
       ## {{{ Required for stealth onion services.
