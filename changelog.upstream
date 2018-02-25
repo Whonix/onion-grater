@@ -1,3 +1,15 @@
+commit e33f1f3d11013f7df4c3079e603773eca590221a
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Feb 25 23:03:24 2018 +0000
+
+    fix onionshare 1.2 stealth services
+
+commit d8124fa4b1d607590e6726f33e0df888c6afc86b
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Feb 25 22:38:05 2018 +0000
+
+    bumped changelog version
+
 commit 7ec2e8d5dfcba2984d6daf5ca90446aaaf1bdfe2
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Feb 25 23:23:33 2018 +0100
