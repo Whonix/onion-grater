@@ -1,6 +1,7 @@
 ## Copyright (C) 2017 - 2018 ENCRYPTED SUPPORT LP <adrelanos@riseup.net>
 ## See the file COPYING for copying conditions
 
+rm_conffile /etc/X11/Xsession.d/20controlportfilt
 rm_conffile /etc/cpfpy.d/30_controlportfilt_default
 rm_conffile /etc/cpfpy.d/30_default.conf
 rm_conffile /etc/apparmor.d/usr.sbin.cpfpd
