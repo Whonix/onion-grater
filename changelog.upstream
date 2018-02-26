@@ -1,3 +1,15 @@
+commit b7d7b7b804a214b23b37eb0a4f795d9fb85da326
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Feb 26 21:32:56 2018 +0000
+
+    rm_conffile /etc/X11/Xsession.d/20controlportfilt
+
+commit f4130d4fd28a2711ac240f8a706a8981cb36e80a
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Feb 25 23:04:27 2018 +0000
+
+    bumped changelog version
+
 commit e33f1f3d11013f7df4c3079e603773eca590221a
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Feb 25 23:03:24 2018 +0000
