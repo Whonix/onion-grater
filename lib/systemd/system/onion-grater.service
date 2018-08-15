@@ -7,7 +7,6 @@ Documentation=https://tails.boum.org/contribute/design/
 After=network.target
 Wants=network.target
 ConditionPathExists=!/var/run/qubes/this-is-templatevm
-ConditionPathExists=!/var/run/qubes/this-is-templatevm
 
 [Service]
 Type=notify
