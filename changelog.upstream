@@ -1,3 +1,15 @@
+commit 7282c489de25df8f42c7bcf1d971d40524cfcd18
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Aug 15 19:06:09 2018 +0800
+
+    remove duplicate "ConditionPathExists=!/var/run/qubes/this-is-templatevm"
+
+commit 362407b261f2f987222f67efffc568f202189617
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Feb 26 22:26:48 2018 +0000
+
+    bumped changelog version
+
 commit b7d7b7b804a214b23b37eb0a4f795d9fb85da326
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Feb 26 21:32:56 2018 +0000
