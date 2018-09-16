@@ -1,3 +1,124 @@
+commit 70e735dae1c15920c356b07fc6aaf4b9589b465a
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Sep 15 13:55:33 2018 -0400
+
+    fix Tor control auth cookie authentication even if HashedControlPassword is set
+    
+    fix custom auth cookie authentication path
+    
+    Previously the following line in Tor config...
+    
+    ```
+    HashedControlPassword
+    16:88A1B9F6EBD74C6960E1E60CC725B6C94A990C65223358EFF0DF41E8BA
+    ```
+    
+    Was leading the the following error:
+    
+    ```
+    Sep 13 22:02:08 host onion-grater[10460]: Exception happened during
+    processing of request from ('10.137.0.45', 48828)
+    Sep 13 22:02:08 host onion-grater[10460]: Traceback (most recent call last):
+    Sep 13 22:02:08 host onion-grater[10460]:   File
+    "/usr/lib/python3.5/socketserver.py", line 625, in process_request_thread
+    Sep 13 22:02:08 host onion-grater[10460]:
+    self.finish_request(request, client_address)
+    Sep 13 22:02:08 host onion-grater[10460]:   File
+    "/usr/lib/python3.5/socketserver.py", line 354, in finish_request
+    Sep 13 22:02:08 host onion-grater[10460]:
+    self.RequestHandlerClass(request, client_address, self)
+    Sep 13 22:02:08 host onion-grater[10460]:   File
+    "/usr/lib/python3.5/socketserver.py", line 681, in __init__
+    Sep 13 22:02:08 host onion-grater[10460]:     self.handle()
+    Sep 13 22:02:08 host onion-grater[10460]:   File
+    "/usr/lib/onion-grater", line 651, in handle
+    Sep 13 22:02:08 host onion-grater[10460]:     self.controller =
+    self.connect_to_real_control_port()
+    Sep 13 22:02:08 host onion-grater[10460]:   File
+    "/usr/lib/onion-grater", line 592, in connect_to_real_control_port
+    Sep 13 22:02:08 host onion-grater[10460]:
+    controller.authenticate(cookie)
+    Sep 13 22:02:08 host onion-grater[10460]:   File
+    "/usr/lib/python3/dist-packages/stem/control.py", line 1071, in authenticate
+    Sep 13 22:02:08 host onion-grater[10460]:
+    stem.connection.authenticate(self, *args, **kwargs)
+    Sep 13 22:02:08 host onion-grater[10460]:   File
+    "/usr/lib/python3/dist-packages/stem/connection.py", line 575, in
+    authenticate
+    Sep 13 22:02:08 host onion-grater[10460]:
+    authenticate_password(controller, password, False)
+    Sep 13 22:02:08 host onion-grater[10460]:   File
+    "/usr/lib/python3/dist-packages/stem/connection.py", line 711, in
+    authenticate_password
+    Sep 13 22:02:08 host onion-grater[10460]:     password =
+    password.replace('"', '\\"')
+    Sep 13 22:02:08 host onion-grater[10460]: TypeError: a bytes-like object
+    is required, not 'str'
+    ```
+    
+    ```
+    ls -la /var/run/tor/
+    ```
+    ```
+    total 148
+    drwxr-sr-x  2 debian-tor debian-tor    140 Sep 13 22:15 .
+    drwxr-xr-x 28 root       root          760 Sep 13 22:00 ..
+    srw-rw----  1 debian-tor debian-tor      0 Sep 13 22:15 control
+    -rw-r-----  1 debian-tor debian-tor     32 Sep 13 22:15 control.authcookie
+    -rw-r-----  1 debian-tor debian-tor 143123 Sep 13 22:15 log
+    srw-rw-rw-  1 debian-tor debian-tor      0 Sep 13 22:15 socks
+    -rw-r--r--  1 debian-tor debian-tor      6 Sep 13 22:15 tor.pid
+    ```
+    ```
+    DataDirectory /var/lib/tor
+    PidFile /var/run/tor/tor.pid
+    RunAsDaemon 1
+    User debian-tor
+    
+    ControlSocket /var/run/tor/control GroupWritable RelaxDirModeCheck
+    ControlSocketsGroupWritable 1
+    SocksPort unix:/var/run/tor/socks WorldWritable
+    SocksPort 9050
+    
+    CookieAuthentication 1
+    CookieAuthFileGroupReadable 1
+    CookieAuthFile /var/run/tor/control.authcookie
+    
+    Log notice file /var/log/tor/log
+    ```
+    
+    The HashedControlPassword confused python-stem even
+    though cookie authentication was functional without that HashedControlPassword.
+    
+    There is no need to manually read Tor authentication cookie file.
+    
+            with open(global_args.control_cookie_path, "rb") as f:
+                cookie = f.read()
+    
+    python-stem can do that for us.
+    
+    Line
+    
+    ```
+    controller.authenticate(cookie)
+    ```
+    
+    was wrong. `controller.authenticate` does not take
+    
+    Syntax from manual:
+    
+    https://stem.torproject.org/api/connection.html#stem.connection.authenticate
+    
+    ```
+    stem.connection.authenticate(controller, password=None, chroot_path=None, protocolinfo_response=None)
+    ```
+
+commit e5cb9bcc6f35775882633f6fcaf19b6d1f689814
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Aug 27 16:43:20 2018 +0000
+
+    bumped changelog version
+
 commit cddac893436e388e9f4bbdc4920a7c156a1f6f14
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Aug 21 05:18:34 2018 +0800
