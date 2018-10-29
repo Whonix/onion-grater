@@ -1,0 +1,24 @@
+## Copyright (C) 2016 - 2018 ENCRYPTED SUPPORT LP <adrelanos@riseup.net>
+## See the file COPYING for copying conditions
+
+## Maintained by: https://forums.whonix.org/u/qubenix <qubenix@riseup.net>
+
+---
+- exe-paths:
+    - '*'
+  users:
+    - '*'
+  hosts:
+    - '*'
+  commands:
+    ADD_ONION:
+      ## {{{ Mainnet onion service.
+      - pattern:     'NEW:(\S+) Port=8333,127.0.0.1:8333'
+        replacement: 'NEW:{} Port=8333,{client-address}:8333 Flags=DiscardPK'
+      ## Testnet onion service.
+      - pattern:     'NEW:(\S+) Port=18333,127.0.0.1:18333'
+        replacement: 'NEW:{} Port=18333,{client-address}:18333 Flags=DiscardPK'
+      ## Needed to make services ephemeral.
+      - pattern:     '250-PrivateKey=(\S+):\S+'
+        replacement: '250-PrivateKey={}:redacted'
+      ## }}}
