@@ -1,3 +1,31 @@
+commit c15e48a3aa0262a7eceac857b14955c474cf6c79
+Merge: b1b8c80 bce65b8
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Oct 29 16:08:15 2018 -0400
+
+    Merge remote-tracking branch 'origin/master'
+
+commit bce65b8cc797e478f9c11f438abe4ac7c69dd163
+Merge: b1b8c80 70b8c4e
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Oct 29 16:06:41 2018 -0400
+
+    Merge pull request #1 from qubenix/master
+    
+    add bitcoind onion-grater profile
+
+commit 70b8c4ebbeb5f113e5c4c8bc379cff2babc76604
+Author: qubenix <qubenix@users.noreply.github.com>
+Date:   Sun Oct 28 21:18:53 2018 +0000
+
+    add bitcoind onion-grater profile
+
+commit b1b8c809123235da14749834aef14772d9a73cdc
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Sep 16 10:17:35 2018 +0000
+
+    bumped changelog version
+
 commit 70e735dae1c15920c356b07fc6aaf4b9589b465a
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sat Sep 15 13:55:33 2018 -0400
