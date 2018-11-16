@@ -40,4 +40,10 @@
   @{PROC}/[0-9]*/net/udp r,
   @{PROC}/[0-9]*/net/udp6 r,
   @{PROC}/[0-9]*/fd/ r,
+
+  ## Nov 15 12:18:46 host audit[2928]: AVC apparmor="DENIED" operation="open" profile="/usr/lib/onion-grater" name="/sys/devices/pci0000:00/0000:00:16.0/host4/port-4:0/end_device-4:0/target4:0:0/4:0:0:0/block/sda/queue/hw_sector_size" pid=2928 comm="onion-grater" requested_mask="r" denied_mask="r" fsuid=114 ouid=0
+  /sys/devices/*/*/*/*/*/*/*/*/*/queue/hw_sector_size r,
+
+  /usr/lib/python*/__pycache__/ rw,
+  /usr/lib/python*/__pycache__/** rw,
 }
