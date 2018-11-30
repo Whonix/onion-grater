@@ -18,7 +18,4 @@
       ## Testnet onion service.
       - pattern:     'NEW:(\S+) Port=18333,127.0.0.1:18333'
         replacement: 'NEW:{} Port=18333,{client-address}:18333 Flags=DiscardPK'
-      ## Needed to make services ephemeral.
-      - pattern:     '250-PrivateKey=(\S+):\S+'
-        replacement: '250-PrivateKey={}:redacted'
       ## }}}
