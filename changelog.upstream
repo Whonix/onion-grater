@@ -1,3 +1,31 @@
+commit 600a9eabfc3f62e32db7fa99ac9f77c753e04b62
+Merge: d9237e7 3882f3d
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Nov 30 06:45:39 2018 -0500
+
+    Merge remote-tracking branch 'origin/master'
+
+commit 3882f3dce0dc666cb0a8c5f1ace12862873c5887
+Merge: d9237e7 06fe5eb
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Nov 30 06:44:46 2018 -0500
+
+    Merge pull request #2 from qubenix/fix-bitcoind-profile
+    
+    remove unnecessary lines from bitcoind profile
+
+commit 06fe5eb35ee2e795eb8b742a344633a97513bab1
+Author: qubenix <qubenix@users.noreply.github.com>
+Date:   Thu Nov 29 23:19:00 2018 +0000
+
+    remove unnecessary lines from bitcoind profile
+
+commit d9237e796fa3bd23b25909085df65c616bcc21ff
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Nov 16 09:44:11 2018 +0000
+
+    bumped changelog version
+
 commit ec6ad51eeddf04f16f4f9eb0aa1925aaf46ebeff
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Nov 16 09:39:47 2018 +0000
