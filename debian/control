@@ -5,11 +5,11 @@ Source: onion-grater
 Section: misc
 Priority: optional
 Maintainer: Patrick Schleizer <adrelanos@riseup.net>
-Build-Depends: debhelper (>= 9), genmkfile, dh-systemd, dh-apparmor
+Build-Depends: debhelper (>= 12), genmkfile,  dh-apparmor
 Homepage: https://www.whonix.org/wiki/Dev/CPFP
 Vcs-Browser: https://github.com/Whonix/onion-grater
 Vcs-Git: https://github.com/Whonix/onion-grater.git
-Standards-Version: 3.9.8
+Standards-Version: 4.3.0
 
 Package: onion-grater
 Architecture: all
