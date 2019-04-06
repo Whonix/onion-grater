@@ -1,3 +1,33 @@
+commit 5873643eee8e04e0a71d8d731649f11c14e8dc55
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Apr 4 08:26:27 2019 -0400
+
+    fix lintian warning package-does-not-install-examples
+
+commit 9b42fc3d4358afaf12dc17872a1c55c6c33d7e1e
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Apr 4 05:55:51 2019 -0400
+
+    port to debian buster
+
+commit b6e531a6ffa8e3ec024674962993a735e7d21abe
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Apr 4 05:51:05 2019 -0400
+
+    port to debian buster
+
+commit 97753afc48b4c9858548ae4ddb6bf0a4aeb230ee
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Apr 3 18:05:54 2019 -0400
+
+    readme
+
+commit e8ea7a08c7708dfbaaffb7ff5f2f8725e4cd1194
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Mar 29 09:57:36 2019 +0000
+
+    bumped changelog version
+
 commit f632961d62332591493af6b650e712143b5fd6d4
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Mar 29 09:03:17 2019 +0000
