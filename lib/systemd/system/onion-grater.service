@@ -19,11 +19,11 @@ WatchdogSec=10
 TimeoutSec=30
 Restart=always
 
-CapabilityBoundingSet=CAP_DAC_OVERRIDE CAP_SYS_PTRACE
-PrivateDevices=yes
-PrivateTmp=yes
-ProtectHome=yes
-ProtectSystem=full
+#CapabilityBoundingSet=CAP_DAC_OVERRIDE CAP_SYS_PTRACE
+#PrivateDevices=yes
+#PrivateTmp=yes
+#ProtectHome=yes
+#ProtectSystem=full
 
 #NoNewPrivileges=yes
 
