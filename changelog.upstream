@@ -1,3 +1,30 @@
+commit 01e05678478380ce7595565a70876cecbc82edb2
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Apr 7 13:02:12 2019 -0400
+
+    revert systemd hardening because incompatible with onion-grater-merger
+
+commit 520237ff8d40d7e742741b146b43cc321a39d0bb
+Merge: 59ddaaa 766b0df
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Apr 7 12:46:46 2019 -0400
+
+    Merge remote-tracking branch 'origin/master'
+
+commit 766b0df771526709ec2ae7302b68d5c20f6e43ee
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Apr 7 02:00:25 2019 -0400
+
+    import hardening from Tails
+    
+    https://git-tails.immerda.ch/tails/plain/config/chroot_local-includes/lib/systemd/system/onion-grater.service
+
+commit 59ddaaa5a8e95daa90869462be1f58f3a706cf2e
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Apr 6 12:08:28 2019 +0000
+
+    bumped changelog version
+
 commit 5873643eee8e04e0a71d8d731649f11c14e8dc55
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Apr 4 08:26:27 2019 -0400
