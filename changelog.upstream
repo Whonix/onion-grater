@@ -1,3 +1,15 @@
+commit a6121d1e71fa07d1ba4431124190f8a57b485e35
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Apr 10 15:13:01 2019 -0400
+
+    port to buster
+
+commit 2cf80b2bf611a2d2cc0c85c7e8e8a855566bb1cc
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Apr 8 13:03:51 2019 +0000
+
+    bumped changelog version
+
 commit 01e05678478380ce7595565a70876cecbc82edb2
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Apr 7 13:02:12 2019 -0400
