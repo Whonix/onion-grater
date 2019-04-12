@@ -46,4 +46,8 @@
 
   /usr/lib/python*/__pycache__/ rw,
   /usr/lib/python*/__pycache__/** rw,
+
+  ## Qubes
+  /usr/lib/python3/dist-packages/sdnotify/__pycache__/ r,
+  /usr/lib/python3/dist-packages/sdnotify/__pycache__/** r,
 }
