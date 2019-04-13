@@ -1,3 +1,15 @@
+commit 717b1943597bdf6f0e07c6bb1b93ed972f220bde
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Apr 12 19:49:09 2019 +0000
+
+    Qubes debian buster apparmor fixes
+
+commit cf5acb3f5f577fb9892405e82a3a1e96bf66b1c5
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Apr 10 16:22:46 2019 -0400
+
+    bumped changelog version
+
 commit a6121d1e71fa07d1ba4431124190f8a57b485e35
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Apr 10 15:13:01 2019 -0400
