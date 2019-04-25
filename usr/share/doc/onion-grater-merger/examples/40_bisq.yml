@@ -1,0 +1,39 @@
+## Copyright (C) 2016 - 2018 ENCRYPTED SUPPORT LP <adrelanos@riseup.net>
+## See the file COPYING for copying conditions
+
+---
+- exe-paths:
+    - '*'
+  users:
+    - '*'
+  hosts:
+    - '*'
+  commands:
+    SETEVENTS:
+      - 'CIRC ORCONN INFO NOTICE WARN ERR HS_DESC HS_DESC_CONTENT'
+    ADD_ONION:
+      - pattern:     'NEW:(\S+) Port=9999,(\S+)'
+        replacement: 'NEW:{} Port=9999,{client-address}:{}'
+      - pattern:     '(\S+):(\S+) Port=9999,(\S+)'
+        replacement: '{}:{} Port=9999,{client-address}:{}'
+    DEL_ONION:
+      - '.+'
+    HSFETCH:
+      - '.+'
+  events:
+    CIRC:
+      suppress: true
+    ORCONN:
+      suppress: true
+    INFO:
+      suppress: true
+    NOTICE:
+      suppress: true
+    WARN:
+      suppress: true
+    ERR:
+      suppress: true
+    HS_DESC:
+      suppress: true
+    HS_DESC_CONTENT:
+      suppress: true
