@@ -9,10 +9,25 @@
   hosts:
     - '*'
   commands:
+    #SETEVENTS:
+      #- 'stream'
+      #- 'STREAM'
     ADD_ONION:
+      ## old
       - pattern:     'NEW:(\S+) Port=15441,15441'
         replacement: 'NEW:{} Port=15441,{client-address}:15441'
+      ## new
+      ## https://github.com/HelloZeroNet/ZeroNet/pull/484#issuecomment-489466198
+      - pattern:     'NEW:(\S+) Port=15441'
+        replacement: 'NEW:{} Port=15441,{client-address}:15441'
+      - pattern:     'NEW:(\S+) Port=33750'
+        replacement: 'NEW:{} Port=33750,{client-address}:33750'
     DEL_ONION:
       - '.+'
     GETCONF:
       - 'hiddenservicesinglehopmode'
+  #events:
+    #stream:
+      #suppress: true
+    #STREAM:
+      #suppress: true
