@@ -1,3 +1,21 @@
+commit afdff5bb4d79af1d733b9d5d77ec91c2306ff542
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon May 6 05:16:32 2019 -0400
+
+    try fix https://github.com/HelloZeroNet/ZeroNet/pull/484#issuecomment-489466198
+
+commit e994509adfb03da868157279398a8a790faf2329
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun May 5 18:26:53 2019 -0400
+
+    try fix https://github.com/HelloZeroNet/ZeroNet/pull/484#issuecomment-489466198
+
+commit 9241e10348564e4f9600cf8d0700681d1972bbe6
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri May 3 11:29:06 2019 +0000
+
+    bumped changelog version
+
 commit dd00d66433504dbde523729feac4fc3e8ba5802c
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri May 3 10:56:54 2019 +0000
