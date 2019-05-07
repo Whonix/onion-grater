@@ -1,4 +1,4 @@
-## Copyright (C) 2016 - 2018 ENCRYPTED SUPPORT LP <adrelanos@riseup.net>
+## Copyright (C) 2018 - 2019 ENCRYPTED SUPPORT LP <adrelanos@riseup.net>
 ## See the file COPYING for copying conditions
 
 ---
@@ -34,6 +34,20 @@
     ERR:
       suppress: true
     HS_DESC:
-      suppress: true
+      response:
+        - pattern:     '650 HS_DESC CREATED (\S+) (\S+) (\S+) \S+ (.+)'
+          replacement: '650 HS_DESC CREATED {} {} {} redacted {}'
+        - pattern:     '650 HS_DESC UPLOAD (\S+) (\S+) .*'
+          replacement: '650 HS_DESC UPLOAD {} {} redacted redacted'
+        - pattern:     '650 HS_DESC UPLOADED (\S+) (\S+) .+'
+          replacement: '650 HS_DESC UPLOADED {} {} redacted'
+        - pattern:     '650 HS_DESC REQUESTED (\S+) NO_AUTH'
+          replacement: '650 HS_DESC REQUESTED {} NO_AUTH'
+        - pattern:     '650 HS_DESC REQUESTED (\S+) NO_AUTH \S+ \S+'
+          replacement: '650 HS_DESC REQUESTED {} NO_AUTH redacted redacted'
+        - pattern:     '650 HS_DESC RECEIVED (\S+) NO_AUTH \S+ \S+'
+          replacement: '650 HS_DESC RECEIVED {} NO_AUTH redacted redacted'
+        - pattern:     '.*'
+          replacement: ''
     HS_DESC_CONTENT:
       suppress: true
