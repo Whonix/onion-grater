@@ -1,3 +1,15 @@
+commit 3cd41fd943df3eb4f015bda07e65282a94149ece
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue May 7 20:41:46 2019 +0000
+
+    fix bisq profile
+
+commit 1e62cf7dcaa41b3a908b744b3645a807dee5c3a3
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon May 6 09:58:10 2019 +0000
+
+    bumped changelog version
+
 commit afdff5bb4d79af1d733b9d5d77ec91c2306ff542
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon May 6 05:16:32 2019 -0400
