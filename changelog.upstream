@@ -2036,7 +2036,7 @@ commit 6ec7ea23a34af29103ad34199fefaef59f46662e
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed May 20 16:10:22 2015 +0000
 
-    debian/control: removed dependency on anon-shared-helper-scripts, no longer required, because we're no longer supporting sysvinit
+    debian/control: removed dependency on helper-scripts, no longer required, because we're no longer supporting sysvinit
 
 commit 33897fc334760c7ffff00b0843a918393619f0d6
 Author: Patrick Schleizer <adrelanos@riseup.net>
@@ -2073,7 +2073,7 @@ commit 6f6734588381a4129e4209b4bee86ba5e1fe0bdb
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu May 14 22:52:34 2015 +0000
 
-    systemd unit: removed "ExecStartPre = /usr/lib/anon-shared-helper-scripts/torsocks-remove-ld-preload" - Doesn't work with systemd and also not required. - https://phabricator.whonix.org/T274
+    systemd unit: removed "ExecStartPre = /usr/lib/helper-scripts/torsocks-remove-ld-preload" - Doesn't work with systemd and also not required. - https://phabricator.whonix.org/T274
 
 commit f211d6074313c789a866981d2cbd470bb1b6684d
 Merge: 34d1bc3 133be44
