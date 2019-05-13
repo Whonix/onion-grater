@@ -17,7 +17,7 @@ true "
 
 case "$1" in
     configure)
-       adduser --home /nonexistent --quiet --system --group onion-grater
+       adduser --no-create-home --home /nonexistent --quiet --system --group onion-grater
        adduser onion-grater debian-tor
     ;;
 
