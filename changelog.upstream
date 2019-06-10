@@ -1,3 +1,20 @@
+commit 4de3d24a819e49595c3ee450cc9b21be8d1a26b2
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Jun 10 15:24:55 2019 +0000
+
+    apparmor fix
+    
+    Jun 10 15:21:38 host audit[23634]: AVC apparmor="DENIED" operation="mkdir" profile="/usr/lib/onion-grater" name="/usr/lib/python3/dist-packages/sdnotify/__pycache__/" pid=23634 comm="onion-grater" requested_mask="c" denied_mask="c" fsuid=113 ouid=113
+    
+      /usr/lib/python3/dist-packages/sdnotify/__pycache__/ rwk,
+      /usr/lib/python3/dist-packages/sdnotify/__pycache__/** rwk,
+
+commit 173575ce3897c5b1832ea27f82fd5bc5466ad41d
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Jun 8 11:27:02 2019 +0000
+
+    bumped changelog version
+
 commit 38784210a2ace882882de372e48647fc70c5f7fe
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sat Jun 8 00:05:34 2019 -0400
