@@ -48,6 +48,7 @@
   /usr/lib/python*/__pycache__/** rw,
 
   ## Qubes
-  /usr/lib/python3/dist-packages/sdnotify/__pycache__/ r,
-  /usr/lib/python3/dist-packages/sdnotify/__pycache__/** r,
+  ## Jun 10 15:21:38 host audit[23634]: AVC apparmor="DENIED" operation="mkdir" profile="/usr/lib/onion-grater" name="/usr/lib/python3/dist-packages/sdnotify/__pycache__/" pid=23634 comm="onion-grater" requested_mask="c" denied_mask="c" fsuid=113 ouid=113
+  /usr/lib/python3/dist-packages/sdnotify/__pycache__/ rwk,
+  /usr/lib/python3/dist-packages/sdnotify/__pycache__/** rwk,
 }
