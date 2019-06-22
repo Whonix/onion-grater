@@ -20,6 +20,7 @@ TimeoutSec=30
 Restart=always
 
 # Hardening
+CapabilityBoundingSet=CAP_DAC_OVERRIDE CAP_SYS_PTRACE
 PrivateDevices=yes
 PrivateTmp=yes
 ProtectHome=yes
