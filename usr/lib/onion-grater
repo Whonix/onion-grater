@@ -5,7 +5,7 @@
 ## See the file COPYING for copying conditions.
 
 # This filter proxy allows fine-grained access whitelists of commands
-# (and their argunents) and events on a per-application basis, stored
+# (and their arguments) and events on a per-application basis, stored
 # in:
 #
 #     /etc/onion-grater.d/
