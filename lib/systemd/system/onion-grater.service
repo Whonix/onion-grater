@@ -27,7 +27,7 @@ ProtectHome=yes
 ProtectSystem=strict
 ReadWriteDirectories=/etc/onion-grater.d/ /etc/onion-grater-merger.d/ /usr/local/etc/onion-grater-merger.d
 NoNewPrivileges=yes
-SystemCallFilter=stat close open mmap fstat rt_sigaction read munmap mprotect readlink getdents write lstat poll lseek brk rt_sigprocmask ioctl access dup getpid socket connect sendto recvmsg bind listen getsockname getpeername setsockopt execve uname fcntl getrlimit sysinfo getuid getgid geteuid getegid sigaltstack statfs arch_prctl futex set_tid_address set_robust_list getrandom
+SystemCallFilter=stat close open mmap fstat rt_sigaction read munmap mprotect readlink getdents write lstat poll lseek brk rt_sigprocmask ioctl access dup getpid socket connect sendto recvmsg bind listen getsockname getpeername setsockopt execve uname fcntl getrlimit sysinfo getuid getgid geteuid getegid sigaltstack statfs arch_prctl futex set_tid_address set_robust_list getrandom openat
 SystemCallArchitectures=native
 
 [Install]
