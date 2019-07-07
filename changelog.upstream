@@ -1,3 +1,39 @@
+commit 0f37e67ea10fa63816b5641a59c72dba6c4063a1
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Jul 7 22:58:31 2019 +0000
+
+    ProtectSystem=strict
+    
+    now that onion-grater-merger (offline tool) was removed from seccomp
+
+commit 183b1d0881be2ec601b25564b5ce08300165350c
+Merge: de48535 14729e0
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Jul 7 22:35:41 2019 +0000
+
+    Merge remote-tracking branch 'origin/master'
+
+commit 14729e0b4ece547e8f5a4e2403c23b75c313a11c
+Merge: de48535 5bb48ab
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Jul 7 22:35:17 2019 +0000
+
+    Merge pull request #4 from madaidan/patch-2
+    
+    More systemd hardening
+
+commit 5bb48ab8ef78ab73c77eeebaf36a59146f1b194c
+Author: madaidan <50278627+madaidan@users.noreply.github.com>
+Date:   Sat Jul 6 14:48:48 2019 +0000
+
+    More systemd hardening
+
+commit de48535e43af9ebc0c7e6c698ee93426b1cdb764
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Jul 6 13:52:38 2019 +0000
+
+    bumped changelog version
+
 commit 8480cff304ea019b25dc49d91672e7c3f8599a07
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Jul 4 01:57:59 2019 -0400
