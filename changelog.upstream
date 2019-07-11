@@ -1,3 +1,17 @@
+commit 630e6bd0a2423cdf6a430439b538d88cac9da155
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Jul 8 19:47:44 2019 +0000
+
+    remove unneeded syscalls
+    
+    https://phabricator.whonix.org/T631#18726
+
+commit 4dc39f80b922d28155c155ffc5d99dde73774038
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Jul 7 22:59:48 2019 +0000
+
+    bumped changelog version
+
 commit 0f37e67ea10fa63816b5641a59c72dba6c4063a1
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Jul 7 22:58:31 2019 +0000
