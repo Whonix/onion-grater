@@ -548,7 +548,7 @@ Date:   Sat Sep 15 13:55:33 2018 -0400
     ```
     
     ```
-    ls -la /var/run/tor/
+    ls -la /run/tor/
     ```
     ```
     total 148
@@ -562,18 +562,18 @@ Date:   Sat Sep 15 13:55:33 2018 -0400
     ```
     ```
     DataDirectory /var/lib/tor
-    PidFile /var/run/tor/tor.pid
+    PidFile /run/tor/tor.pid
     RunAsDaemon 1
     User debian-tor
     
-    ControlSocket /var/run/tor/control GroupWritable RelaxDirModeCheck
+    ControlSocket /run/tor/control GroupWritable RelaxDirModeCheck
     ControlSocketsGroupWritable 1
-    SocksPort unix:/var/run/tor/socks WorldWritable
+    SocksPort unix:/run/tor/socks WorldWritable
     SocksPort 9050
     
     CookieAuthentication 1
     CookieAuthFileGroupReadable 1
-    CookieAuthFile /var/run/tor/control.authcookie
+    CookieAuthFile /run/tor/control.authcookie
     
     Log notice file /var/log/tor/log
     ```
@@ -626,7 +626,7 @@ commit 7282c489de25df8f42c7bcf1d971d40524cfcd18
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Aug 15 19:06:09 2018 +0800
 
-    remove duplicate "ConditionPathExists=!/var/run/qubes/this-is-templatevm"
+    remove duplicate "ConditionPathExists=!/run/qubes/this-is-templatevm"
 
 commit 362407b261f2f987222f67efffc568f202189617
 Author: Patrick Schleizer <adrelanos@riseup.net>
@@ -708,7 +708,7 @@ commit e95c98b2a556d76a1a2c8b48fa79a1833f27279f
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Dec 22 13:42:39 2017 +0000
 
-    remove legacy /var/run/qubes/this-is-templatevm
+    remove legacy /run/qubes/this-is-templatevm
 
 commit 84cd2de8fd29c7a8447cf738ffb49c4c030ddff0
 Author: Patrick Schleizer <adrelanos@riseup.net>
@@ -2387,7 +2387,7 @@ commit f0eedc86739fb2524be35fe29fa92dbc30f9e80a
 Author: troubadoour <trobador@riseup.net>
 Date:   Thu May 7 20:16:17 2015 +0000
 
-    create /var/run/control-port-filter-python directory
+    create /run/control-port-filter-python directory
 
 commit baf8eaa1bb891343bd6ac6aa5fc51e2f7673f833
 Author: troubadoour <trobador@riseup.net>
