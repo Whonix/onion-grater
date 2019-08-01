@@ -1,3 +1,15 @@
+commit ecfc69678aebf1bb4bb0ea9b56f3f3a821a4ba7e
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Aug 1 11:13:40 2019 +0000
+
+    readme
+
+commit 75fcee33d6496a49f4cd368fcfc8383b4f57f7c3
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Jul 31 07:41:35 2019 +0000
+
+    bumped changelog version
+
 commit 5cc757b60f57b3c59abe426233a50079008eba56
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Jul 31 03:08:30 2019 -0400
