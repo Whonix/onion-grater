@@ -1,3 +1,19 @@
+commit 25afac19cf0ab9e6eef512f9b497d1f92b1cccf6
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Aug 6 12:35:45 2019 -0400
+
+    add pipe2 syscall
+    
+    required during package upgrades
+    
+    Aug 06 16:21:29 host audit[9062]: SECCOMP auid=4294967295 uid=107 gid=114 ses=4294967295 subj==/usr/lib/onion-grater (enforce) pid=9062 comm="onion-grater" exe="/usr/bin/python3.7" sig=31 arch=c000003e syscall=293 compat=0 ip=0x792a95cf4c87 code=0x0
+
+commit 3cf8e0134677896b3ae9dcfd29264d1bf3038e8e
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Aug 1 11:57:13 2019 +0000
+
+    bumped changelog version
+
 commit ecfc69678aebf1bb4bb0ea9b56f3f3a821a4ba7e
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Aug 1 11:13:40 2019 +0000
