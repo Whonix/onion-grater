@@ -1,3 +1,15 @@
+commit 48a8e5932af92cbe698c3edf9d33557af6edf39d
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Aug 6 13:49:00 2019 -0400
+
+    add syscalls dup2 wait4
+
+commit fa67da8266eebaf85e7f77738eeea0905d23863f
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Aug 6 16:41:21 2019 +0000
+
+    bumped changelog version
+
 commit 25afac19cf0ab9e6eef512f9b497d1f92b1cccf6
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Aug 6 12:35:45 2019 -0400
