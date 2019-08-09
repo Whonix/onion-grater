@@ -1,3 +1,15 @@
+commit 3539734cb5cc7ea0ba6d2847abb4b33998cb375c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Aug 9 08:05:32 2019 +0000
+
+    add syscalls mkdir fchownat
+
+commit 86183485b9044a0ea0de056f9d9856308e3ff667
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Aug 6 17:54:22 2019 +0000
+
+    bumped changelog version
+
 commit 48a8e5932af92cbe698c3edf9d33557af6edf39d
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Aug 6 13:49:00 2019 -0400
