@@ -1,6 +1,13 @@
 ## Copyright (C) 2016 - 2018 ENCRYPTED SUPPORT LP <adrelanos@riseup.net>
 ## See the file COPYING for copying conditions
 
+#### meta start
+#### project Whonix
+#### category tor-control
+#### description
+## Shipped but not enabled by default onion-grater profile.
+#### meta end
+
 ## tested with onionshare v0.9.2-67-g12acb89
 ## tested with tor 0.2.9.8-2~d80.jessie+1
 

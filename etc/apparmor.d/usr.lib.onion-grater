@@ -1,6 +1,13 @@
 ## Copyright (C) 2015 - 2018 ENCRYPTED SUPPORT LP <adrelanos@riseup.net>
 ## See the file COPYING for copying conditions.
 
+#### meta start
+#### project Whonix
+#### category tor-control and security
+#### description
+## onion-grater apparmor profile
+#### meta end
+
 #include <tunables/global>
 
 ## The attach_disconnected flag prevents a denied

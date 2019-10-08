@@ -1,6 +1,13 @@
 ## Copyright (C) 2016 - 2018 ENCRYPTED SUPPORT LP <adrelanos@riseup.net>
 ## See the file COPYING for copying conditions
 
+#### meta start
+#### project Whonix
+#### category tor-control
+#### description
+## Shipped but not enabled by default onion-grater profile.
+#### meta end
+
 ## TODO: restrict number of ports / instances
 ##       https://github.com/ricochet-im/ricochet/issues/30#issuecomment-271646818
 

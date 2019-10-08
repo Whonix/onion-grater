@@ -1,6 +1,16 @@
 ## Copyright (C) 2016 - 2018 ENCRYPTED SUPPORT LP <adrelanos@riseup.net>
 ## See the file COPYING for copying conditions
 
+#### meta start
+#### project Whonix
+#### category tor-control
+#### description
+## Whonix onion-grater default configuration file.
+##
+## TODO: would be cleaner to split this file and to move snippets to covered
+## applications sdwdate, whonixcheck and tb-starter.
+#### meta end
+
 ---
 - exe-paths:
     - '*'

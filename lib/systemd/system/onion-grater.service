@@ -1,6 +1,13 @@
 ## Copyright (C) 2015 - 2018 ENCRYPTED SUPPORT LP <adrelanos@riseup.net>
 ## See the file COPYING for copying conditions.
 
+#### meta start
+#### project Whonix
+#### category tor-control
+#### description
+## Runs <code>/usr/lib/onion-grater</code>.
+#### meta end
+
 [Unit]
 Description=Tor control port filter proxy
 Documentation=https://tails.boum.org/contribute/design/
