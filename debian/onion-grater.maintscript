@@ -7,3 +7,4 @@ rm_conffile /etc/cpfpy.d/30_default.conf
 rm_conffile /etc/apparmor.d/usr.sbin.cpfpd
 rm_conffile /etc/apparmor.d/usr.lib.tor-controlport-filter
 rm_conffile /etc/tor-controlport-filter-merger.d/30_whonix.yml
+rm_conffile /etc/onion-grater-merger.d/30_whonix.yml
