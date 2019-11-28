@@ -1,3 +1,15 @@
+commit 0191b788ab72910ff55a22094ce6b98c33708eae
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Nov 25 14:28:04 2019 +0000
+
+    move /etc/onion-grater-merger.d/30_whonix.yml to anon-gw-anonymizer-config
+
+commit 2711bdde4d8530e4184d8a412b1905164c4bd7e3
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Oct 14 10:20:27 2019 +0000
+
+    bumped changelog version
+
 commit 270a79b8e8acb9d4626e765a870a9586911657ab
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Oct 8 07:19:30 2019 -0400
