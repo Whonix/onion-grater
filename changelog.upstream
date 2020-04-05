@@ -1,3 +1,15 @@
+commit ca6d703feec9d52c12279830e01146061686038d
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Apr 5 14:29:49 2020 -0400
+
+    apparmor fix
+
+commit a059217b1cff4b5f2560ddb65ee3540af838a914
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Apr 5 13:27:44 2020 -0400
+
+    bumped changelog version
+
 commit 5a505d4cfeb22e1c0634c8967b7f0e04336949ca
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Apr 5 13:11:00 2020 -0400
