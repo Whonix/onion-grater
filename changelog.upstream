@@ -1,3 +1,15 @@
+commit 5a505d4cfeb22e1c0634c8967b7f0e04336949ca
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Apr 5 13:11:00 2020 -0400
+
+    apparmor packaging fixes
+
+commit c5ddec329e24c201181a417807856c0aa464164e
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Apr 2 07:53:54 2020 -0400
+
+    bumped changelog version
+
 commit a35d9d34d818604dd229f357670faadc28f9cf43
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Apr 2 07:22:40 2020 -0400
