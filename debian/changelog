@@ -1,3 +1,9 @@
+onion-grater (3:8.3-1) unstable; urgency=medium
+
+  * New upstream version (local package).
+
+ -- Patrick Schleizer <adrelanos@riseup.net>  Wed, 27 May 2020 17:53:49 +0000
+
 onion-grater (3:8.2-1) unstable; urgency=medium
 
   * New upstream version (local package).

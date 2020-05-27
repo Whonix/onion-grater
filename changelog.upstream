@@ -1,3 +1,15 @@
+commit ec2929c7fddbc654bc7f51d4fcc188ab8fdc4b8c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed May 27 12:34:38 2020 -0400
+
+    resolv.conf
+
+commit d042676521f55e93683f0f105ba1b9225ee917d9
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Apr 16 08:38:40 2020 -0400
+
+    bumped changelog version
+
 commit 50ffbd9620cbbd96642b2d5cc31da284d493346f
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Apr 15 14:05:34 2020 -0400
