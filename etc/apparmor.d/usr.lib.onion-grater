@@ -22,6 +22,7 @@
 
   /etc/resolv.conf r,
   /etc/resolv.conf.anondist r,
+  /etc/resolv.conf.whonix r,
   /etc/host.conf r,
   /etc/hosts r,
   /etc/nsswitch.conf r,
