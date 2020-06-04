@@ -15,8 +15,14 @@ After=network.target
 Wants=network.target
 ConditionPathExists=!/run/qubes/this-is-templatevm
 
+## The '[Unit]' section gets extended in Whonix by file:
+## /lib/systemd/system/onion-grater.service.d/30_whonix_cpfpy.conf
+
 [Service]
 Type=notify
+
+## 'ExecStart' gets overwritten in Whonix by file:
+## /lib/systemd/system/onion-grater.service.d/30_cpfpy.conf
 ExecStart=/usr/lib/onion-grater
 
 User=onion-grater
