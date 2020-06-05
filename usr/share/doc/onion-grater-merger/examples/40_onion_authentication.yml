@@ -1,0 +1,23 @@
+## Copyright (C) 2016 - 2020 ENCRYPTED SUPPORT LP <adrelanos@riseup.net>
+## See the file COPYING for copying conditions
+
+#### meta start
+#### project Whonix
+#### category tor-control
+#### description
+## Onion Authentication
+## Not default when one workstation would login, this would login all workstations.
+## Therefore potential cross VM linking identifier.
+## https://blog.torproject.org/new-release-tor-browser-95
+#### meta end
+
+---
+- exe-paths:
+    - '*'
+  users:
+    - '*'
+  hosts:
+    - '*'
+  commands:
+    onion_client_auth_add:
+      - '.+'
