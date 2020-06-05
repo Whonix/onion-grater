@@ -1,3 +1,20 @@
+commit fb651a3297712627ef8b0ba7ea279b835bf38542
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Jun 5 09:34:50 2020 -0400
+
+    provide opt-in control protocol onion authentication example
+    onion-grater profile drop-in configuration snippet
+    
+    Thanks to @rustybird for the suggestion!
+    
+    https://phabricator.whonix.org/T996
+
+commit 27bec811cb0957d9fd79c6ead5650e3354ceea04
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Jun 4 11:55:08 2020 -0400
+
+    bumped changelog version
+
 commit c3bde5e2b4c84ceca327d7ace0fdb18943405655
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Jun 4 09:00:50 2020 -0400
