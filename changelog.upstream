@@ -1,3 +1,34 @@
+commit 50fdf8d432393f7158a890ad6c8f22cb0a83f411
+Merge: 904b9bb 12bcbad
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Aug 3 09:22:45 2020 -0400
+
+    Merge remote-tracking branch 'github/master'
+
+commit 12bcbad269a2e134ad9295f8eee5c62904f790a5
+Merge: 904b9bb 485030d
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Aug 3 13:21:41 2020 +0000
+
+    Merge pull request #6 from JeremyRand/seccomp-ppc64le
+    
+    Fix seccomp filter for ppc64le
+
+commit 485030dfac0f76eca8743d6e293c89cf2a0255ac
+Author: Jeremy Rand <jeremyrand@airmail.cc>
+Date:   Sun Aug 2 18:42:34 2020 +0000
+
+    Fix seccomp filter for ppc64le
+    
+    On ppc64le, _llseek and send are used as soon as onion-grater launches;
+    recv is used when Ricochet tries to connect.
+
+commit 904b9bb4cdab94e0a9b64cf6ec25d253ccf507cd
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Jun 6 08:31:20 2020 -0400
+
+    bumped changelog version
+
 commit 692dcf0d385f832cbd9efc0760c73896feffb7b8
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Jun 5 13:37:00 2020 -0400
