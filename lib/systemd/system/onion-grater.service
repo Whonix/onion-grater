@@ -28,6 +28,7 @@ SuccessExitStatus=143
 WatchdogSec=10
 TimeoutSec=30
 Restart=always
+RestartSec=60
 
 # Hardening
 CapabilityBoundingSet=CAP_DAC_OVERRIDE CAP_SYS_PTRACE
