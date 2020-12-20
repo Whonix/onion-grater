@@ -1,3 +1,37 @@
+commit fcce4083e5210c897d1b80fdfcb37f7afefde122
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Dec 20 07:59:08 2020 -0500
+
+    readme
+
+commit 64aa150da2199503b7f8a7514a6f0aef050289c2
+Merge: 07078f8 834e851
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Dec 20 01:28:39 2020 -0500
+
+    Merge remote-tracking branch 'github/master'
+
+commit 834e851b1f10bbc6bab3b960d7ba218795127718
+Merge: 07078f8 f72b601
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Dec 20 06:28:01 2020 +0000
+
+    Merge pull request #7 from qubenix/update-bitcoind
+    
+    update 40_bitcoind.yml to work with bitcoind v0.21
+
+commit f72b60124841b29440eaa46d1233bb0c11e411f6
+Author: qubenix <qubenix@users.noreply.github.com>
+Date:   Sat Dec 19 16:22:36 2020 +0000
+
+    update 40_bitcoind.yml to work with bitcoind v0.21
+
+commit 07078f8d31cc17f04f9cc780c0c0ee01868b930a
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Aug 25 12:16:31 2020 -0400
+
+    bumped changelog version
+
 commit 2c9c95760692e3b5af55d198fe14ef7fdee6bc03
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Aug 25 11:13:49 2020 -0400
