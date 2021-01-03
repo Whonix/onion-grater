@@ -1,3 +1,31 @@
+commit 164bdb3ef559d9dca6cf86767f7cbcb87267cf8f
+Merge: f5997bd a176ee5
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Jan 2 02:21:18 2021 -0500
+
+    Merge remote-tracking branch 'github/master'
+
+commit a176ee546b3dd64d98d67038f3dc333dbe173ecf
+Merge: f5997bd 9539d88
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Jan 2 07:20:36 2021 +0000
+
+    Merge pull request #8 from qubenix/simplify-bitcoind
+    
+    Simplify 40_bitcoind.yml
+
+commit 9539d88c7e0b8336b74586d8c93821cad946fc90
+Author: qubenix <qubenix@users.noreply.github.com>
+Date:   Fri Jan 1 15:32:25 2021 +0000
+
+    simplify 40_bitcoind.yml
+
+commit f5997bd88b2a674e7b47c88c41b92f9cdd72eb1f
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Dec 20 07:59:09 2020 -0500
+
+    bumped changelog version
+
 commit fcce4083e5210c897d1b80fdfcb37f7afefde122
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Dec 20 07:59:08 2020 -0500
