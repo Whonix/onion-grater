@@ -1,7 +1,7 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 
 Files: *
-Copyright: 2012 - 2020 ENCRYPTED SUPPORT LP <adrelanos@riseup.net>
+Copyright: 2012 - 2021 ENCRYPTED SUPPORT LP <adrelanos@whonix.org>
 License: GPL-3+-with-additional-terms-1
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ License: GPL-3+-with-additional-terms-1
 
 Files: usr/lib/onion-grater
 Copyright: (C) Amnesia <amnesia at boum dot org>
-           (C) 2016 - 2020 ENCRYPTED SUPPORT LP <adrelanos@riseup.net>
+           (C) 2016 - 2021 ENCRYPTED SUPPORT LP <adrelanos@whonix.org>
 Comment:
  https://git-tails.immerda.ch/tails/tree/config/chroot_local-includes/usr/local/lib/tor-controlport-filter?h=feature/7870-include_onionshare&id=b420c546d2fe2183ea87c799c646794d2095bbc9
  https://git-tails.immerda.ch/tails/plain/config/chroot_local-includes/usr/local/sbin/tor-controlport-filter
