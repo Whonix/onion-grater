@@ -60,6 +60,12 @@
   /usr/lib/python3/dist-packages/sdnotify/__pycache__/ rwk,
   /usr/lib/python3/dist-packages/sdnotify/__pycache__/** rwk,
 
+  ## At first boot.
+  ## AVC apparmor="DENIED" operation="exec" profile="/usr/lib/onion-grater" name="/bin/dash" comm="onion-grater" requested_mask="x" denied_mask="x"
+  ## AVC apparmor="DENIED" operation="exec" profile="/usr/lib/onion-grater" name="/bin/ps" comm="onion-grater" requested_mask="x" denied_mask="x
+  /{,usr/}bin/ps rix,
+  /{,usr/}bin/dash rix,
+
   # Site-specific additions and overrides. See local/README for details.
   #include <local/usr.lib.onion-grater>
 }
