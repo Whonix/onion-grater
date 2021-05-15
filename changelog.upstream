@@ -1,3 +1,31 @@
+commit ee4e40f54cedf0553a3dafa215eb83a4b758c370
+Merge: d2486f1 7c4ae28
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat May 15 07:06:23 2021 -0400
+
+    Merge remote-tracking branch 'github-whonix/master'
+
+commit 7c4ae28dd5a6496f33b24ad5e32506e0c1666644
+Merge: d2486f1 4651809
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat May 15 07:05:45 2021 -0400
+
+    Merge pull request #10 from GavinPacini/patch-1
+    
+    Add SystemCallFilter changes for arm64
+
+commit 465180909f97a2853eaa0192c024af0a979bb080
+Author: Gavin Pacini <GavinPacini@users.noreply.github.com>
+Date:   Fri May 14 19:01:41 2021 +0200
+
+    Add changes for arm64
+
+commit d2486f165b11b5a63b56bc5e64e8cab3faa9dacd
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Mar 19 13:53:54 2021 -0400
+
+    bumped changelog version
+
 commit 446a79ec064d73db2125860b276261e8b8bc353c
 Merge: 23bc6db c592232
 Author: Patrick Schleizer <adrelanos@whonix.org>
