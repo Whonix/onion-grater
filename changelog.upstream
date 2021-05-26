@@ -1,3 +1,37 @@
+commit 25584cf8312ab7a3c763d4184d8272476ed832fa
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed May 26 14:23:38 2021 -0400
+
+    copying
+
+commit d96789bf897dbb6fb438ad7f0668c4bac7b368af
+Merge: c7df1a7 c91a6c3
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed May 26 14:06:17 2021 -0400
+
+    Merge remote-tracking branch 'github-whonix/master'
+
+commit c91a6c3347aca6979abb8b0485c3c37dedd2861b
+Merge: c7df1a7 97b8feb
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed May 26 14:05:17 2021 -0400
+
+    Merge pull request #11 from JeremyRand/wahay
+    
+    Add Wahay profile
+
+commit 97b8feb8dcc739eb4ffd67528fa12c6ff425384b
+Author: Jeremy Rand <jeremyrand@airmail.cc>
+Date:   Wed May 26 15:30:31 2021 +0000
+
+    Add Wahay profile
+
+commit c7df1a75059603d3346608101994ef457984fdce
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat May 15 07:10:06 2021 -0400
+
+    bumped changelog version
+
 commit ee4e40f54cedf0553a3dafa215eb83a4b758c370
 Merge: d2486f1 7c4ae28
 Author: Patrick Schleizer <adrelanos@whonix.org>
