@@ -16,8 +16,6 @@ Wants=network.target
 ConditionPathExists=!/run/qubes/this-is-templatevm
 
 [Service]
-Type=notify
-
 ## 'ExecStart' gets overwritten in Whonix by file:
 ## /lib/systemd/system/onion-grater.service.d/30_cpfpy.conf
 ExecStart=/usr/lib/onion-grater
@@ -25,7 +23,6 @@ ExecStart=/usr/lib/onion-grater
 User=onion-grater
 Group=onion-grater
 SuccessExitStatus=143
-WatchdogSec=10
 TimeoutSec=30
 Restart=always
 RestartSec=60

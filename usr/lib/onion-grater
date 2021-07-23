@@ -1,18 +1,7 @@
 #!/usr/bin/python3 -u
 
-## Copyright (C) Amnesia <amnesia at boum dot org>
-## Portion Copyright (C) 2016 - 2021 ENCRYPTED SUPPORT LP <adrelanos@whonix.org>
-## See the file COPYING for copying conditions.
-
-#### meta start
-#### project Whonix
-#### category tor-control
-#### description
-## main script
-#### meta end
-
 # This filter proxy allows fine-grained access whitelists of commands
-# (and their arguments) and events on a per-application basis, stored
+# (and their argunents) and events on a per-application basis, stored
 # in:
 #
 #     /etc/onion-grater.d/
@@ -23,8 +12,10 @@
 # dictionary looking something like this:
 #
 #     - name: blabla
-#       exe-paths:
-#         - path_to_executable
+#       apparmor-profiles:
+#         - path_to_executable_if_that_is_the_name_of_the_apparmor_profile
+#         # or
+#         - explicit_apparmor_profile_name
 #         ...
 #       users:
 #         - user
@@ -58,10 +49,10 @@
 # least one of the elements match the client. For local (loopback)
 # clients the following qualifiers are relevant:
 #
-# * `exe-paths`: a list of strings, each describing the path to
-#   the binary or script of the client with `*` matching
-#   anything. While this matcher always works for binaries, it only
-#   works for scripts with an enabled AppArmor profile (not
+# * `apparmor-profiles`: a list of strings, each being the name
+#   of the AppArmor profile applied to the binary or script of the client,
+#   with `*` matching anything. While this matcher always works for binaries,
+#   it only works for scripts with an enabled AppArmor profile (not
 #   necessarily enforced, complain mode is good enough).
 #
 # * `users`: a list of strings, each describing the user of the
@@ -147,15 +138,16 @@ import stem.connection
 import struct
 import sys
 import textwrap
+import time
 import yaml
-import sdnotify
-
-n = sdnotify.SystemdNotifier()
 
 DEFAULT_LISTEN_ADDRESS = 'localhost'
 DEFAULT_LISTEN_PORT = 9051
 DEFAULT_COOKIE_PATH = '/run/tor/control.authcookie'
-DEFAULT_CONTROL_SOCKET_PATH = '/run/tor/control'
+# How often (in seconds) we check whether we've lost the tor
+# controller connection.
+TOR_CONTROLLER_PING_INTERVAL = 1.0
+LOCAL_VETH_NETWORK = "10.200.1.0/24"
 
 
 class NoRewriteMatch(RuntimeError):
@@ -178,7 +170,7 @@ def pid_of_laddr(address):
         return None
 
 
-def exe_path_of_pid(pid):
+def apparmor_profile_of_pid(pid):
     # Here we leverage AppArmor's in-kernel solution for determining
     # the exact executable invoked. Looking at /proc/pid/exe when an
     # interpreted script is running will just point to the
@@ -187,12 +179,12 @@ def exe_path_of_pid(pid):
     # using one of its profiles. However, we fallback to /proc/pid/exe
     # in case there is no AppArmor profile, so the only unsupported
     # mode here is unconfined scripts.
-    enabled_aa_profile_re = r'^(/.+) \((?:complain|enforce)\)$'
+    enabled_aa_profile_re = r'^(.+) \((?:complain|enforce)\)$'
     with open('/proc/{}/attr/current'.format(str(pid)), "rb") as fh:
         aa_profile_status = str(fh.read().strip(), 'UTF-8')
-        exe_path_match = re.match(enabled_aa_profile_re, aa_profile_status)
-        if exe_path_match:
-            return exe_path_match.group(1)
+        apparmor_profile_match = re.match(enabled_aa_profile_re, aa_profile_status)
+        if apparmor_profile_match:
+            return apparmor_profile_match.group(1)
         else:
             return psutil.Process(pid).exe()
 
@@ -201,7 +193,7 @@ def get_ip_address(ifname):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     return socket.inet_ntoa(fcntl.ioctl(
         s.fileno(),
-        0x8915, # SIOCGIFADDR
+        0x8915,  # SIOCGIFADDR
         struct.pack('256s', bytes(ifname[:15], 'utf-8'))
     )[20:24])
 
@@ -226,8 +218,9 @@ class FilteredControlPortProxySession:
         self.controller = handler.controller
         self.debug_log = handler.debug_log
         self.filter_name = handler.filter_name
+        self.reconnect_controller = handler.connect_to_real_control_port
         self.restrict_stream_events = handler.restrict_stream_events
-        self.rfile = handler.rfile
+        self.request = handler.request
         self.server_address = handler.server_address
         self.wfile = handler.wfile
         self.client_streams = set()
@@ -267,12 +260,20 @@ class FilteredControlPortProxySession:
         return next((rule for rule in allowed_args
                      if re.match(rule['pattern'] + "$", arg_str)), None)
 
-    def proxy_line(self, line, args_rewriter=None, response_rewriter=None):
+    def proxy_line(self, line, args_rewriter=None, response_rewriter=None, retry=False):
         if args_rewriter:
             new_line = args_rewriter(line)
             self.debug_log_rewrite('command', line, new_line)
             line = new_line
-        response = self.controller.msg(line.strip()).raw_content()
+        try:
+            response = self.controller.msg(line.strip()).raw_content()
+        except (stem.SocketClosed, stem.SocketError):
+            if retry:
+                raise
+            else:
+                self.recover_controller()
+                self.proxy_line(line, args_rewriter, response_rewriter, retry=True)
+            return
         if response_rewriter:
             new_response = response_rewriter(response)
             self.debug_log_rewrite('response', response, new_response)
@@ -318,8 +319,10 @@ class FilteredControlPortProxySession:
            isinstance(event, stem.response.events.StreamEvent) and \
            not global_args.disable_filtering:
             if event.id not in self.client_streams:
-                if event.status in [stem.StreamStatus.NEW,
-                                    stem.StreamStatus.NEWRESOLVE] and \
+                if event.status not in [stem.StreamStatus.NEW,
+                                        stem.StreamStatus.NEWRESOLVE]:
+                    return
+                if self.client_address == event.source_address or \
                    self.client_pid == pid_of_laddr((event.source_address,
                                                     event.source_port)):
                     self.client_streams.add(event.id)
@@ -342,10 +345,19 @@ class FilteredControlPortProxySession:
     def update_event_subscriptions(self, events):
         for listener, event in self.subscribed_event_listeners:
             if event not in events:
-                self.controller.remove_event_listener(listener)
                 self.subscribed_event_listeners.remove((listener, event))
                 if global_args.print_responses:
                     self.debug_log("unsubscribed from event '{}'".format(event))
+                try:
+                    self.controller.remove_event_listener(listener)
+                except (stem.SocketClosed, stem.SocketError):
+                    # When recovering the controller we'll also
+                    # recover the subscriptions recorded in
+                    # self.subscribed_event_listeners, so since we
+                    # already have dropped event from there, the
+                    # failed unsubscription we're dealing with will be
+                    # successfully unsubscribed.
+                    self.recover_controller()
         for event in events:
             if any(event == event_ for _, event_ in self.subscribed_event_listeners):
                 if global_args.print_responses:
@@ -358,26 +370,63 @@ class FilteredControlPortProxySession:
                 event_rewriter = None
                 if 'response' in rule:
                     replacers = rule['response']
+
                     def _event_rewriter(line):
                         return self.rewrite_matched_line(replacers, line)
                     event_rewriter = _event_rewriter
+
                 def _event_cb(event):
                     self.event_cb(event, event_rewriter=event_rewriter)
-                self.controller.add_event_listener(
-                    _event_cb, getattr(stem.control.EventType, event)
-                )
+
                 self.subscribed_event_listeners.append((_event_cb, event))
                 if global_args.print_responses:
                     self.debug_log("subscribed to event '{}'".format(event))
+                try:
+                    self.controller.add_event_listener(
+                        _event_cb, getattr(stem.control.EventType, event)
+                    )
+                except (stem.SocketClosed, stem.SocketError):
+                    # See comment above for failed unsubscriptions.
+                    self.recover_controller()
             else:
                 if global_args.print_responses:
                     self.debug_log("suppressed subscription to event '{}'"
                                    .format(event))
-        self.respond("250 OK")
+
+    def recover_controller(self):
+        self.debug_log('lost connection to tor, reconnecting...')
+        self.controller = self.reconnect_controller()
+        self.debug_log('successfully recovered a tor connection!')
+        # The only state we carry is about event subscriptions, so we
+        # have to set them up again for the new controller
+        event_subs = [e for _, e in self.subscribed_event_listeners]
+        self.subscribed_event_listeners = []
+        self.client_streams = set()
+        self.update_event_subscriptions(event_subs)
+
+    def get_client_request(self):
+        while True:
+            try:
+                # Some clients (e.g. Tor Browser) write their requests
+                # byte-by-byte, so we peek ahead and make sure we only
+                # read a single, full request.
+                peek_ahead = self.request.recv(self.MAX_LINESIZE,
+                                               socket.MSG_PEEK)
+                if peek_ahead == b'':
+                    # The client disconnected
+                    return peek_ahead
+                request_length = peek_ahead.find(b"\n")
+                if request_length == -1:
+                    continue
+                return self.request.recv(request_length + 1)
+            except socket.timeout:
+                if not self.controller.is_alive():
+                    self.recover_controller()
+                continue
 
     def handle(self):
         while True:
-            binary_line = self.rfile.readline(self.MAX_LINESIZE)
+            binary_line = self.get_client_request()
             if binary_line == b'':
                 # Deal with clients that close the socket without a QUIT.
                 break
@@ -396,9 +445,9 @@ class FilteredControlPortProxySession:
                 # Hopefully the next line is ok...
                 continue
             self.debug_log_recv(line)
-            cmd         = match.group('cmd')
+            cmd = match.group('cmd')
             cmd_arg_sep = match.group('cmd_arg_sep')
-            arg_str     = match.group('arg_str')
+            arg_str = match.group('arg_str')
             args = arg_str.split()
             cmd = cmd.upper()
 
@@ -420,24 +469,6 @@ class FilteredControlPortProxySession:
                 self.respond("250 closing connection")
                 break
 
-            elif cmd == "GETINFO" and arg_str.strip() in ['config/names', 'info/names']:
-                arg = arg_str.strip()
-                if arg == 'config/names':
-                    test_cmd = 'GETCONF'
-                elif arg == 'info/names':
-                    test_cmd = 'GETINFO'
-                def conf_matches(lines):
-                    response = ['250+{}='.format(arg)]
-                    for line in lines.strip().split("\n")[1:-2]:
-                        name = line.split()[0]
-                        if self.get_rule(test_cmd, name):
-                            response.append(line)
-                    response.append('.')
-                    response.append('250 OK')
-                    response.append('')
-                    return '\r\n'.join(response)
-                self.proxy_line(line, response_rewriter=conf_matches)
-
             elif cmd == "SETEVENTS":
                 # The control language doesn't care about case for
                 # the event type.
@@ -447,6 +478,7 @@ class FilteredControlPortProxySession:
                     self.filter_line(line)
                 else:
                     self.update_event_subscriptions(events)
+                    self.respond("250 OK")
 
             else:
                 rule = self.get_rule(cmd, arg_str)
@@ -500,6 +532,12 @@ class FilteredControlPortProxyHandler(socketserver.StreamRequestHandler):
 
     def setup(self):
         super(type(self), self).setup()
+        # We don't want to block forever when waiting for client
+        # requests, because the tor controller connection might have
+        # broken (e.g. if tor restarted) which we need to monitor in
+        # between socket timeouts.
+        self.request.settimeout(TOR_CONTROLLER_PING_INTERVAL)
+
         self.allowed_commands = {}
         self.allowed_events = {}
         self.client_desc = None
@@ -537,16 +575,19 @@ class FilteredControlPortProxyHandler(socketserver.StreamRequestHandler):
                     allowed_args[i] = {'pattern': allowed_args[i]}
             self.allowed_commands[cmd.upper()] = allowed_args
 
+    def case_insensitive_regex(self, s):
+        return ''.join(['[' + c.upper() + c.lower() + ']' for c in s])
+
     def add_allowed_confs_commands(self, confs):
         combined_getconf_rule = {'pattern': "(" + "|".join([
-            key for key in confs]) + ")"}
+            self.case_insensitive_regex(key) for key in confs]) + ")"}
         setconf_reset_part = "\s*|\s*".join([
-            key for key in confs
+            self.case_insensitive_regex(key) for key in confs
             if isinstance(confs[key], list) and '' in confs[key]]
         )
         setconf_assignment_part = "\s*|\s*".join([
             "{}=({})".format(
-                key, "|".join(confs[key])
+                self.case_insensitive_regex(key), "|".join(confs[key])
             )
             for key in confs
             if isinstance(confs[key], list) and len(confs[key]) > 0])
@@ -596,24 +637,53 @@ class FilteredControlPortProxyHandler(socketserver.StreamRequestHandler):
         ))
 
     def connect_to_real_control_port(self):
-        controller = stem.connection.connect(control_socket=global_args.control_socket_path)
+        controller = None
+        tries = 0
+        # If tor isn't running this would just loop endlessly as fast
+        # as possible, so let's rate limit it so it at least cannot
+        # become a performance issue.
+        while not controller:
+            if tries >= 3:
+                time.sleep(1)
+            # We would prefer to use the control socket but use the
+            # TCP control port as a workaround for this Tor bug:
+            # https://gitlab.torproject.org/tpo/core/tor/-/issues/25173
+            # This workaround was added while working on the "Always
+            # start Tor Launcher" feature. It remains a mystery why we
+            # don't hit this bug when running a Tails without this
+            # feature but enabling "bridge mode", which should reach
+            # the same state as this feature.
+            # Make sure to revert the commit adding this comment once
+            # the Tor bug is fixed and we want to revert back to using
+            # the control socket.
+            # Also, we would like to use Controller.from_port() here
+            # since it does not attempt fallback on failure, but at
+            # least for Tor Launcher that makes its second connection
+            # that handles events not receive any events breaking e.g.
+            # the progress bar and tor error handling.
+            # It remains to see if Controller.from_socket() is also
+            # affected.
+            controller = stem.connection.connect(
+                control_port=('127.0.0.1', '9052'), control_socket=None
+            )
+            tries += 1
         stem.connection.authenticate_cookie(controller, cookie_path=global_args.control_cookie_path)
         return controller
 
     def handle(self):
         client_host = self.client_address[0]
-        local_connection = ipaddress.ip_address(client_host).is_loopback
-        if local_connection:
+        pid_based_connection = ipaddress.ip_address(client_host).is_loopback
+        if pid_based_connection:
             self.client_pid = pid_of_laddr(self.client_address)
             # Deal with the race between looking up the PID, and the
             # client being killed before we find the PID.
             if not self.client_pid:
                 return
-            client_exe_path = exe_path_of_pid(self.client_pid)
+            client_apparmor_profile = apparmor_profile_of_pid(self.client_pid)
             client_user = psutil.Process(self.client_pid).username()
             matchers = [
-                ('exe-paths', client_exe_path),
-                ('users',     client_user),
+                ('apparmor-profiles', client_apparmor_profile),
+                ('users',             client_user),
             ]
         else:
             self.client_pid = None
@@ -621,10 +691,10 @@ class FilteredControlPortProxyHandler(socketserver.StreamRequestHandler):
                 ('hosts', client_host),
             ]
         self.match_and_parse_filter(matchers)
-        if local_connection:
-            self.client_desc = '{exe} (pid: {pid}, user: {user}, ' \
+        if pid_based_connection:
+            self.client_desc = '{aa_profile} (pid: {pid}, user: {user}, ' \
                                'port: {port}, filter: {filter_name})'.format(
-                                   exe=client_exe_path,
+                                   aa_profile=client_apparmor_profile,
                                    pid=self.client_pid,
                                    user=client_user,
                                    port=self.client_address[1],
@@ -634,7 +704,10 @@ class FilteredControlPortProxyHandler(socketserver.StreamRequestHandler):
             self.client_desc = '{1}:{2} (filter: {0})'.format(
                 self.filter_name, *self.client_address
             )
-        if self.restrict_stream_events and not local_connection:
+        remote_connection = not pid_based_connection and ipaddress.ip_address(
+            client_host
+        ) not in ipaddress.ip_network(LOCAL_VETH_NETWORK)
+        if self.restrict_stream_events and remote_connection:
             self.debug_log(
                 "filter '{}' has `restrict-stream-events` set "
                 "and we are remote so the option was disabled"
@@ -662,12 +735,6 @@ class FilteredControlPortProxyHandler(socketserver.StreamRequestHandler):
         except (ConnectionResetError, BrokenPipeError) as err:
             # Handle clients disconnecting abruptly
             disconnect_reason = str(err)
-        except stem.SocketError:
-            # Handle client closing its socket abruptly
-            disconnect_reason = "Client closed its socket"
-        except stem.SocketClosed:
-            # Handle Tor closing its socket abruptly
-            disconnect_reason = "Tor closed its socket"
         finally:
             if self.controller:
                 self.controller.close()
@@ -687,21 +754,6 @@ class FilteredControlPortProxy(socketserver.ThreadingTCPServer):
     # quits.
     daemon_threads = True
 
-    # Keep count of serving thread
-    thread_cnt = 0
-    thread_cnt_reset = 10000
-
-    # Interval to be used for polling to check if thread is active (in sec)
-    poll_cnt = 30
-
-    def service_actions(self):
-        self.thread_cnt += 1
-        if self.thread_cnt >= self.thread_cnt_reset:
-            self.thread_cnt = 0
-        msg = "STATUS=Serving Thread active. count: " + str(self.thread_cnt) + " / " + str(self.thread_cnt_reset)
-        n.notify("READY=1")
-        n.notify("WATCHDOG=1")
-        n.notify(msg)
 
 def main():
     parser = argparse.ArgumentParser()
@@ -730,12 +782,6 @@ def main():
              "(default: {})".format(DEFAULT_COOKIE_PATH)
     )
     parser.add_argument(
-        "--control-socket-path",
-        type=str, metavar='PATH', default=DEFAULT_CONTROL_SOCKET_PATH,
-        help="specifies the path to Tor's control socket " +
-             "(default: {})".format(DEFAULT_CONTROL_SOCKET_PATH)
-    )
-    parser.add_argument(
         "--complain",
         action='store_true', default=False,
         help="disables all filtering and just prints the commands sent " +
@@ -754,21 +800,19 @@ def main():
     # Deal with overlapping functionality between arguments
     global_args.__dict__['disable_filtering'] = global_args.complain
     global_args.__dict__['print_requests'] = global_args.complain or \
-                                             global_args.debug
+        global_args.debug
     global_args.__dict__['print_responses'] = global_args.debug
     if global_args.listen_interface:
         ip_address = get_ip_address(global_args.listen_interface)
         if global_args.debug:
             log("IP address for interface {} : {}".format(
-                global_args.listen_interface,ip_address))
+                global_args.listen_interface, ip_address))
     else:
         ip_address = global_args.listen_address
     address = (ip_address, global_args.listen_port)
     server = FilteredControlPortProxy(address, FilteredControlPortProxyHandler)
     log("Tor control port filter started, listening on {}:{}".format(*address))
     try:
-        log("Serving Thread started")
-        n.notify("STATUS=Serving Thread started")
         server.serve_forever()
     except KeyboardInterrupt:
         pass
