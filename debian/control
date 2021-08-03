@@ -5,11 +5,12 @@ Source: onion-grater
 Section: misc
 Priority: optional
 Maintainer: Patrick Schleizer <adrelanos@whonix.org>
-Build-Depends: debhelper (>= 12), dh-apparmor
+Build-Depends: debhelper (>= 13), debhelper-compat (= 13), dh-apparmor
 Homepage: https://www.whonix.org/wiki/Dev/CPFP
 Vcs-Browser: https://github.com/Whonix/onion-grater
 Vcs-Git: https://github.com/Whonix/onion-grater.git
-Standards-Version: 4.3.0
+Standards-Version: 4.5.1
+Rules-Requires-Root: no
 
 Package: onion-grater
 Architecture: all
