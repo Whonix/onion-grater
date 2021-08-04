@@ -1,0 +1,7 @@
+#!/bin/bash
+
+## Copyright (C) 2020 - 2021 ENCRYPTED SUPPORT LP <adrelanos@whonix.org>
+## See the file COPYING for copying conditions.
+
+## Keep fork delta small.
+genmkfile_lintian_post_opts+=" --suppress-tags executable-in-usr-lib"
