@@ -1,3 +1,35 @@
+commit a791d75d721c73787e03abd76cf7dd4225569cc9
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Aug 4 15:06:25 2021 -0400
+
+    `lintian --suppress-tags executable-in-usr-lib`
+    
+     Keep fork delta small.
+
+commit e8f9bec799916de887968d0083d8e10e1d98b1ba
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Aug 3 12:48:54 2021 -0400
+
+    move /usr/lib/helper-scripts and /usr/lib/curl-scripts to /usr/libexec/helper-scripts as per lintian FHS
+
+commit 89d94512b51848177c9633542727d79e144f73d7
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Aug 3 05:48:23 2021 -0400
+
+    bullseye
+
+commit 3fbeee1ec14e1e62a40f113ba38969f8cf0824cb
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Aug 1 16:24:35 2021 -0400
+
+    readme
+
+commit 84921294fc782e38b1637a2bbc7f5ab01ef91610
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Jul 23 06:51:15 2021 -0400
+
+    bumped changelog version
+
 commit 5655e2f3bf4cffc5f6c2336a542d0c9ea5ca952b
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Fri Jul 23 06:44:31 2021 -0400
