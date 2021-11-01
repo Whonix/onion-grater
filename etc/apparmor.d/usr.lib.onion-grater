@@ -20,6 +20,9 @@
   ## This script doesn't really need to read the interpreter that's running it.
   deny /usr/bin/python{2,3}.[0-7]* r,
 
+  ## Not needed.
+  deny /etc/ssl/openssl.cnf r,
+
   /etc/resolv.conf r,
   /etc/resolv.conf.anondist r,
   /etc/resolv.conf.whonix r,
