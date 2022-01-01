@@ -44,7 +44,7 @@
     ADD_ONION:
       ## {{{ Required for regular onion services.
       - pattern:     'NEW:(\S+) Port=80,(176[0-5][0-9])'
-        replacement: 'NEW:{} Port=80,{client-address}:{} Flags=DiscardPK'
+        replacement: 'NEW:{} Port=80,{client-address}:{}'
       ## }}}
 
       ## {{{ Required for stealth onion services.
@@ -53,7 +53,7 @@
         replacement: 'NEW:{} Flags=BasicAuth Port=1,{client-address}:1 ClientAuth=onionshare'
       ## https://github.com/micahflee/onionshare/issues/343
       - pattern:     'NEW:(\S+) Port=80,0'
-        replacement: 'NEW:{} Port=80,{client-address}:1 Flags=DiscardPK'
+        replacement: 'NEW:{} Port=80,{client-address}:1'
       ## Flags=DiscardPK would break it.
       - pattern:     'NEW:(\S+) Flags=BasicAuth Port=80,(176[0-5][0-9]) ClientAuth=onionshare'
         replacement: 'NEW:{} Flags=BasicAuth Port=80,{client-address}:{} ClientAuth=onionshare'
@@ -66,6 +66,12 @@
         replacement: 'NEW:ED25519-V3 Flags=V3Auth Port=1,{client-address} ClientAuthV3={}'
       - pattern:     'NEW:ED25519-V3 Flags=V3Auth Port=80,(176[0-5][0-9]) ClientAuthV3=(\S+)'
         replacement: 'NEW:ED25519-V3 Flags=V3Auth Port=80,{client-address}:{} ClientAuthV3={}'
+      ## ADD_ONION ED25519-V3:aOhCmBUtE2e/GFLuIOvZnNP8v/VdPgECoZ9YP19IJltc/A6xj+2np8FG0ithqIyf6gJBgE9tZftR02s6mmg0mA== Flags=V3Auth Port=80,17646 ClientAuthV3=PCY5OWYK7U5UBTPFC2M73DI7ULGDQLG3MKI5SGZ6Z6YGFJYFGEFQ
+      ## Did not work:
+      #- pattern:     'NEW:ED25519-V3:(\S+) Flags=V3Auth Port=80,(176[0-5][0-9]) ClientAuthV3=(\S+)'
+      #  replacement: 'NEW:ED25519-V3:{} Flags=V3Auth Port=80,{client-address}:{} ClientAuthV3={}'
+      - pattern:     '(\S+) Flags=V3Auth Port=80,(176[0-5][0-9]) ClientAuthV3=(\S+)'
+        replacement: '{} Flags=V3Auth Port=80,{client-address}:{} ClientAuthV3={}'
       ## }}}
     DEL_ONION:
       - '.+'
@@ -84,5 +90,18 @@
           replacement: '650 HS_DESC UPLOAD {} {} redacted redacted'
         - pattern:     '650 HS_DESC UPLOADED (\S+) (\S+) .+'
           replacement: '650 HS_DESC UPLOADED {} {} redacted'
+
+        ## 650 HS_DESC CREATED kysctmrrqf7bos3dphh6wyva4peykkqrqw5j2t3pnjpnpmyletscjlyd UNKNOWN UNKNOWN ZTkUMJlLPo/ixM/O+2wrxCAVR7x1fFanI5g1hcBVbho
+        - pattern:     '650 HS_DESC CREATED (\S+) \S+ \S+ \S+'
+          replacement: '650 HS_DESC CREATED {} redacted redacted redacted'
+
+        ## 650 HS_DESC UPLOAD kysctmrrqf7bos3dphh6wyva4peykkqrqw5j2t3pnjpnpmyletscjlyd UNKNOWN $3655BA69BDB86299057FDE2FF1A788003BE1043D~whitehouse reuFJS+ry/nUxDUEXZMoi8jD++LgI8umwdjz4g884vw HSDIR_INDEX=BF61420E1273BC56D38560BE45A2B0DF7E5D6A7B4B2139083EE09DB88ED0DB06
+        - pattern:     '650 HS_DESC UPLOAD (\S+) \S+ \S+ \S+'
+          replacement: '650 HS_DESC UPLOAD {} redacted redacted redacted'
+
+        ## 650 HS_DESC UPLOADED kysctmrrqf7bos3dphh6wyva4peykkqrqw5j2t3pnjpnpmyletscjlyd UNKNOWN $35DF27BA29982A5F418C752BEB8182126188724D~berni
+        - pattern:     '650 HS_DESC UPLOAD (\S+) \S+ \S+'
+          replacement: '650 HS_DESC UPLOAD {} redacted redacted'
+
         - pattern:     '.*'
-          replacement: ''
+          replacement: 'XXXredactedXXX'
