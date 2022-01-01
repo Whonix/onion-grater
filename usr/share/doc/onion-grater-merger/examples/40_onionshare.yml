@@ -13,7 +13,7 @@
 
 ## Tor's reply ClientAuth
 ## 250-ClientAuth=onionshare:xxxKEYBLOBxxxxxxxxxxxx
-## is left intact because onionshare's button 'Copy HidServAuth' coppies the
+## is left intact because onionshare's button 'Copy HidServAuth' copies the
 ## following into the clipboard, which is a usability feature.
 ## HidServAuth xxxdomainxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.onion xxxKEYBLOBxxxxxxxxxxxx
 ## Otherwise the user would have to extract it from onion-grater
@@ -47,8 +47,15 @@
         replacement: 'NEW:{} Port=80,{client-address}:{} Flags=DiscardPK'
       ## }}}
 
+      ## TODO:
+      ## Flags=BasicAuth
+      ## Quote Tor ControlProtocol:
+      ## "BasicAuth" / ; Client authorization is required using the "basic" method (v2 only).
+      ## OnionShare 2.2 (Debian bullseye version) still uses "Flags=BasicAuth".
+      ## Newer OnionShare
+
       ## {{{ Required for stealth onion services.
-      ## onionshare creates this dummy probably to test if Tor supports the BasicAuth option.
+      ## OnionShare creates this dummy probably to test if Tor supports the BasicAuth option.
       - pattern:     'NEW:(\S+) Flags=BasicAuth Port=1,1 ClientAuth=onionshare'
         replacement: 'NEW:{} Flags=BasicAuth Port=1,{client-address}:1 ClientAuth=onionshare Flags=DiscardPK'
       ## https://github.com/micahflee/onionshare/issues/343
