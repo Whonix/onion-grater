@@ -1,3 +1,39 @@
+commit 63eb2f20b302dbdb902629d166c444bb4826d4df
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Jan 1 16:14:48 2022 -0500
+
+    towards OnionShare 2.4 support
+
+commit 132ac995c750d6fd19e095bf1f2fc76f41985ee6
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Jan 1 15:14:49 2022 -0500
+
+    towards OnionShare 2.4 support
+
+commit 2d67dfddb301ed0589f368b47051cdd74e745c61
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Jan 1 14:31:26 2022 -0500
+
+    towards OnionShare 2.4 support
+
+commit f8319d7eeadee7b70b1248a3843bc0a0ac97e2e6
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Jan 1 14:27:35 2022 -0500
+
+    comment
+
+commit 8597e43de57af2d8ad3c5959f3c78ee9f51451b4
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Nov 9 14:32:32 2021 -0500
+
+    readme
+
+commit 40fc2148483376c888bbb1bd71cf30a03cc42d68
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Nov 1 05:42:01 2021 -0400
+
+    bumped changelog version
+
 commit a4b6a07bf30e0804416d214fe1d1bfac7a234b5b
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Mon Nov 1 05:35:26 2021 -0400
