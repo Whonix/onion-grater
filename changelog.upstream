@@ -1,3 +1,19 @@
+commit e36db8f769230959ea07ce44ede333aef00a39e5
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Jan 6 15:12:12 2022 -0500
+
+    fix, prevent dh_compress from compressing the OnionShare onion-grater profile
+    
+    Thanks to @DaemonFuu for the bug report!
+    
+    https://forums.whonix.org/t/onion-grater-deb-package-contains-compressed-40-onionshare-yml/13154
+
+commit b0995b76372ee2a23ddbeede85db8f57642f0b18
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Jan 2 06:13:46 2022 -0500
+
+    bumped changelog version
+
 commit 63eb2f20b302dbdb902629d166c444bb4826d4df
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Sat Jan 1 16:14:48 2022 -0500
