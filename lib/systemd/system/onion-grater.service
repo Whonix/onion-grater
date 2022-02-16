@@ -38,7 +38,8 @@ ProtectKernelLogs=true
 ProtectHostname=true
 ProtectClock=true
 ProtectProc=invisible
-ProcSubset=pid
+## See comment below.
+#ProcSubset=pid
 PrivateTmp=true
 PrivateUsers=true
 PrivateDevices=true
@@ -50,6 +51,23 @@ RestrictAddressFamilies=AF_INET AF_UNIX
 RestrictNamespaces=true
 SystemCallFilter=stat close open mmap fstat rt_sigaction read munmap mprotect readlink getdents write lstat poll lseek brk rt_sigprocmask ioctl access dup getpid socket connect sendto recvmsg bind listen getsockname getpeername setsockopt execve uname fcntl getrlimit sysinfo getuid getgid geteuid getegid sigaltstack statfs arch_prctl futex set_tid_address set_robust_list getrandom openat getdents64 getcwd accept4 clone recvfrom shutdown madvise pipe2 dup2 wait4 mkdir fchownat _llseek send recv faccessat readlinkat newfstatat ppoll epoll_create1
 SystemCallArchitectures=native
+
+## ProcSubset=pid above is disabled because:
+# onion-grater[23859]: Traceback (most recent call last):
+# onion-grater[23859]:   File "/usr/lib/python3/dist-packages/psutil/_common.py", line 403, in wrapper
+# onion-grater[23859]:     return cache[key]
+# onion-grater[23859]: KeyError: (('/proc',), frozenset())
+# onion-grater[23859]: During handling of the above exception, another exception occurred:
+# onion-grater[23859]: Traceback (most recent call last):
+# onion-grater[23859]:   File "/usr/lib/python3/dist-packages/psutil/_pslinux.py", line 302, in <module>
+# onion-grater[23859]:     set_scputimes_ntuple("/proc")
+# onion-grater[23859]:   File "/usr/lib/python3/dist-packages/psutil/_common.py", line 405, in wrapper
+# onion-grater[23859]:     ret = cache[key] = fun(*args, **kwargs)
+# onion-grater[23859]:   File "/usr/lib/python3/dist-packages/psutil/_pslinux.py", line 269, in set_scputimes_ntuple
+# onion-grater[23859]:     with open_binary('%s/stat' % procfs_path) as f:
+# onion-grater[23859]:   File "/usr/lib/python3/dist-packages/psutil/_common.py", line 711, in open_binary
+# onion-grater[23859]:     return open(fname, "rb", **kwargs)
+# onion-grater[23859]: FileNotFoundError: [Errno 2] No such file or directory: '/proc/stat'
 
 [Install]
 WantedBy=multi-user.target
