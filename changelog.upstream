@@ -1,3 +1,17 @@
+commit 4b13181ac4743c9a969164b81bf840eb85325fb7
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Feb 16 18:33:34 2022 -0500
+
+    disable `ProcSubset=pid` due to onion-grater crash at startup
+    
+    > onion-grater[23859]: FileNotFoundError: [Errno 2] No such file or directory: '/proc/stat'
+
+commit 63b46d3e22bc0e7a2665b38a4088ffd5c923dc78
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Jan 6 15:13:34 2022 -0500
+
+    bumped changelog version
+
 commit e36db8f769230959ea07ce44ede333aef00a39e5
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Thu Jan 6 15:12:12 2022 -0500
