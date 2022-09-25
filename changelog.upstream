@@ -1,3 +1,19 @@
+commit 86584992cb4e83873617a9471ac7b05c9e1a0981
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Sep 24 19:52:05 2022 -0400
+
+    fix systemd seccomp violation after suspend/resume
+    
+    by adding `SystemCallFilter` `select`
+    
+    Sep 25 01:06:57 host audit[841]: SECCOMP auid=4294967295 uid=106 gid=116 ses=4294967295 subj==/usr/lib/onion-grater (enforce) pid=841 comm="onion-grater" exe="/usr/bin/python3.9" sig=31 arch=c000003e syscall=23 compat=0 ip=0x792fb3bac2a3 code=0x80000000
+
+commit 87ac26ac5626cf578044c5c1b550e626b6d81a3c
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed May 25 06:07:59 2022 -0400
+
+    bumped changelog version
+
 commit ca5fed662400a980da66157c95fe155410aad0d6
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Fri May 20 15:27:14 2022 -0400
