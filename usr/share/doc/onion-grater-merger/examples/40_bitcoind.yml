@@ -8,8 +8,6 @@
 ## Shipped but not enabled by default onion-grater profile.
 #### meta end
 
-## Maintained by: https://forums.whonix.org/u/qubenix <qubenix@riseup.net>
-
 ---
 - exe-paths:
     - '*'
@@ -19,7 +17,17 @@
     - '*'
   commands:
     ADD_ONION:
-      ## {{{ bitcoind onion service
-      - pattern:     'NEW:(\S+) Port=(\S+),127.0.0.1:(\S+)'
+      ## {{{ bitcoind default listening ports
+      ## mainnet (8333)
+      - pattern:     'NEW:(\S+) Port=8333,127.0.0.1:8333'
+        replacement: 'NEW:{} Port={},{client-address}:{} Flags=DiscardPK'
+      ## testnet (18333)
+      - pattern:     'NEW:(\S+) Port=18333,127.0.0.1:18333'
+        replacement: 'NEW:{} Port={},{client-address}:{} Flags=DiscardPK'
+      ## signet (38333)
+      - pattern:     'NEW:(\S+) Port=38333,127.0.0.1:38333'
+        replacement: 'NEW:{} Port={},{client-address}:{} Flags=DiscardPK'
+      ## regtest (18444)
+      - pattern:     'NEW:(\S+) Port=18444,127.0.0.1:18444'
         replacement: 'NEW:{} Port={},{client-address}:{} Flags=DiscardPK'
       ## }}}
