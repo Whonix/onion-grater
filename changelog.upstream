@@ -1,3 +1,37 @@
+commit 33bd1abd0d9e715f8fa6d9b8f35375246ac6f8e6
+Merge: 7a64310 e9a73e9
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Oct 1 10:05:01 2022 -0400
+
+    Merge remote-tracking branch 'github-whonix/master'
+
+commit e9a73e9e1800bb049ef3e708bfa0ba8e901dc80d
+Merge: 7a64310 3831604
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Oct 1 10:04:13 2022 -0400
+
+    Merge pull request #1 from nyxnor/master
+    
+    correct bitcond pattern for all default ports of the chains
+
+commit 38316044dc73eab7519890514db44f044f479d69
+Author: nyxnor <nyxnor@protonmail.com>
+Date:   Fri Sep 30 09:47:43 2022 +0000
+
+    correct bitcoind binding ports
+
+commit 12477ae6da0c82bc79898184c086287a6512a8db
+Author: nyxnor <nyxnor@protonmail.com>
+Date:   Thu Sep 29 22:02:19 2022 +0000
+
+    correct bitcond pattern for all default ports of the chains
+
+commit 7a643104f28c19150e9ceb0cbe630b44f6a6b21e
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Sep 24 20:03:31 2022 -0400
+
+    bumped changelog version
+
 commit 86584992cb4e83873617a9471ac7b05c9e1a0981
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Sat Sep 24 19:52:05 2022 -0400
