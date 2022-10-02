@@ -14,8 +14,11 @@
 
 ## Bitcoin default P2P ports
 ## Listening ports: main(8333) testnet(18333) signet(38333) regtest(18444)
-## Binding ports: {listening_port} + 1
+## Onion binding port: {listening_port} + 1
 
+## Bitcoind defaults to "bind=127.0.0.1:8334=onion". That won't work with
+## Whonix because it will not be listening on the internal network interface.
+## Listen on onion by setting in your bitcoin.conf "bind=0.0.0.0:8334=onion".
 
 ---
 - exe-paths:
@@ -27,13 +30,13 @@
   commands:
     ADD_ONION:
       ## {{{
-      - pattern:     'NEW:(\S+) Port=8333,127.0.0.1:8334'
+      - pattern:     'NEW:(\S+) Port=8333,(?:127.0.0.1|0.0.0.0):8334'
         replacement: 'NEW:{} Port=8333,{client-address}:8334 Flags=DiscardPK'
-      - pattern:     'NEW:(\S+) Port=18333,127.0.0.1:18334'
+      - pattern:     'NEW:(\S+) Port=18333,(?:127.0.0.1|0.0.0.0):18334'
         replacement: 'NEW:{} Port=18333,{client-address}:18334 Flags=DiscardPK'
-      - pattern:     'NEW:(\S+) Port=38333,127.0.0.1:38334'
+      - pattern:     'NEW:(\S+) Port=38333,(?:127.0.0.1|0.0.0.0):38334'
         replacement: 'NEW:{} Port=38333,{client-address}:38334 Flags=DiscardPK'
-      - pattern:     'NEW:(\S+) Port=18444,127.0.0.1:18445'
+      - pattern:     'NEW:(\S+) Port=18444,(?:127.0.0.1|0.0.0.0):18445'
         replacement: 'NEW:{} Port=18444,{client-address}:18445 Flags=DiscardPK'
       ## }}}
 
