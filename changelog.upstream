@@ -1,3 +1,33 @@
+commit b29145be966f4c90ea6bc987383dc718863fdfcd
+Merge: 525bc71 a7cbd28
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Oct 23 18:44:04 2022 -0400
+
+    Merge remote-tracking branch 'github-whonix/master'
+
+commit a7cbd28af2d8f28d7d18284c9a321860d3cb8e9f
+Merge: 525bc71 9addd1d
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Oct 23 18:43:26 2022 -0400
+
+    Merge pull request #2 from nyxnor/master
+    
+    make bitcoind accept 127.0.0.1 and 0.0.0.0
+    
+    https://forums.whonix.org/t/bitcoin-core-onion-grater-profile/6216/9
+
+commit 9addd1d6dd9671b18e5415a196b92d7f6ee5846c
+Author: nyxnor <nyxnor@protonmail.com>
+Date:   Sun Oct 2 20:50:30 2022 +0000
+
+    make bitcoind accept 127.0.0.1 and 0.0.0.0
+
+commit 525bc713ca3c6c3cca9d1b4784f6388d01515dab
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Oct 1 10:29:33 2022 -0400
+
+    bumped changelog version
+
 commit 33bd1abd0d9e715f8fa6d9b8f35375246ac6f8e6
 Merge: 7a64310 e9a73e9
 Author: Patrick Schleizer <adrelanos@whonix.org>
