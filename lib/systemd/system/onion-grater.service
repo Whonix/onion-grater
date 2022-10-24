@@ -17,7 +17,7 @@ ConditionPathExists=!/run/qubes/this-is-templatevm
 
 [Service]
 ## 'ExecStart' gets overwritten in Whonix by file:
-## /lib/systemd/system/onion-grater.service.d/30_cpfpy.conf
+## /lib/systemd/system/onion-grater.service.d/30_whonix.conf
 ExecStart=/usr/lib/onion-grater
 
 User=onion-grater
