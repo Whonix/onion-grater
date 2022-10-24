@@ -9,7 +9,7 @@
 #### meta end
 
 ---
-- apparmor-profiles:
+- exe-paths:
     - '*'
   users:
     - '*'
