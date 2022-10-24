@@ -141,6 +141,7 @@ import textwrap
 import time
 import yaml
 
+DEFAULT_PROFILE_DIR = ['/etc/onion-grater.d/']
 DEFAULT_LISTEN_ADDRESS = 'localhost'
 DEFAULT_LISTEN_PORT = 9051
 DEFAULT_COOKIE_PATH = '/run/tor/control.authcookie'
@@ -549,11 +550,15 @@ class FilteredControlPortProxyHandler(socketserver.StreamRequestHandler):
         self.restrict_stream_events = False
         self.server_address = self.server.server_address
         self.subscribed_event_listeners = []
-        for filter_file in glob.glob('/etc/onion-grater.d/*.yml'):
+        profile_dir = []
+        for directory in global_args.profile_dir:
+          profile_dir += glob.glob(directory + '*.yml')
+        profile_dir.sort(reverse = True)
+        for filter_file in profile_dir:
             try:
                 with open(filter_file, "rb") as fh:
                     filters = yaml.safe_load(fh.read())
-                    name = re.sub(r'\.yml$', '', os.path.basename(filter_file))
+                    name = re.sub(r'\.yml$', '', os.path.abspath(filter_file))
                     for filter_ in filters:
                         if name not in filter_:
                             filter_['name'] = name
@@ -619,11 +624,13 @@ class FilteredControlPortProxyHandler(socketserver.StreamRequestHandler):
                            if all(any(val == expected_val or val == '*'
                                       for val in filter_.get(key, []))
                                   for key, expected_val in matchers)]
+
         if len(matched_filters) == 0:
             return
-        elif len(matched_filters) > 1:
-            raise RuntimeError('multiple filters matched: ' +
-                               ', '.join(matched_filters))
+        if global_args.multiple_matches == False and \
+           len(matched_filters) > 1:
+            raise RuntimeError('multiple filters matched: {}'
+                               .format(matched_filters))
         matched_filter = matched_filters[0]
         self.filter_name = matched_filter['name']
         commands = matched_filter.get('commands', {}) or {}
@@ -758,6 +765,17 @@ class FilteredControlPortProxy(socketserver.ThreadingTCPServer):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
+        "--multiple-matches",
+        action='store_true', default=False,
+        help="allow multiple files to match "
+    )
+    parser.add_argument(
+        "--profile-dir",
+        action='append', metavar='DIR',
+        help="specifies the directory on which the profiles are " +
+             "(default: {})".format(DEFAULT_PROFILE_DIR)
+    )
+    parser.add_argument(
         "--listen-address",
         type=str, metavar='ADDR', default=DEFAULT_LISTEN_ADDRESS,
         help="specifies the address on which the server listens " +
@@ -805,13 +823,24 @@ def main():
     if global_args.listen_interface:
         ip_address = get_ip_address(global_args.listen_interface)
         if global_args.debug:
-            log("IP address for interface {} : {}".format(
+            log("IP address for interface {}: {}".format(
                 global_args.listen_interface, ip_address))
     else:
         ip_address = global_args.listen_address
     address = (ip_address, global_args.listen_port)
     server = FilteredControlPortProxy(address, FilteredControlPortProxyHandler)
     log("Tor control port filter started, listening on {}:{}".format(*address))
+    profile_dir = []
+    # https://bugs.python.org/issue16399
+    if global_args.profile_dir == None:
+      global_args.profile_dir = DEFAULT_PROFILE_DIR
+    for dir in global_args.profile_dir:
+        # Don't duplicate directories
+        if dir not in profile_dir:
+            # Adds trailing slash at the end of dir if it doesn't exist yet
+            profile_dir.append(os.path.join(dir, ''))
+    global_args.profile_dir = profile_dir
+    log("Profile directory: {}".format(profile_dir))
     try:
         server.serve_forever()
     except KeyboardInterrupt:
