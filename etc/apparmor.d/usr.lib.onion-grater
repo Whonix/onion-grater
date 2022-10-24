@@ -41,6 +41,8 @@
   /etc/onion-grater-merger.d/* r,
   /usr/local/etc/onion-grater-merger.d/ r,
   /usr/local/etc/onion-grater-merger.d/* r,
+  /usr/share/doc/onion-grater-merger/examples/ r
+  /usr/share/doc/onion-grater-merger/examples/* r
 
   /run/tor/control.authcookie r,
   /run/tor/control rw,
