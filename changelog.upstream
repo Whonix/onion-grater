@@ -1,3 +1,69 @@
+commit 196c69cca36d593d17a811ec0000c02327097c97
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Oct 24 17:07:21 2022 -0400
+
+    revert
+
+commit 6856819cb9cef9125cb18ef302c3407908a5b8ea
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Oct 24 14:17:36 2022 -0400
+
+    apparmor
+
+commit a13f2676560a1ae90d7661b99d37ca78b8fcb221
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Oct 24 14:16:36 2022 -0400
+
+    apparmor
+
+commit e788d066070203e9589cba3fa25239d10d79221f
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Oct 24 11:54:36 2022 -0400
+
+    bumped changelog version
+
+commit 272dbb499f9ad5c4a8becb6e957fa9d8748b472c
+Merge: 639e001 4df11c4
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Oct 24 11:53:02 2022 -0400
+
+    Merge remote-tracking branch 'github-whonix/master'
+
+commit 4df11c40368dd19ded64fb6bb7b16c311c42d194
+Merge: 639e001 884d6eb
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Oct 24 11:50:38 2022 -0400
+
+    Merge pull request #3 from nyxnor/reborn
+    
+    Reborn
+
+commit 884d6eba523ec98a88b3cc1326d71c7fd83847c8
+Author: nyxnor <nyxnor@protonmail.com>
+Date:   Mon Oct 24 15:19:35 2022 +0000
+
+    support multiple directories and multiple matchers
+    
+    allow support for different hosts for remote connections, deprecating onion-grater-merger. Sorting made in reverse to honor precedence as parsing stops at first match. https://forums.whonix.org/t/onion-grater-wiki-improvements/15845
+
+commit 2353be12767d933ebc43b6dd3f49928191a43b41
+Author: nyxnor <nyxnor@protonmail.com>
+Date:   Mon Oct 24 15:17:28 2022 +0000
+
+    no need to edit systemd file to set arguments
+
+commit ed4af1fcc9b07f6e6278dad18a4ecfc080c35fb7
+Author: nyxnor <nyxnor@protonmail.com>
+Date:   Mon Oct 24 12:25:16 2022 +0000
+
+    fix old apparmor variable
+
+commit 639e001200765e96a3d19cf436ff7e5e28b2b764
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Oct 23 18:45:52 2022 -0400
+
+    bumped changelog version
+
 commit b29145be966f4c90ea6bc987383dc718863fdfcd
 Merge: 525bc71 a7cbd28
 Author: Patrick Schleizer <adrelanos@whonix.org>
