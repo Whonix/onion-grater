@@ -22,7 +22,7 @@
 #XAJKD2BRVOI4C4IHK2OWF3EKIJNVIDBVCP2IM2Z2ZHPN456HNRZA
 
 ---
-- exe-paths:
+- apparmor-profiles:
     - '*'
   users:
     - '*'

@@ -11,7 +11,7 @@
 ## Maintained by: https://forums.whonix.org/u/qubenix <qubenix@riseup.net>
 
 ---
-- exe-paths:
+- apparmor-profiles:
     - '*'
   users:
     - '*'

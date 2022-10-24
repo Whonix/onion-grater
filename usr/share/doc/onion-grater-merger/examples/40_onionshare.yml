@@ -25,7 +25,7 @@
 ## HsDir gets redacted.
 
 ---
-- exe-paths:
+- apparmor-profiles:
     - '*'
   users:
     - '*'
