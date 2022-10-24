@@ -21,7 +21,7 @@
 ## Listen on onion by setting in your bitcoin.conf "bind=0.0.0.0:8334=onion".
 
 ---
-- exe-paths:
+- apparmor-profiles:
     - '*'
   users:
     - '*'

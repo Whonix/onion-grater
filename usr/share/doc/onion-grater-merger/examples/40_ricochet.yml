@@ -12,7 +12,7 @@
 ##       https://github.com/ricochet-im/ricochet/issues/30#issuecomment-271646818
 
 ---
-- exe-paths:
+- apparmor-profiles:
     - '*'
   users:
     - '*'
