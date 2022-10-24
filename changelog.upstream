@@ -1,3 +1,15 @@
+commit 73b5aeb85e3defb65cd5da16102777f34fabd4ad
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Oct 24 17:10:21 2022 -0400
+
+    signed commit
+
+commit 59461fc0b060a36345ff2e36e6fef41e90d361a2
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Oct 24 17:08:52 2022 -0400
+
+    bumped changelog version
+
 commit 196c69cca36d593d17a811ec0000c02327097c97
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Mon Oct 24 17:07:21 2022 -0400
@@ -35,7 +47,7 @@ Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Mon Oct 24 11:50:38 2022 -0400
 
     Merge pull request #3 from nyxnor/reborn
-
+    
     Reborn
 
 commit 884d6eba523ec98a88b3cc1326d71c7fd83847c8
@@ -43,7 +55,7 @@ Author: nyxnor <nyxnor@protonmail.com>
 Date:   Mon Oct 24 15:19:35 2022 +0000
 
     support multiple directories and multiple matchers
-
+    
     allow support for different hosts for remote connections, deprecating onion-grater-merger. Sorting made in reverse to honor precedence as parsing stops at first match. https://forums.whonix.org/t/onion-grater-wiki-improvements/15845
 
 commit 2353be12767d933ebc43b6dd3f49928191a43b41
@@ -77,9 +89,9 @@ Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Sun Oct 23 18:43:26 2022 -0400
 
     Merge pull request #2 from nyxnor/master
-
+    
     make bitcoind accept 127.0.0.1 and 0.0.0.0
-
+    
     https://forums.whonix.org/t/bitcoin-core-onion-grater-profile/6216/9
 
 commit 9addd1d6dd9671b18e5415a196b92d7f6ee5846c
@@ -107,7 +119,7 @@ Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Sat Oct 1 10:04:13 2022 -0400
 
     Merge pull request #1 from nyxnor/master
-
+    
     correct bitcond pattern for all default ports of the chains
 
 commit 38316044dc73eab7519890514db44f044f479d69
@@ -133,9 +145,9 @@ Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Sat Sep 24 19:52:05 2022 -0400
 
     fix systemd seccomp violation after suspend/resume
-
+    
     by adding `SystemCallFilter` `select`
-
+    
     Sep 25 01:06:57 host audit[841]: SECCOMP auid=4294967295 uid=106 gid=116 ses=4294967295 subj==/usr/lib/onion-grater (enforce) pid=841 comm="onion-grater" exe="/usr/bin/python3.9" sig=31 arch=c000003e syscall=23 compat=0 ip=0x792fb3bac2a3 code=0x80000000
 
 commit 87ac26ac5626cf578044c5c1b550e626b6d81a3c
@@ -173,7 +185,7 @@ Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Wed Feb 16 18:33:34 2022 -0500
 
     disable `ProcSubset=pid` due to onion-grater crash at startup
-
+    
     > onion-grater[23859]: FileNotFoundError: [Errno 2] No such file or directory: '/proc/stat'
 
 commit 63b46d3e22bc0e7a2665b38a4088ffd5c923dc78
@@ -187,9 +199,9 @@ Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Thu Jan 6 15:12:12 2022 -0500
 
     fix, prevent dh_compress from compressing the OnionShare onion-grater profile
-
+    
     Thanks to @DaemonFuu for the bug report!
-
+    
     https://forums.whonix.org/t/onion-grater-deb-package-contains-compressed-40-onionshare-yml/13154
 
 commit b0995b76372ee2a23ddbeede85db8f57642f0b18
@@ -275,7 +287,7 @@ Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Wed Aug 4 15:06:25 2021 -0400
 
     `lintian --suppress-tags executable-in-usr-lib`
-
+    
      Keep fork delta small.
 
 commit e8f9bec799916de887968d0083d8e10e1d98b1ba
@@ -307,7 +319,7 @@ Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Fri Jul 23 06:44:31 2021 -0400
 
     upgrade to newer onion-grater version by Tails
-
+    
     Files: usr/lib/onion-grater
     Copyright: (C) Amnesia <amnesia at boum dot org>
     Comment:
@@ -352,7 +364,7 @@ Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Wed May 26 14:05:17 2021 -0400
 
     Merge pull request #11 from JeremyRand/wahay
-
+    
     Add Wahay profile
 
 commit 97b8feb8dcc739eb4ffd67528fa12c6ff425384b
@@ -380,7 +392,7 @@ Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Sat May 15 07:05:45 2021 -0400
 
     Merge pull request #10 from GavinPacini/patch-1
-
+    
     Add SystemCallFilter changes for arm64
 
 commit 465180909f97a2853eaa0192c024af0a979bb080
@@ -408,7 +420,7 @@ Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Fri Mar 19 13:50:31 2021 -0400
 
     Merge pull request #9 from madaidan/sandboxing
-
+    
     Improve systemd sandboxing
 
 commit 1fd8701dd6197b3325b83ad03bfd9ecedbcbdee6
@@ -460,7 +472,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sat Jan 2 07:20:36 2021 +0000
 
     Merge pull request #8 from qubenix/simplify-bitcoind
-
+    
     Simplify 40_bitcoind.yml
 
 commit 9539d88c7e0b8336b74586d8c93821cad946fc90
@@ -494,7 +506,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Dec 20 06:28:01 2020 +0000
 
     Merge pull request #7 from qubenix/update-bitcoind
-
+    
     update 40_bitcoind.yml to work with bitcoind v0.21
 
 commit f72b60124841b29440eaa46d1233bb0c11e411f6
@@ -540,7 +552,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Aug 3 13:21:41 2020 +0000
 
     Merge pull request #6 from JeremyRand/seccomp-ppc64le
-
+    
     Fix seccomp filter for ppc64le
 
 commit 485030dfac0f76eca8743d6e293c89cf2a0255ac
@@ -548,7 +560,7 @@ Author: Jeremy Rand <jeremyrand@airmail.cc>
 Date:   Sun Aug 2 18:42:34 2020 +0000
 
     Fix seccomp filter for ppc64le
-
+    
     On ppc64le, _llseek and send are used as soon as onion-grater launches;
     recv is used when Ricochet tries to connect.
 
@@ -576,9 +588,9 @@ Date:   Fri Jun 5 09:34:50 2020 -0400
 
     provide opt-in control protocol onion authentication example
     onion-grater profile drop-in configuration snippet
-
+    
     Thanks to @rustybird for the suggestion!
-
+    
     https://phabricator.whonix.org/T996
 
 commit 27bec811cb0957d9fd79c6ead5650e3354ceea04
@@ -772,9 +784,9 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Aug 6 12:35:45 2019 -0400
 
     add pipe2 syscall
-
+    
     required during package upgrades
-
+    
     Aug 06 16:21:29 host audit[9062]: SECCOMP auid=4294967295 uid=107 gid=114 ses=4294967295 subj==/usr/lib/onion-grater (enforce) pid=9062 comm="onion-grater" exe="/usr/bin/python3.7" sig=31 arch=c000003e syscall=293 compat=0 ip=0x792a95cf4c87 code=0x0
 
 commit 3cf8e0134677896b3ae9dcfd29264d1bf3038e8e
@@ -824,7 +836,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Jul 8 19:47:44 2019 +0000
 
     remove unneeded syscalls
-
+    
     https://phabricator.whonix.org/T631#18726
 
 commit 4dc39f80b922d28155c155ffc5d99dde73774038
@@ -838,7 +850,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Jul 7 22:58:31 2019 +0000
 
     ProtectSystem=strict
-
+    
     now that onion-grater-merger (offline tool) was removed from seccomp
 
 commit 183b1d0881be2ec601b25564b5ce08300165350c
@@ -854,7 +866,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Jul 7 22:35:17 2019 +0000
 
     Merge pull request #4 from madaidan/patch-2
-
+    
     More systemd hardening
 
 commit 5bb48ab8ef78ab73c77eeebaf36a59146f1b194c
@@ -875,7 +887,7 @@ Date:   Thu Jul 4 01:57:59 2019 -0400
 
     ProtectSystem=full
     ReadWriteDirectories=/etc/onion-grater.d/
-
+    
     https://phabricator.whonix.org/T631
 
 commit a4d5d9753ec303fa2d95d3dd53e77d7a726a3175
@@ -895,7 +907,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Jul 1 08:06:18 2019 +0000
 
     incomplete fix systemd hardening
-
+    
     https://phabricator.whonix.org/T631
 
 commit fce2c8e67b7aea176b16dbcab9f16a23bbd886de
@@ -911,7 +923,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Jul 1 08:02:15 2019 +0000
 
     Merge pull request #3 from madaidan/patch-1
-
+    
     systemd hardening
 
 commit 457d50a5c744fac6687e77fe7bf8c88ca3fa1f4d
@@ -973,9 +985,9 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Jun 10 15:24:55 2019 +0000
 
     apparmor fix
-
+    
     Jun 10 15:21:38 host audit[23634]: AVC apparmor="DENIED" operation="mkdir" profile="/usr/lib/onion-grater" name="/usr/lib/python3/dist-packages/sdnotify/__pycache__/" pid=23634 comm="onion-grater" requested_mask="c" denied_mask="c" fsuid=113 ouid=113
-
+    
       /usr/lib/python3/dist-packages/sdnotify/__pycache__/ rwk,
       /usr/lib/python3/dist-packages/sdnotify/__pycache__/** rwk,
 
@@ -1147,7 +1159,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Apr 7 02:00:25 2019 -0400
 
     import hardening from Tails
-
+    
     https://git-tails.immerda.ch/tails/plain/config/chroot_local-includes/lib/systemd/system/onion-grater.service
 
 commit 59ddaaa5a8e95daa90869462be1f58f3a706cf2e
@@ -1209,18 +1221,18 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Mar 1 14:32:40 2019 +0000
 
     add improved legal protections clauses
-
+    
     The license for software created by Whonix is the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version with additional terms applicable per GNU GPL version 3 section 7.
-
+    
     The additional terms are based on the Doom 3 license which is Debian refers to as `GPL-3+-with-id-software-additional-terms`, which is Debian DFSG [1] (The Debian Free Software Guidelines) approved and which is therefore suitable for Debian `main`. Whonix made applied minimal changes to it:
-
+    
     * Rewrite `The Doom 3 BFG Edition GPL Source Code` to the more common `this program` which is used throughout the GPL.
     * Added a "trump clause" [2], in other words, any conflicts or disputes between the additional terms and the GPLv3 shall be resolved in favor of the GPLv3 by adding `Notwithstanding any other provision of this License` (as mentioned in GPL FAQ [3]) at the beginning of the additional terms.
-
+    
     [1] https://www.debian.org/social_contract#guidelines
     [2] https://www.fsf.org/news/canonical-updated-licensing-terms
     [3] https://www.gnu.org/licenses/gpl-faq.html#v3Notwithstanding
-
+    
     For more considerations, see also:
     https://www.whonix.org/wiki/Dev/Licensing
 
@@ -1243,7 +1255,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Nov 30 06:44:46 2018 -0500
 
     Merge pull request #2 from qubenix/fix-bitcoind-profile
-
+    
     remove unnecessary lines from bitcoind profile
 
 commit 06fe5eb35ee2e795eb8b742a344633a97513bab1
@@ -1283,7 +1295,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Oct 29 16:06:41 2018 -0400
 
     Merge pull request #1 from qubenix/master
-
+    
     add bitcoind onion-grater profile
 
 commit 70b8c4ebbeb5f113e5c4c8bc379cff2babc76604
@@ -1303,18 +1315,18 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sat Sep 15 13:55:33 2018 -0400
 
     fix Tor control auth cookie authentication even if HashedControlPassword is set
-
+    
     fix custom auth cookie authentication path
-
+    
     Previously the following line in Tor config...
-
+    
     ```
     HashedControlPassword
     16:88A1B9F6EBD74C6960E1E60CC725B6C94A990C65223358EFF0DF41E8BA
     ```
-
+    
     Was leading the the following error:
-
+    
     ```
     Sep 13 22:02:08 host onion-grater[10460]: Exception happened during
     processing of request from ('10.137.0.45', 48828)
@@ -1355,7 +1367,7 @@ Date:   Sat Sep 15 13:55:33 2018 -0400
     Sep 13 22:02:08 host onion-grater[10460]: TypeError: a bytes-like object
     is required, not 'str'
     ```
-
+    
     ```
     ls -la /var/run/tor/
     ```
@@ -1374,41 +1386,41 @@ Date:   Sat Sep 15 13:55:33 2018 -0400
     PidFile /var/run/tor/tor.pid
     RunAsDaemon 1
     User debian-tor
-
+    
     ControlSocket /var/run/tor/control GroupWritable RelaxDirModeCheck
     ControlSocketsGroupWritable 1
     SocksPort unix:/var/run/tor/socks WorldWritable
     SocksPort 9050
-
+    
     CookieAuthentication 1
     CookieAuthFileGroupReadable 1
     CookieAuthFile /var/run/tor/control.authcookie
-
+    
     Log notice file /var/log/tor/log
     ```
-
+    
     The HashedControlPassword confused python-stem even
     though cookie authentication was functional without that HashedControlPassword.
-
+    
     There is no need to manually read Tor authentication cookie file.
-
+    
             with open(global_args.control_cookie_path, "rb") as f:
                 cookie = f.read()
-
+    
     python-stem can do that for us.
-
+    
     Line
-
+    
     ```
     controller.authenticate(cookie)
     ```
-
+    
     was wrong. `controller.authenticate` does not take
-
+    
     Syntax from manual:
-
+    
     https://stem.torproject.org/api/connection.html#stem.connection.authenticate
-
+    
     ```
     stem.connection.authenticate(controller, password=None, chroot_path=None, protocolinfo_response=None)
     ```
@@ -1472,9 +1484,9 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Feb 25 23:23:33 2018 +0100
 
     fix for onionshare 1.2
-
+    
     Thanks to @troubadour for the fix!
-
+    
     https://forums.whonix.org/t/feature-request-onionshare-support
 
 commit c50ad941f5f82c24eb35ddea54ee70e81632c98c
@@ -1590,9 +1602,9 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Mar 30 01:37:13 2017 +0000
 
     return "\n".join(response) -> return '\r\n'.join(response)
-
+    
     as suggested
-
+    
     https://github.com/meejah/txtorcon/issues/215#issuecomment-290182519
 
 commit ce4aa36ec780df3a41d0fef6e17916697a5da6fd
@@ -1606,7 +1618,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Mar 30 01:30:36 2017 +0000
 
     cleanup, remove no longer needed build dependency ruby-ronn
-
+    
     since we no longer ship a manpage
 
 commit dd9a17d9f8637f11ec48ef2821068cf66be996b8
@@ -1639,7 +1651,7 @@ Date:   Wed Mar 29 13:46:50 2017 +0200
 
     merge feature/getinfo-config-names from the new upstream repo (note
     the name change!) found at: https://git-tails.immerda.ch/onion-grater by anonym
-
+    
     https://github.com/meejah/txtorcon/issues/215#issuecomment-288235451
 
 commit 4a8b29be65fd0d7d7de5adb5662ab3a0a4107069
@@ -1647,7 +1659,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Mar 21 15:21:59 2017 +0100
 
     allow AppArmor /run/tor/control rw
-
+    
     so it keeps working when AppArmor starts moderating socket file access
 
 commit d843dd6e9df4a83a0782e1e06b18a39eac94f63f
@@ -1661,7 +1673,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Mar 21 15:20:12 2017 +0100
 
     update config location to new upstream default /etc/onion-grater.d/
-
+    
     https://github.com/meejah/txtorcon/issues/215#issuecomment-287792764
 
 commit b00ab0d83c2fb59ab68dc5ee24650f079ce3f17c
@@ -1669,7 +1681,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Mar 21 15:16:23 2017 +0100
 
     import upstream changes from https://git-tails.immerda.ch/onion-grater
-
+    
     https://github.com/meejah/txtorcon/issues/215#issuecomment-287792764
 
 commit a42e032804491a547b4eb432cd4b906cb7821010
@@ -1683,9 +1695,9 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Mar 8 00:36:09 2017 +0000
 
     adjust for ZeroNet profile for python-stem port changes
-
+    
     https://github.com/HelloZeroNet/ZeroNet/issues/758
-
+    
     https://github.com/HelloZeroNet/ZeroNet/pull/834
 
 commit eef318c2d2116214799a967c055ee7d1d8f61508
@@ -1699,13 +1711,13 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Mar 6 19:13:08 2017 +0000
 
     etc/tor-controlport-filter-merger.d/30_whonix.yml allow by default:
-
+    
           - 'consensus/valid-after'
           - 'consensus/valid-until'
           - 'consensus/fresh-until'
-
+    
     For sdwdate Tor Consensus Time Sanity Check.
-
+    
     https://phabricator.whonix.org/T151
 
 commit e00186003ed4bf9bf07ae76349c54c081db028c5
@@ -1719,7 +1731,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Feb 21 22:47:24 2017 +0000
 
     add python3-sdnotify to Depends
-
+    
     https://phabricator.whonix.org/T274
 
 commit e176f6ebab9cd4f69824b556d83abfb08d6d85e0
@@ -1733,9 +1745,9 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Feb 21 17:52:43 2017 +0000
 
     enable systemd WatchdogSec=10
-
+    
     move sd_notify READY=0 into service_actions to prevent race condition
-
+    
     https://phabricator.whonix.org/T274
 
 commit a68fb8199f709bd18290e423502ffc261f2b96a6
@@ -1749,7 +1761,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Feb 21 17:36:55 2017 +0000
 
     notify systemd sd_notify with thread counter
-
+    
     don't log thread active to keep logs small
 
 commit a0b72aa0c5e07ff38b48d5fd22f68ab8f4cc1cac
@@ -1794,7 +1806,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Feb 17 14:58:10 2017 +0000
 
     remove "This file is part of Whonix." from copyright
-
+    
     since not needed
 
 commit 0f5fcb1272218eae697b54b73b8989b15ff689f6
@@ -1814,7 +1826,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Feb 17 14:51:38 2017 +0000
 
     remove troubadour from copyright
-
+    
     because current version is no longer based on troubadour's version
 
 commit a8e40cced492938d31b072099a9c68aeb6b26f21
@@ -1846,9 +1858,9 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Feb 17 14:40:17 2017 +0000
 
     remove dh-python from package build since not required
-
+    
     removes the following warning
-
+    
     dpkg-gencontrol: warning: Depends field of package control-port-filter-python: unknown substitution variable ${python3:Depends}
 
 commit 77f9a48acfa37bf3be600013c01dcdf81ecb544f
@@ -1886,7 +1898,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Feb 10 15:47:50 2017 +0000
 
     remove faketime from Build-Depends:
-
+    
     since no longer used for reproducible builds
 
 commit b274982294ce4113ef43397676626139f3060763
@@ -1919,7 +1931,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sat Feb 4 13:36:56 2017 +0100
 
     same keywords as Tails
-
+    
     https://phabricator.whonix.org/T617
 
 commit d6ac95ee0d000ca39aacd17c1ff2b9ced5f7696f
@@ -1940,7 +1952,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Feb 2 23:25:54 2017 +0100
 
     improve yml file top comment; slight refactoring of yml file creation
-
+    
     https://phabricator.whonix.org/T617
 
 commit d05d1015c460812ae0faa1a699f95f248817d4c7
@@ -1979,7 +1991,7 @@ Author: joysn <joysn1980@yahoo.com>
 Date:   Thu Feb 2 12:13:55 2017 +0000
 
     Revert "Matchers incorrectly spelled so the config file was not read properly"
-
+    
     This reverts commit 6f488c14980e8b5c58a42374649c4d5725c8296e.
 
 commit f430cf3478d430851db3443b2984bc61f69a6605
@@ -1988,7 +2000,7 @@ Date:   Thu Feb 2 11:38:34 2017 +0000
 
     Remove 'match" from the config files
     https://mailman.boum.org/pipermail/tails-dev/2017-February/011224.html
-
+    
     https://phabricator.whonix.org/T617
 
 commit 37d1d2e5ec88c20566be32fef0063abde5180a0c
@@ -2083,7 +2095,7 @@ Date:   Wed Jan 25 14:21:42 2017 +0000
 
     Replace the current tor-controlport-filter with
     https://git-tails.immerda.ch/tails/tree/config/chroot_local-includes/usr/local/lib/tor-controlport-filter
-
+    
     Step 1 - merge tor-control-port-filter changes by Tails into Whonix's tor-control-port-filter fork
     https://phabricator.whonix.org/T612
 
@@ -2163,7 +2175,7 @@ Date:   Fri Jan 13 11:32:36 2017 +0000
 
     Makesure that python exceptions are logged and found using
     sudo journalctl -f -u tor-controlport-filter
-
+    
     https://phabricator.whonix.org/T603
 
 commit 07a6ab605b549487414a61920086648bd14b7f22
@@ -2217,7 +2229,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Jan 10 16:32:22 2017 +0000
 
     add ricochet config to examples folder
-
+    
     https://phabricator.whonix.org/T444
 
 commit 6b51c6cc3e18a1d2c09bcef994b088adeebc1ff7
@@ -2225,7 +2237,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Jan 9 20:56:43 2017 +0100
 
     workaround for 'bug, ADD_ONION tries port 0?'
-
+    
     https://github.com/micahflee/onionshare/issues/343
 
 commit 69bffd76788fa2ec2c497fe48083cd072043cb55
@@ -2245,7 +2257,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Jan 9 19:39:49 2017 +0100
 
     renamed etc/tor-controlport-filter.d/whonix.yml -> etc/tor-controlport-filter.d/30_whonix.yml
-
+    
     https://phabricator.whonix.org/T576
 
 commit 008e642c04e099f1807e9766396d1d2ffa063f5a
@@ -2253,7 +2265,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Jan 9 19:35:32 2017 +0100
 
     https://phabricator.whonix.org/T594
-
+    
     add usr/share/tor-controlport-filter/40_onionshare.yml
 
 commit 2c647edd23457516338092aa0654472df73a3310
@@ -2268,7 +2280,7 @@ Author: joysn <joysn1980@yahoo.com>
 Date:   Mon Jan 9 11:58:06 2017 +0000
 
     https://phabricator.whonix.org/T576
-
+    
     Fix error pointed by Patrick
 
 commit 22ce6ba6ff6513e45d9166e6004d8748fd407eb0
@@ -2277,7 +2289,7 @@ Date:   Thu Dec 22 12:18:27 2016 +0000
 
     add /etc/tor-controlport-filter.d configuration drop-in snippet configuration
     extension feature
-
+    
     https://phabricator.whonix.org/T576
 
 commit 501f2fcb80087aff4d702e84a78136709d69e3c5
@@ -2298,7 +2310,7 @@ Author: Joy SN <joysn1980@yahoo.com>
 Date:   Fri Dec 16 12:45:01 2016 +0530
 
     add --listen-interface
-
+    
     https://phabricator.whonix.org/T579
 
 commit cf0535fcd46464bdbdd86c2cd258e17ee7f6d171
@@ -2318,7 +2330,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 23:06:20 2016 +0000
 
     fix systemd unit file syntax error
-
+    
     https://phabricator.whonix.org/T573
 
 commit 169b6c6180a204e6382934e07512ea81200aba91
@@ -2326,7 +2338,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 20:28:22 2016 +0000
 
     add Whonix default config
-
+    
     https://phabricator.whonix.org/T573
 
 commit bd6b10386f6c85b083cea3b95b6bacd9d439b78a
@@ -2334,7 +2346,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 19:56:32 2016 +0000
 
     adjust for don't run inside Qubes TemplateVM
-
+    
     https://phabricator.whonix.org/T573
 
 commit a063841e36cf3602e7c4e68f8783aaef17ae6954
@@ -2342,7 +2354,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 19:51:33 2016 +0000
 
     adjust debian/rules and debian/control for python3
-
+    
     https://phabricator.whonix.org/T573
 
 commit cc5836ccb5d21e24ce457c5d1f9919435f616511
@@ -2350,7 +2362,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 19:48:38 2016 +0000
 
     fix lintian false-positive
-
+    
     https://phabricator.whonix.org/T573
 
 commit 0a1494d6e064ef253d680d3086e865e6d0dbc5b9
@@ -2358,7 +2370,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 19:45:52 2016 +0000
 
     add debian postinst to create user tor-controlport-filter with member debian-tor
-
+    
     https://phabricator.whonix.org/T573
 
 commit 6635f29699877049722cddf4d80c5d76e406a8f2
@@ -2366,7 +2378,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 19:36:56 2016 +0000
 
     adjust file location in copyright files
-
+    
     https://phabricator.whonix.org/T573
 
 commit b58447a77e2ab9fbf59969d58af8e6f7a1f47774
@@ -2374,7 +2386,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 19:33:47 2016 +0000
 
     fix python build depends
-
+    
     https://phabricator.whonix.org/T573
 
 commit 4e4b103680873b7711ee475f9e6271907ef826d6
@@ -2388,7 +2400,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 20:21:24 2016 +0100
 
     normal dependency rather than pre-dependency on tor package should do
-
+    
     https://phabricator.whonix.org/T573
 
 commit dd80fd2658d329eeed0bb42e7d8b87f338b60406
@@ -2396,7 +2408,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 20:19:39 2016 +0100
 
     adjust systemd unit file ExecStart=/usr/lib/tor-controlport-filter
-
+    
     https://phabricator.whonix.org/T573
 
 commit 6e48680ef2aeda4fa2b38f926accf096d37067d1
@@ -2404,7 +2416,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 20:17:40 2016 +0100
 
     remove man page since no longer in /usr
-
+    
     https://phabricator.whonix.org/T573
 
 commit 80542aa94dceb09f8d3158aea88a0e1cb7362ea5
@@ -2412,7 +2424,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 20:16:52 2016 +0100
 
     move usr/sbin/cpfpd -> usr/lib/tor-controlport-filter
-
+    
     https://phabricator.whonix.org/T573
 
 commit 2c615e544744b9431c65330b6c49772752aa785a
@@ -2420,7 +2432,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 20:14:37 2016 +0100
 
     adjust debian dependency list
-
+    
     https://phabricator.whonix.org/T573
 
 commit 21526163ef3b21de4e0105710b1fefc7f266016b
@@ -2428,7 +2440,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 20:12:27 2016 +0100
 
     remove logrotate since using journal now
-
+    
     https://phabricator.whonix.org/T573
 
 commit 8a5e396422ac099952eb57cb75859cb0242c3580
@@ -2436,7 +2448,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 20:09:51 2016 +0100
 
     remove legacy Whonix cpfpy config file
-
+    
     https://phabricator.whonix.org/T573
 
 commit 8ae1d312985cdb457c37b4a0ae0597e678d3f103
@@ -2450,7 +2462,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 20:00:38 2016 +0100
 
     add tor-controlport-filter.service
-
+    
     https://phabricator.whonix.org/T573
 
 commit d431e92f78d946ce26b16f4fe14fd45dd84049d9
@@ -2458,7 +2470,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Dec 7 19:56:40 2016 +0100
 
     move from Whonix control-port-filter-python to tor-controlport-filter by Tails
-
+    
     https://phabricator.whonix.org/T573
 
 commit 99e8395fbafcb7789c7d1b5cbf7410ed65192e9a
@@ -2472,7 +2484,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Sep 23 20:12:56 2016 +0000
 
     reject add_onion requests that do include the NonAnonymous keyword
-
+    
     https://phabricator.whonix.org/T448
 
 commit 828f35426349d6ead53013afbe89ee712befae38
@@ -2480,7 +2492,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Sep 23 19:45:08 2016 +0000
 
     remove postinst, no longer needed
-
+    
     since no longer using DaemonRunner
 
 commit 401870a472451bd51450a43d97736243c09224b3
@@ -2494,7 +2506,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Sep 23 19:41:28 2016 +0000
 
     remove control-port-filter-python.conf
-
+    
     no longer required since DaemonRunner was removed
 
 commit b0154ce609778b7faedbd4155616472d96ceb314
@@ -2502,7 +2514,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Sep 23 19:39:58 2016 +0000
 
     remove start parameter from ExecStart since no longer needed
-
+    
     since DaemonRunner was removed
 
 commit 88aafe059bb05dd1175148d00f635db6ff020cbd
@@ -2552,7 +2564,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Sep 22 23:48:25 2016 +0000
 
     remove issue comment since solved
-
+    
     Should Tor authentication fail, this is logged and cpfpy closes client connection.
 
 commit 9c325f5fa953f395c5dd38d3b2eb3114beb1bcc4
@@ -2560,7 +2572,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Sep 22 23:43:31 2016 +0000
 
     remove issue comment since solved
-
+    
     should Tor close the connection, cpfpy will also close client connection
 
 commit a1374dc4cd10cad93b38e963f21d0c07405ff602
@@ -2568,7 +2580,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Sep 22 23:37:58 2016 +0000
 
     remove issue comment since non-issue
-
+    
     Both real Tor control port and cpfpy close the connection if commands are sent
     when the client is not yet authenticated. (With the exception of authenticate,
     authchallenge and protocolinfo so there is parity.)
@@ -2594,7 +2606,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Sep 21 23:08:52 2016 +0200
 
     Merge pull request #5 from marmarek/development
-
+    
     Fix 100% CPU usage bug and other things
 
 commit 36f69be421490b3b71e089010344c33eac310ae4
@@ -2602,7 +2614,7 @@ Author: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
 Date:   Wed Sep 21 23:04:36 2016 +0200
 
     Do not wait for client connection being writable
-
+    
     There is nothing buffered to write. This commit fixes 100% CPU usage -
     it was looping and calling handle_write, which does not exist.
 
@@ -2652,7 +2664,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Sep 20 21:12:34 2016 +0000
 
     Merge pull request #4 from marmarek/development
-
+    
     buffer incoming request
 
 commit 353cb41fac87d348fab06e357a0fbb0b007d360e
@@ -2660,7 +2672,7 @@ Author: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
 Date:   Mon Sep 19 00:14:35 2016 +0200
 
     buffer incoming request
-
+    
     https://phabricator.whonix.org/T448
 
 commit 7eda59671bc52c2bdf2bea1b9580fbb39272ffac
@@ -2674,7 +2686,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Sep 18 02:45:49 2016 +0000
 
     removed now obsolete loop
-
+    
     https://phabricator.whonix.org/T448
 
 commit 62e13d03d75497dc8f05fb80c1735b2e572b3c66
@@ -2690,7 +2702,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Sep 18 02:42:32 2016 +0000
 
     Merge pull request #3 from marmarek/development
-
+    
     Switch to asyncore for client side too
 
 commit c73d397041ac9c0aab1c03d254e6aded509a24b0
@@ -2728,7 +2740,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sat Sep 17 23:48:07 2016 +0000
 
     work towards support for Tor control protocol events (setevent) by Control Port Filter Proxy
-
+    
     https://phabricator.whonix.org/T448
 
 commit e073189f6f96380b66b577d02cb6f87fe4761a82
@@ -2736,7 +2748,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sat Sep 17 02:45:10 2016 +0000
 
     work towards support for Tor control protocol events (setevent) by Control Port Filter Proxy
-
+    
     https://phabricator.whonix.org/T448
 
 commit b349bea05298707181b2980a7e836681ea9e9d57
@@ -2762,7 +2774,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Sep 16 17:30:19 2016 +0000
 
     work towards support for Tor control protocol events (setevent) by Control Port Filter Proxy
-
+    
     https://phabricator.whonix.org/T448
 
 commit 419e41938dbbd90d4e6c14992d4061e0b03ac0b4
@@ -2779,7 +2791,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Sep 16 14:55:50 2016 +0000
 
     remove getinfo status/bootstrap-phase from built-in defaults
-
+    
     since no longer required
 
 commit 74c913fe730e4247b59eca4a1c82a0546441c216
@@ -2787,9 +2799,9 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Sep 16 14:51:09 2016 +0000
 
     add support for python-stem based applications using Tor Control Socket authentication
-
+    
     by adding protocolinfo to whitelist
-
+    
     https://forums.whonix.org/t/control-port-filter-proxy-python-cpfpy-anon-ws-disable-stacked-tor/533/157?u=patrick
 
 commit 7fe75ffab2a5a6ce0716abbe6c496ca15dbc6cda
@@ -2797,7 +2809,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Sep 14 19:21:15 2016 +0000
 
     add support for python-stem Tor control socket based authentication
-
+    
     - also accept AUTHCHALLANGE Tor control port command
     - correctly terminate answers with CRLF
 
@@ -2806,7 +2818,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Aug 22 22:53:10 2016 +0000
 
     no longer allow the workstation to read tor_bootstrap_status
-
+    
     for better security
 
 commit 4e07a03ad533a58cb3e3df7404d8d71af8bbb2f3
@@ -2828,7 +2840,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Aug 14 23:19:42 2016 +0000
 
     Merge pull request #2 from HulaHoopWhonix/patch-3
-
+    
     Update control-port-filter-python.service
 
 commit aeed87e051b1b798f3f3721542c0d0d29f772f90
@@ -2837,7 +2849,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Aug 14 23:19:20 2016 +0000
 
     Merge pull request #1 from HulaHoopWhonix/patch-1
-
+    
     Tested deny read interpreter rule. Works ok
 
 commit 3a5f7caeaabeae39fd5efd1aae0b9e93b2bcaa21
@@ -2939,9 +2951,9 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Nov 30 19:48:20 2015 +0000
 
     Only source configuration files that end with the '.conf' extension.
-
+    
     Thanks to @nrgaway for the suggestion!
-
+    
     https://phabricator.whonix.org/T286
 
 commit 1e47a1f6dfda480472d82f72ddc10a836c884c15
@@ -2967,7 +2979,7 @@ Author: HulaHoopWhonix <bancfc@openmailbox.org>
 Date:   Sat Jun 20 14:35:43 2015 +0000
 
     Update control-port-filter-python.service
-
+    
     syscall whitelist added.
     /usr /boot and /etc are read-only.
     access to /home /run/user is denied.
@@ -3222,7 +3234,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun May 3 21:31:51 2015 +0000
 
     Merge remote-tracking branch 'troubadoour/master' into mtest
-
+    
     Conflicts:
             etc/init.d/control-port-filter-python
 
@@ -3616,7 +3628,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Feb 6 23:52:30 2015 +0000
 
     Merge remote-tracking branch 'origin/master' into x
-
+    
     Removed Conflicts:
             man/cpfpy.8.ronn
             usr/bin/cpfpy
