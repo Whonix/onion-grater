@@ -56,7 +56,7 @@ setsockopt execve uname fcntl getrlimit sysinfo getuid getgid geteuid getegid \
 sigaltstack statfs arch_prctl futex set_tid_address set_robust_list getrandom \
 openat getdents64 getcwd accept4 clone recvfrom shutdown madvise pipe2 dup2 \
 wait4 mkdir fchownat _llseek send recv faccessat readlinkat newfstatat ppoll \
-epoll_create1 select
+epoll_create1 select pread64 clone3
 SystemCallArchitectures=native
 
 ## ProcSubset=pid above is disabled because:
