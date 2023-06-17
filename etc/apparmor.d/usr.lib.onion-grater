@@ -1,74 +1,56 @@
+# Last Modified: Sat Jun 17 13:38:56 2023
+include <tunables/global>
+
 ## Copyright (C) 2015 - 2023 ENCRYPTED SUPPORT LP <adrelanos@whonix.org>
 ## See the file COPYING for copying conditions.
-
 #### meta start
 #### project Whonix
 #### category tor-control and security
 #### description
 ## onion-grater apparmor profile
 #### meta end
-
-#include <tunables/global>
-
 ## The attach_disconnected flag prevents a denied
 ## message on /dev/null -> disconnected path.
 
-/usr/lib/onion-grater flags=(attach_disconnected) {
-  #include <abstractions/base>
-  #include <abstractions/python>
 
-  ## This script doesn't really need to read the interpreter that's running it.
+/usr/lib/onion-grater flags=(attach_disconnected) {
+  include <abstractions/base>
+  include <abstractions/nameservice>
+  include <abstractions/python>
+  include <local/usr.lib.onion-grater>
+
+  deny /etc/ssl/openssl.cnf r,
   deny /usr/bin/python{2,3}.[0-7]* r,
 
-  ## Not needed.
-  deny /etc/ssl/openssl.cnf r,
-
-  /etc/resolv.conf r,
-  /etc/resolv.conf.anondist r,
-  /etc/resolv.conf.whonix r,
+  /etc/gai.conf r,
   /etc/host.conf r,
   /etc/hosts r,
   /etc/nsswitch.conf r,
-  /etc/gai.conf r,
-
   /etc/onion-grater.d/ r,
   /etc/onion-grater.d/* r,
-
-  /run/tor/control.authcookie r,
+  /etc/resolv.conf r,
+  /etc/resolv.conf.anondist r,
+  /etc/resolv.conf.whonix r,
   /run/tor/control rw,
-
+  /run/tor/control.authcookie r,
+  /sys/devices/*/*/*/*/*/*/*/*/*/queue/hw_sector_size r,
   /tmp/* rwk,
-  /var/tmp/* rwk,
-
   /usr/lib/ r,
   /usr/lib/onion-grater r,
-
+  /usr/lib/python*/__pycache__/ rw,
+  /usr/lib/python*/__pycache__/** rw,
+  /usr/lib/python3/dist-packages/sdnotify/__pycache__/ rwk,
+  /usr/lib/python3/dist-packages/sdnotify/__pycache__/** rwk,
+  /var/tmp/* rwk,
+  /{,usr/}bin/dash rix,
+  /{,usr/}bin/ps rix,
   @{PROC}/ r,
-  @{PROC}/[0-9]*/status r,
+  @{PROC}/[0-9]*/fd/ r,
   @{PROC}/[0-9]*/mounts r,
   @{PROC}/[0-9]*/net/tcp r,
   @{PROC}/[0-9]*/net/tcp6 r,
   @{PROC}/[0-9]*/net/udp r,
   @{PROC}/[0-9]*/net/udp6 r,
-  @{PROC}/[0-9]*/fd/ r,
+  @{PROC}/[0-9]*/status r,
 
-  ## Nov 15 12:18:46 host audit[2928]: AVC apparmor="DENIED" operation="open" profile="/usr/lib/onion-grater" name="/sys/devices/pci0000:00/0000:00:16.0/host4/port-4:0/end_device-4:0/target4:0:0/4:0:0:0/block/sda/queue/hw_sector_size" pid=2928 comm="onion-grater" requested_mask="r" denied_mask="r" fsuid=114 ouid=0
-  /sys/devices/*/*/*/*/*/*/*/*/*/queue/hw_sector_size r,
-
-  /usr/lib/python*/__pycache__/ rw,
-  /usr/lib/python*/__pycache__/** rw,
-
-  ## Qubes
-  ## Jun 10 15:21:38 host audit[23634]: AVC apparmor="DENIED" operation="mkdir" profile="/usr/lib/onion-grater" name="/usr/lib/python3/dist-packages/sdnotify/__pycache__/" pid=23634 comm="onion-grater" requested_mask="c" denied_mask="c" fsuid=113 ouid=113
-  /usr/lib/python3/dist-packages/sdnotify/__pycache__/ rwk,
-  /usr/lib/python3/dist-packages/sdnotify/__pycache__/** rwk,
-
-  ## At first boot.
-  ## AVC apparmor="DENIED" operation="exec" profile="/usr/lib/onion-grater" name="/bin/dash" comm="onion-grater" requested_mask="x" denied_mask="x"
-  ## AVC apparmor="DENIED" operation="exec" profile="/usr/lib/onion-grater" name="/bin/ps" comm="onion-grater" requested_mask="x" denied_mask="x
-  /{,usr/}bin/ps rix,
-  /{,usr/}bin/dash rix,
-
-  # Site-specific additions and overrides. See local/README for details.
-  #include <local/usr.lib.onion-grater>
 }
