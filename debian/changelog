@@ -1,3 +1,9 @@
+onion-grater (3:11.7-1) unstable; urgency=medium
+
+  * New upstream version (local package).
+
+ -- Patrick Schleizer <adrelanos@whonix.org>  Wed, 21 Jun 2023 09:43:40 +0000
+
 onion-grater (3:11.6-1) unstable; urgency=medium
 
   * New upstream version (local package).
