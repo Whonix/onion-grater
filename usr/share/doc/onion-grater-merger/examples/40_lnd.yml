@@ -24,9 +24,9 @@
       - pattern: 'NEW:ED25519-V3 Port=9911,9911 '
         replacement: 'NEW:ED25519-V3 Port=9911,{client-address}:9911'
       - pattern: 'ED25519-V3:(\S+) Port=9735,9735 '
-        replacement: 'ED25519-V3:(\S+) Port=9735,{client-address}:9735'
+        replacement: 'ED25519-V3:{} Port=9735,{client-address}:9735'
       - pattern: 'ED25519-V3:(\S+) Port=9911,9911 '
-        replacement: 'ED25519-V3:(\S+) Port=9911,{client-address}:9911'
+        replacement: 'ED25519-V3:{} Port=9911,{client-address}:9911'
     DEL_ONION:
       - '.+'
 
