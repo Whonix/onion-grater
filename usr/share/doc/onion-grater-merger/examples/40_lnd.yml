@@ -1,0 +1,32 @@
+## onion-grater profile for LND (https://github.com/lightningnetwork/lnd)
+## Following will be enabled:
+## - ADD_ONION for new V3 onions at port 9735 and 9911
+## - Re-creating previous onions at aforementioned ports
+## - DEL_ONION
+
+## LND will create an onion service for P2P at port 9735
+## Optionally, an onion service that will act as an LND Watchtower
+## can be enabled at port 9911
+## LND will re-use old onion services which is why simply creating
+## new onion services does not suffice.
+
+---
+- exe-paths:
+    - '*'
+  users:
+    - '*'
+  hosts:
+    - '*'
+  commands:
+    ADD_ONION:
+      - pattern: 'NEW:ED25519-V3 Port=9735,9735 '
+        replacement: 'NEW:ED25519-V3 Port=9735,{client-address}:9735'
+      - pattern: 'NEW:ED25519-V3 Port=9911,9911 '
+        replacement: 'NEW:ED25519-V3 Port=9911,{client-address}:9911'
+      - pattern: 'ED25519-V3:(\S+) Port=9735,9735 '
+        replacement: 'ED25519-V3:(\S+) Port=9735,{client-address}:9735'
+      - pattern: 'ED25519-V3:(\S+) Port=9911,9911 '
+        replacement: 'ED25519-V3:(\S+) Port=9911,{client-address}:9911'
+    DEL_ONION:
+      - '.+'
+
