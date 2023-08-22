@@ -1,3 +1,37 @@
+commit acfaad5317ebfd6da2a854d72f66330159dca87c
+Merge: 8c56cdd da5fb69
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Aug 20 15:24:25 2023 -0400
+
+    Merge remote-tracking branch 'github-whonix/master'
+
+commit da5fb69f90640928eeab12d7b57cfb95b4866d58
+Merge: 8c56cdd 3b2e9a7
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Aug 20 15:23:33 2023 -0400
+
+    Merge pull request #5 from ApacheSub/lnd-profile
+    
+    Added example profile for LND
+
+commit 3b2e9a7eab4a4d3c793a354910bb678f28dccf4f
+Author: apachesub22 <shkuygxw@duck.com>
+Date:   Tue Aug 8 18:41:52 2023 +0000
+
+    Fixed issue where replacement contained something that belonged to pattern
+
+commit d281ad64d2a7bf1628bf3e1d3879fd9e22a78976
+Author: apachesub22 <shkuygxw@duck.com>
+Date:   Tue Aug 8 18:32:14 2023 +0000
+
+    Added example grater profile for LND
+
+commit 8c56cdd2b0896528c2361bc88f85ba34f3fc705c
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Jul 9 06:33:02 2023 -0400
+
+    bumped changelog version
+
 commit 63f33be1e2de22801682f7863f4b0f3f816c9c78
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Sun Jul 9 06:15:12 2023 -0400
