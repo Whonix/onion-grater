@@ -1,4 +1,4 @@
-# Last Modified: Sat Jun 17 13:38:56 2023
+# Last Modified: Tue Sep  5 12:12:58 2023
 include <tunables/global>
 
 ## Copyright (C) 2015 - 2023 ENCRYPTED SUPPORT LP <adrelanos@whonix.org>
@@ -31,6 +31,7 @@ include <tunables/global>
   /etc/resolv.conf r,
   /etc/resolv.conf.anondist r,
   /etc/resolv.conf.whonix r,
+  /proc/cmdline r,
   /run/tor/control rw,
   /run/tor/control.authcookie r,
   /sys/devices/*/*/*/*/*/*/*/*/*/queue/hw_sector_size r,
