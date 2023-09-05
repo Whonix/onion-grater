@@ -1,3 +1,31 @@
+commit a3e8cd43f0e324c69d8731f8e3d427714cb2aee1
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Sep 5 08:16:17 2023 -0400
+
+    apparmor
+
+commit 58a4a2a68605ed36123819dc907297092680f845
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Sep 5 08:08:18 2023 -0400
+
+    update onion-grater
+    
+    from Tails upstream
+    
+    https://gitlab.tails.boum.org/tails/tails/-/blob/stable/config/chroot_local-includes/usr/local/lib/onion-grater
+    
+    https://gitlab.tails.boum.org/tails/tails/-/commit/e68d4d2bc2fdef0540935a236cb9ee11a8ec523a
+    
+    as written by @anonym
+    
+    https://gitlab.tails.boum.org/anonym
+
+commit 4be0e5088d2e345ae02ae3b29b8b58afaa2d273c
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Aug 22 09:44:54 2023 -0400
+
+    bumped changelog version
+
 commit acfaad5317ebfd6da2a854d72f66330159dca87c
 Merge: 8c56cdd da5fb69
 Author: Patrick Schleizer <adrelanos@whonix.org>
