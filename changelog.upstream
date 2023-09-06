@@ -1,3 +1,31 @@
+commit 9e37212b7c74bf77c0988c751d2424af220f679f
+Merge: 9d63ab9 56b7451
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Sep 6 07:42:00 2023 -0400
+
+    Merge remote-tracking branch 'github-whonix/master'
+
+commit 56b7451a42115ad6e5dd19f84104b34270160c8a
+Merge: 9d63ab9 980c00d
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Sep 6 07:41:21 2023 -0400
+
+    Merge pull request #8 from nyxnor/cwtch
+    
+    Add Cwtch profile
+
+commit 980c00d042e40331bcdc896ed511c0944166319d
+Author: nyxnor <nyxnor@protonmail.com>
+Date:   Wed Sep 6 00:20:10 2023 +0000
+
+    Add Cwtch profile
+
+commit 9d63ab929ed40b66ce6ac3e296e63502cc194fa8
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Sep 5 08:23:53 2023 -0400
+
+    bumped changelog version
+
 commit a3e8cd43f0e324c69d8731f8e3d427714cb2aee1
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Tue Sep 5 08:16:17 2023 -0400
