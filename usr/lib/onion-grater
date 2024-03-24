@@ -501,6 +501,12 @@ class FilteredControlPortProxySession:
                 # access-restricted according to our filter instead.
                 self.respond("250 OK")
 
+            elif cmd == "TAKEOWNERSHIP":
+                self.respond("250 OK")
+
+            elif cmd == "RESETCONF":
+                self.respond("250 OK")
+
             elif cmd == "QUIT":
                 self.respond("250 closing connection")
                 break

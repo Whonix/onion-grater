@@ -27,7 +27,14 @@
       - '.+'
     HSFETCH:
       - '.+'
+    SETCONF:
+      - pattern:       'DisableNetwork.*'
+        response:
+        - pattern:     '250 DisableNetwork=.*'
+          replacement: '250 DisableNetwork=0'
   events:
+    SIGNAL:
+      suppress: true
     CIRC:
       suppress: true
     ORCONN:
@@ -58,3 +65,9 @@
           replacement: ''
     HS_DESC_CONTENT:
       suppress: true
+    ## TODO: Bisq 2
+    STATUS_CLIENT:
+      suppress: false
+    ## TODO: Bisq 2
+    STATUS_SERVER:
+      suppress: false
