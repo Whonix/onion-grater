@@ -1,3 +1,23 @@
+commit 5c26cadbc03c08c0ed5786bcfd105884ae083083
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Mar 24 18:53:10 2024 -0400
+
+    towards Bisq 2 support
+
+commit 47e9a880ed0f76a37ebeafb1b1fcbd3926c6403f
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Mar 24 18:31:26 2024 -0400
+
+    add hardcoded ignore commands TAKEOWNERSHIP and RESETCONF
+    
+    towards Bisq 2 support
+
+commit 04270076e10fd9555457ed69becbecdb3fd575f3
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Feb 2 12:46:39 2024 +0000
+
+    bumped changelog version
+
 commit 84997aa832463ad3b0732865b939001619a50df9
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Fri Feb 2 07:33:03 2024 -0500
