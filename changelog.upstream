@@ -1,3 +1,31 @@
+commit a26435d64397062a45626b39b2c21d31c36f884f
+Merge: b55bfb1 3de979d
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Apr 15 10:50:46 2024 -0400
+
+    Merge remote-tracking branch 'github-whonix/master'
+
+commit 3de979d165cc10c8c46321cf8b924c7844d97ff2
+Merge: b55bfb1 210074a
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Apr 15 10:50:07 2024 -0400
+
+    Merge pull request #10 from nyxnor/bisq
+    
+    Add boostrap pattern for Bisq
+
+commit 210074af097ae986f11453a26b144a897e428921
+Author: nyxnor <nyxnor@protonmail.com>
+Date:   Mon Apr 15 14:25:12 2024 +0000
+
+    Add boostrap pattern for Bisq
+
+commit b55bfb1f51e04eea8e12b87590f1d79fcee1c7b9
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Mar 24 22:54:49 2024 +0000
+
+    bumped changelog version
+
 commit 5c26cadbc03c08c0ed5786bcfd105884ae083083
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Sun Mar 24 18:53:10 2024 -0400
