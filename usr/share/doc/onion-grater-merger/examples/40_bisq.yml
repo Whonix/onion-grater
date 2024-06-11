@@ -21,11 +21,11 @@
         response:
         - pattern:     '250-status/bootstrap-phase=*'
           replacement: '250-status/bootstrap-phase=NOTICE BOOTSTRAP PROGRESS=100 TAG=done SUMMARY="Done"'
-    SETEVENTS:
-      - 'CIRC ORCONN INFO NOTICE WARN ERR HS_DESC HS_DESC_CONTENT'
     ADD_ONION:
       - pattern:     'NEW:(\S+) Port=9999,(\S+)'
         replacement: 'NEW:{} Port=9999,{client-address}:{}'
+      - pattern:     '(\S+) Port=(\S+),(\S+)'
+        replacement: '{} Port={},{client-address}:{}'
       - pattern:     '(\S+):(\S+) Port=9999,(\S+)'
         replacement: '{}:{} Port=9999,{client-address}:{}'
     DEL_ONION:
@@ -60,8 +60,10 @@
       response:
         - pattern:     '650 HS_DESC CREATED (\S+) (\S+) (\S+) \S+ (.+)'
           replacement: '650 HS_DESC CREATED {} {} {} redacted {}'
-        - pattern:     '650 HS_DESC UPLOAD (\S+) (\S+) .*'
-          replacement: '650 HS_DESC UPLOAD {} {} redacted redacted'
+        - pattern:     '650 HS_DESC FAILED (\S+) \S+ \S+ \S+ (.+)'
+          replacement: '650 HS_DESC FAILED {} redacted redacted redacted {}'
+        - pattern:     '650 HS_DESC UPLOAD (\S+) (\S+) (\S+) (\S+) (\S+)'
+          replacement: '650 HS_DESC UPLOAD {} {} {} {} {}'
         - pattern:     '650 HS_DESC UPLOADED (\S+) (\S+) .+'
           replacement: '650 HS_DESC UPLOADED {} {} redacted'
         - pattern:     '650 HS_DESC REQUESTED (\S+) NO_AUTH'
@@ -74,9 +76,3 @@
           replacement: ''
     HS_DESC_CONTENT:
       suppress: true
-    ## TODO: Bisq 2
-    #STATUS_CLIENT:
-      #suppress: false
-    ## TODO: Bisq 2
-    #STATUS_SERVER:
-      #suppress: false
