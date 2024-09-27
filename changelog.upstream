@@ -1,3 +1,38 @@
+commit fb4f0379148e2225f5fc5643245bfcb34205da39
+Merge: 84c85c8 a437dbf
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Sep 26 21:24:57 2024 -0400
+
+    Merge remote-tracking branch 'github-whonix/master'
+
+commit a437dbf8ddc30e8e9f80f60304577c500f4935c3
+Merge: 84c85c8 abfc921
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Sep 26 21:24:17 2024 -0400
+
+    Merge pull request #11 from alvasw/fix_bisq2_onion_grater_profile
+    
+    Fix Bisq 2 onion-grater profile
+
+commit abfc921d4aa84ee995dc5b308e251d5b4025b264
+Author: Alva Swanson <alvasw@protonmail.com>
+Date:   Tue Jun 11 01:11:41 2024 +0000
+
+    Fix Bisq 2 onion-grater profile
+    
+    - Remove deprecated SETEVENTS command
+    - Add missing ADD_ONION pattern and replacement
+    - Fix HS_DESC UPLOAD pattern and replacement
+    - Add missing HS_DESC FAILED pattern and replacement
+    
+    Ref: bisq-network/bisq2#1894
+
+commit 84c85c85f90eb36757c503864e1e979e7034dc43
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Apr 15 14:53:09 2024 +0000
+
+    bumped changelog version
+
 commit a26435d64397062a45626b39b2c21d31c36f884f
 Merge: b55bfb1 3de979d
 Author: Patrick Schleizer <adrelanos@whonix.org>
