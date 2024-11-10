@@ -1,3 +1,51 @@
+commit f9064783ba6cdf96df8feb9c891cf154d45aa875
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Nov 10 06:17:27 2024 -0500
+
+    comment
+
+commit 23817f72677cfdf02c16d9e0dd3468caa63af502
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Nov 10 06:15:37 2024 -0500
+
+    minor
+
+commit 21af96a6369ac988e1870a97c62e58a627920929
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Nov 10 06:15:17 2024 -0500
+
+    comments
+
+commit 049ea6d9578a6d14b32e3b66f3cfc5d6ca6ec1dc
+Merge: 1dfaea0 c5ab11a
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Nov 10 06:14:10 2024 -0500
+
+    Merge remote-tracking branch 'github-whonix/master'
+
+commit c5ab11a00b6f8f745d7c03fa9802a837307565bb
+Merge: 1dfaea0 81e00d4
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Nov 10 06:06:20 2024 -0500
+
+    Merge pull request #13 from XMRZombie/haveno-gratle
+    
+    Create 40_haveno.yml
+
+commit 81e00d41435a69c44ca6bb87522a57172b239e9b
+Author: XMRZombie <monerozombie@proton.me>
+Date:   Sun Nov 10 09:23:05 2024 +0000
+
+    Create 40_haveno.yml
+    
+    Creating an onion gratle for haveno
+
+commit 1dfaea0449ed0153fcbab53b8800772204227d6c
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Sep 27 01:25:37 2024 +0000
+
+    bumped changelog version
+
 commit fb4f0379148e2225f5fc5643245bfcb34205da39
 Merge: 84c85c8 a437dbf
 Author: Patrick Schleizer <adrelanos@whonix.org>
