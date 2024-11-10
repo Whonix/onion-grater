@@ -10,7 +10,7 @@
 
 ---
 - exe-paths:
-  - '*'
+    - '*'
   users:
     - '*'
   hosts:
