@@ -8,6 +8,12 @@
 ## Shipped but not enabled by default onion-grater profile.
 #### meta end
 
+## https://github.com/Whonix/onion-grater/pull/13
+## By @XMRZombie
+## https://github.com/XMRZombie
+##
+## https://forums.whonix.org/t/installing-haveno-in-whonix/20014
+
 ---
 - exe-paths:
     - '*'
