@@ -19,6 +19,12 @@ Tor over Tor and with functional New Identity and about:tor.
 This control port filter is written in Python. The original Python code
 was forked from the Tails version of control port filter.
 
+Source Code Contributions / Patches / Pull Requests:
+Please discuss before doing significant development work.
+This is a fork of Tails' onion-grater.
+Therefore, you'll most likely will be asked to submit patches to upstream,
+Tails first.
+
 This package is produced independently of, and carries no guarantee from,
 The Tor Project.
 
