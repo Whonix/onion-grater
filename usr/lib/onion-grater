@@ -646,11 +646,11 @@ class FilteredControlPortProxyHandler(socketserver.StreamRequestHandler):
     def add_allowed_confs_commands(self, confs):
         combined_getconf_rule = {'pattern': "(" + "|".join([
             self.case_insensitive_regex(key) for key in confs]) + ")"}
-        setconf_reset_part = "\s*|\s*".join([
+        setconf_reset_part = r"\s*|\s*".join([
             self.case_insensitive_regex(key) for key in confs
             if isinstance(confs[key], list) and '' in confs[key]]
         )
-        setconf_assignment_part = "\s*|\s*".join([
+        setconf_assignment_part = r"\s*|\s*".join([
             "{}=({})".format(
                 self.case_insensitive_regex(key), "|".join(confs[key])
             )
@@ -661,7 +661,7 @@ class FilteredControlPortProxyHandler(socketserver.StreamRequestHandler):
             if part and part != '':
                 setconf_parts.append(part)
         combined_setconf_rule = {
-            'pattern': "({})+".format("\s*|\s*".join(setconf_parts))
+            'pattern': "({})+".format(r"\s*|\s*".join(setconf_parts))
         }
         for cmd, rule in [('GETCONF', combined_getconf_rule),
                           ('SETCONF', combined_setconf_rule)]:
