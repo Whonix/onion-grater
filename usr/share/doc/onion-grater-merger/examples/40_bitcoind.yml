@@ -30,13 +30,13 @@
   commands:
     ADD_ONION:
       ## {{{
-      - pattern:     'NEW:(\S+) Port=8333,(?:127.0.0.1|0.0.0.0):8334'
+      - pattern:     'NEW:(\S+) Port=8333,(?:127\.0\.0\.1|0\.0\.0\.0|10\.152\.152\.\d{1.3}):8334'
         replacement: 'NEW:{} Port=8333,{client-address}:8334 Flags=DiscardPK'
-      - pattern:     'NEW:(\S+) Port=18333,(?:127.0.0.1|0.0.0.0):18334'
+      - pattern:     'NEW:(\S+) Port=18333,(?:127\.0\.0\.1|0\.0\.0\.0|10\.152\.152\.\d{1.3}):18334'
         replacement: 'NEW:{} Port=18333,{client-address}:18334 Flags=DiscardPK'
-      - pattern:     'NEW:(\S+) Port=38333,(?:127.0.0.1|0.0.0.0):38334'
+      - pattern:     'NEW:(\S+) Port=38333,(?:127\.0\.0\.1|0\.0\.0\.0|10\.152\.152\.\d{1.3}):38334'
         replacement: 'NEW:{} Port=38333,{client-address}:38334 Flags=DiscardPK'
-      - pattern:     'NEW:(\S+) Port=18444,(?:127.0.0.1|0.0.0.0):18445'
+      - pattern:     'NEW:(\S+) Port=18444,(?:127\.0\.0\.1|0\.0\.0\.0|10\.152\.152\.\d{1.3}):18445'
         replacement: 'NEW:{} Port=18444,{client-address}:18445 Flags=DiscardPK'
       ## }}}
 
