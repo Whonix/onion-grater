@@ -7,7 +7,7 @@
 ## LND will create an onion service for P2P at port 9735
 ## Optionally, an onion service that will act as an LND Watchtower
 ## can be enabled at port 9911
-## LND will re-use old onion services which is why simply creating
+## LND will reuse old onion services which is why simply creating
 ## new onion services does not suffice.
 
 ---
