@@ -13,7 +13,7 @@
 
 ## Tor's reply ClientAuth
 ## 250-ClientAuth=onionshare:xxxKEYBLOBxxxxxxxxxxxx
-## is left intact because onionshare's button 'Copy HidServAuth' coppies the
+## is left intact because onionshare's button 'Copy HidServAuth' copies the
 ## following into the clipboard, which is a usability feature.
 ## HidServAuth xxxdomainxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.onion xxxKEYBLOBxxxxxxxxxxxx
 ## Otherwise the user would have to extract it from onion-grater
