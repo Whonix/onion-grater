@@ -254,9 +254,9 @@ class FilteredControlPortProxySession:
         if line.isspace():
             return
         self.debug_log_send(line)
-        self.wfile.write(bytes(line, 'ascii'))
         if not raw:
-            self.wfile.write(bytes("\r\n", 'ascii'))
+            line += "\r\n"
+        self.wfile.write(bytes(line, 'ascii'))
         self.wfile.flush()
 
     def get_rule(self, cmd, arg_str):
