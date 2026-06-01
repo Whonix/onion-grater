@@ -1,3 +1,25 @@
+commit 99b7d3a73df405538888ab8d044fcecea03f8455
+Merge: d7ff31c df9c581
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun May 31 16:27:04 2026 -0400
+
+    Merge remote-tracking branch 'refs/remotes/ArrayBolt3/arraybolt3/trixie'
+
+commit df9c5814f3a955223c7febbc6e6320c4afb4ca84
+Author: Aaron Rainbolt <arraybolt3@gmail.com>
+Date:   Sun May 31 10:59:05 2026 -0400
+
+    Add mremap to system call filter whitelist
+
+    glibc uses it internally as part of realloc(), which Python calls
+    numerous times internally.
+
+commit d7ff31c42e4e7e689ed11f2ff81564cf1bbdb70c
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed May 20 22:34:34 2026 +0000
+
+    bumped changelog version
+
 commit afafb082608adccfe3c6c4cf2fa3e99d80f07d3b
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Wed May 20 16:57:36 2026 -0400
