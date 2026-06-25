@@ -35,7 +35,7 @@
 
     ## Bisq 2
     SETCONF:
-      - pattern:       'DisableNetwork.*'
+      - pattern:       'DisableNetwork=[01]'
         response:
         - pattern:     '250 DisableNetwork=.*'
           replacement: '250 DisableNetwork=0'
