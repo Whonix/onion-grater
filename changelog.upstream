@@ -1,3 +1,41 @@
+commit c765a8537e187f32da27775723fc051cfd13115e
+Merge: cd68807 a0bc80d
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Jun 25 06:39:39 2026 -0400
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit a0bc80db22c806116f422c8da387081461b00ee4
+Author: Aaron Rainbolt <arraybolt3@gmail.com>
+Date:   Wed Jun 24 21:41:43 2026 -0400
+
+    security: fix Bisq onion-grater profile deanonymization vulnerability
+
+    The Bisq onion-grater profile contained an unsafe regex that would
+    allow a compromised Whonix-Workstation to deanonymize the user by
+    sending a crafted Tor control protocol command.
+
+    The Bisq onion-grater profile is optional and is not enabled by default.
+
+    Vulnerable users: Users who ran the command
+    `sudo onion-grater-add 40_bisq`. Users are encouraged to run this
+    command by https://whonix.org/wiki/Bisq as part of setting up Bisq, so
+    any users who followed these instructions are very likely to be
+    affected.
+
+    The updated onion-grater profile fixes the issue. No user action is
+    required beyond installing a version of onion-grater that includes the
+    fixed profile.
+
+    Attribution: Thanks to 0x6d (https://0x6d.net) for the responsible
+    private security bug report found during a Whonix security audit.
+
+commit cd688070de3a83de92b8dbb5561cd8e8ea5a4be4
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Jun 1 18:18:11 2026 +0000
+
+    bumped changelog version
+
 commit 99b7d3a73df405538888ab8d044fcecea03f8455
 Merge: d7ff31c df9c581
 Author: Patrick Schleizer <adrelanos@whonix.org>
