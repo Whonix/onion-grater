@@ -19,7 +19,7 @@
     GETINFO:
       - pattern:       'status/bootstrap-phase'
         response:
-        - pattern:     '250-status/bootstrap-phase=*'
+        - pattern:     '250-status/bootstrap-phase=.*'
           replacement: '250-status/bootstrap-phase=NOTICE BOOTSTRAP PROGRESS=100 TAG=done SUMMARY="Done"'
     ADD_ONION:
       - pattern:     'NEW:(\S+) Port=9999,(\S+)'
@@ -29,9 +29,9 @@
       - pattern:     '(\S+):(\S+) Port=9999,(\S+)'
         replacement: '{}:{} Port=9999,{client-address}:{}'
     DEL_ONION:
-      - '.+'
+      - '\S+'
     HSFETCH:
-      - '.+'
+      - '\S+( SERVER=\S+)*'
 
     ## Bisq 2
     SETCONF:
