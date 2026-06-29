@@ -23,13 +23,13 @@
     - '*'
   commands:
     AUTHCHALLENGE:
-      - 'SAFECOOKIE .*'
+      - 'SAFECOOKIE \S+'
     SETEVENTS:
       - 'CIRC ORCONN INFO NOTICE WARN ERR HS_DESC HS_DESC_CONTENT'
     GETINFO:
       - pattern: 'status/bootstrap-phase'
         response:
-          - pattern: '250-status/bootstrap-phase=*'
+          - pattern: '250-status/bootstrap-phase=.*'
             replacement: '250-status/bootstrap-phase=NOTICE BOOTSTRAP PROGRESS=100 TAG=done SUMMARY="Done"'
       - 'net/listeners/socks'
     ADD_ONION:
@@ -38,9 +38,9 @@
       - pattern:     '(\S+):(\S+) Port=9999,(\S+)'
         replacement: '{}:{} Port=9999,{client-address}:{}'
     DEL_ONION:
-      - '.+'
+      - '\S+'
     HSFETCH:
-      - '.+'
+      - '\S+( SERVER=\S+)*'
   events:
     CIRC:
       suppress: true

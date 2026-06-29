@@ -27,6 +27,6 @@
       - pattern:     'NEW:(\S+) port=33750'
         replacement: 'NEW:{} port=33750,{client-address}:33750'
     DEL_ONION:
-      - '.+'
+      - '\S+'
     GETCONF:
       - 'hiddenservicesinglehopmode'

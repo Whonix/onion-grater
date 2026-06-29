@@ -30,4 +30,4 @@
     - '*'
   commands:
     onion_client_auth_add:
-      - '.+'
+      - '\S+ x25519:\S+( ClientName=\S+)?( Flags=\S+)?'

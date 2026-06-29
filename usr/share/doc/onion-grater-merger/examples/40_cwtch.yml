@@ -31,7 +31,7 @@
           replacement: '250-network-liveness=up'
       - pattern:       'status/bootstrap-phase'
         response:
-        - pattern:     '250-status/bootstrap-phase=*'
+        - pattern:     '250-status/bootstrap-phase=.*'
           replacement: '250-status/bootstrap-phase=NOTICE BOOTSTRAP PROGRESS=100 TAG=done SUMMARY="Done"'
     GETCONF:
       - pattern:       'DisableNetwork'
@@ -48,9 +48,9 @@
         replacement: 'ED25519-V3:{} Flags=DiscardPK,Detach Port=9878,{client-address}:{}'
       ## }}}
     DEL_ONION:
-      - '.+'
+      - '\S+'
     HSFETCH:
-      - '.+'
+      - '\S+( SERVER=\S+)*'
   events:
     CIRC:
       suppress: true
