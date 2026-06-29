@@ -1,3 +1,178 @@
+commit 04e18e7be6fd80340e7394fbc72d71eb5a0b7853
+Merge: 02aa5a6 9d78f0b
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Jun 29 07:45:39 2026 -0400
+
+    Merge remote-tracking branch 'refs/remotes/ArrayBolt3/arraybolt3/trixie'
+
+commit 9d78f0ba1a482a60a9a7fd38356b4633a8efd3bd
+Author: Aaron Rainbolt <arraybolt3@gmail.com>
+Date:   Sat Jun 27 23:10:54 2026 -0400
+
+    Fixed and squashed commit of the following:
+
+    commit b2ef612de850c7ba4069e5240708b03303af2fd5
+    Author: claude <noreply@anthropic.com>
+    Date:   Thu Jun 25 17:47:32 2026 -0400
+
+        fix busy-loop CPU DoS in get_client_request (blocking read)
+
+        get_client_request() peeked with MSG_PEEK and `continue`d whenever the request
+        was not yet newline-terminated, without ever blocking -- so a client that sent
+        a partial line (or a line > MAX_LINESIZE with no newline) and stalled pinned a
+        CPU core at ~100%. On Whonix the untrusted Workstation could thus CPU-DoS the
+        Gateway with a few connections. Pre-existing upstream Tails bug (documented in
+        the onion-grater upstream-bug repo as #06).
+
+        Replace the peek-spin with a blocking recv that accumulates into a per-session
+        buffer until a newline, splitting one line per call (pipelining preserved) and
+        bounding the buffer by MAX_LINESIZE (over-long lines drop the connection). The
+        socket already has a timeout, so the periodic controller-aliveness check is
+        preserved. Marked as a Whonix delta to keep across future Tails resyncs.
+
+        Tested (throwaway tor + real onion-grater):
+        - stalled 14-byte partial line: 0.01 cpu-seconds/2s (was 1.95, ~98% of a core).
+        - byte-by-byte client: command assembled + answered, 0.00 cpu during dribble.
+        - filtering battery still all 510-blocked; bitcoind e2e 3/3; unit suite 90/90.
+
+        Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+        Claude-Session: https://claude.ai/code/session_013mrX5JikyxWrAijcPbyzWL
+
+    commit 002f130056558dd1fe870dfbda7975c379e307f7
+    Author: claude <noreply@anthropic.com>
+    Date:   Thu Jun 25 16:32:44 2026 -0400
+
+        restore TAKEOWNERSHIP/RESETCONF dropped in the Tails resync (AI review)
+
+        The wholesale resync to Tails (7f85017) silently dropped two Whonix-only
+        dispatch branches that acknowledge TAKEOWNERSHIP and bare RESETCONF with a
+        no-op 250 OK (added for Bisq 2 / RetoSwap, which issue them during control-
+        port init). Without them these commands fall through to rule lookup and get
+        510-filtered, breaking those clients. Caught by Codex in the ai-review pass.
+
+        Restored both branches with a comment to prevent future resyncs from
+        dropping them again. (My earlier "no Whonix-exclusive main-script logic"
+        assessment was wrong: a def-name/keyword diff missed the `elif cmd ==`
+        branches; a black-normalised full diff confirms these two were the only
+        genuinely dropped Whonix logic.)
+
+        Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+        Claude-Session: https://claude.ai/code/session_013mrX5JikyxWrAijcPbyzWL
+
+    commit 7f850175647f7be6849a0e5a26d785f56ccdd4a6
+    Author: claude <noreply@anthropic.com>
+    Date:   Thu Jun 25 16:14:21 2026 -0400
+
+        resync main script with Tails upstream (master, ~f3c8cc98)
+
+        The fork's main filter script had drifted ~2 years (fork base e68d4d2,
+        2023-08) and 500+ lines from Tails, almost entirely cosmetic (Tails'
+        2025 ruff reformat) plus Tor-Browser-specific additions. The core
+        filtering (get_rule, the re.match(pattern + "$") anchor, the str->dict
+        normalizer, command dispatch) was verified byte-identical, and the fork
+        carries NO exclusive logic in the main script -- its value-add is the
+        profiles + Debian packaging. So replace usr/lib/onion-grater wholesale
+        with the current Tails version to close the gap and ease future syncs.
+
+          https://gitlab.tails.boum.org/tails/tails/-/blob/master/config/chroot_local-includes/usr/local/lib/onion-grater
+
+        Deltas kept/re-applied on top of the verbatim copy:
+
+        - Shebang -Iu -> -IBu. -I (isolated) already implies -E/-P/-s; -B adds
+          no-.pyc-writes (the Kicksecure helper-scripts convention). Stricter
+          than both Tails (-Iu) and helper-scripts (-Bsu).
+
+        - Adopt Tails' `tor-browser-mode` config key (was `restrict-stream-events`)
+          to stay close to upstream. Its only user, 40_wahay.yml, set it to
+          `false` -- which is the default -- so the key is dropped entirely
+          (no behavioural change: wahay still receives unrestricted STREAM
+          events). The Tor-Browser circuit-leak logic comes along but is inert
+          in Whonix (no profile enables it).
+
+        Tails' code style (double quotes / ruff) is kept verbatim for sync-
+        friendliness. Validated: ASCII clean, module loads under -IBu, the
+        in-process unit suite is 90/90, and the bitcoind real-application
+        end-to-end test passes 3/3 (ADD_ONION still rewritten + proxied,
+        service published).
+
+        Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+        Claude-Session: https://claude.ai/code/session_013mrX5JikyxWrAijcPbyzWL
+
+    commit baf2c81a62df6c29a99efd51218270c433ea6df5
+    Author: claude <noreply@anthropic.com>
+    Date:   Thu Jun 25 15:54:13 2026 -0400
+
+        port hardening + onionshare fixes from Tails upstream
+
+        Three small, generic improvements cherry-picked from the Tails onion-grater
+        (the fork upstream), keeping the Whonix-specific delta otherwise untouched:
+
+        - Harden the Python invocation: -su -> -IBu on onion-grater and
+          onion-grater-merger. -I (isolated) implies -E/-P/-s, so it also ignores
+          PYTHON* env vars (e.g. PYTHONPATH) and won't prepend an unsafe sys.path[0];
+          Tails uses -Iu, the Kicksecure helper-scripts convention adds -B
+          (no .pyc writes). -IBu combines both and is stricter than either. Verified
+          stem/yaml/psutil still import and the filter starts.
+
+        - respond(): write the line and its \r\n terminator in a single write() so a
+          response is not split across syscalls (ported from Tails).
+
+        - 40_onionshare.yml: allow GETINFO version and suppress the STATUS_SERVER
+          event. Current OnionShare (verified locally with onionshare-cli 2.6.3)
+          sends both during startup and is otherwise filtered (510) and stalls before
+          ADD_ONION; Tails' profile already allows them.
+
+        Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+        Claude-Session: https://claude.ai/code/session_013mrX5JikyxWrAijcPbyzWL
+
+    commit 0887a52f7ea73d09c3a7c0e87417bab048f4775c
+    Author: claude <noreply@anthropic.com>
+    Date:   Thu Jun 25 10:16:09 2026 -0400
+
+        security: tighten onion-grater profile regexes against argument injection
+
+        Follow-up to the Bisq SETCONF deanonymization fix (a0bc80d). That bug
+        was an unanchored regex (DisableNetwork.*) that, because patterns are
+        matched with re.match(pattern + "$") against the command's full
+        argument string, let a compromised Workstation append extra
+        space-separated parameters to a Tor control command.
+
+        Audited all profiles for the same class. No other config-write
+        (SETCONF) carried a trailing wildcard, but several commands used
+        overly broad whole-argument allows ('.+' / '.*') that match arbitrary
+        trailing tokens. Tightened them to single tokens or the documented Tor
+        control grammar so no additional parameters can be smuggled through:
+
+          - DEL_ONION:  '.+' -> '\S+'                 (single service id)
+            bisq, cwtch, haveno, lnd, onionshare, ricochet, wahay, zeronet
+          - HSFETCH:    '.+' -> '\S+( SERVER=\S+)*'   (addr + optional SERVER=)
+            bisq, cwtch, haveno
+          - onion_client_auth_add: '.+' ->
+              '\S+ x25519:\S+( ClientName=\S+)?( Flags=\S+)?'
+            onion_authentication
+          - AUTHCHALLENGE: 'SAFECOOKIE .*' -> 'SAFECOOKIE \S+'
+            haveno
+
+        Also fixed a latent regex typo in the bootstrap-phase response rewrite:
+        '250-status/bootstrap-phase=*' ('=' zero-or-more) never matched the
+        real reply, so the spoof-to-done rewrite was dead code. Changed to
+        '=.*' so it works as intended.
+            bisq, cwtch, haveno, onionshare, ricochet
+
+        These are example profiles, not enabled by default. Verified each new
+        regex accepts the legitimate command forms and rejects token injection;
+        all profiles still parse as YAML. Not live-tested against the
+        respective applications.
+
+        Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+        Claude-Session: https://claude.ai/code/session_013mrX5JikyxWrAijcPbyzWL
+
+commit 02aa5a6b29fac15bd640ba14d8d52fe51d48f1f8
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Jun 25 10:41:23 2026 +0000
+
+    bumped changelog version
+
 commit c765a8537e187f32da27775723fc051cfd13115e
 Merge: cd68807 a0bc80d
 Author: Patrick Schleizer <adrelanos@whonix.org>
