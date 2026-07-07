@@ -1,3 +1,30 @@
+commit 993b458093d4bab73b6b17a7a1c2708ec308f47e
+Merge: b8d3644 8bbb70d
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Jul 7 06:31:04 2026 -0400
+
+    Merge remote-tracking branch 'refs/remotes/org-ai-assisted/master'
+
+commit 8bbb70d3d1f5d6d8c8465127b1c3d2a2a314cb86
+Author: claude (dev42 08e1f373-4824-43b0-b4d4-e48187e4d900) <noreply@anthropic.com>
+Date:   Fri Jul 3 15:21:41 2026 -0400
+
+    add AGENTS.md pointing to the comprehensive test suite in dist-ai
+
+    onion-grater has no in-tree tests; its profile regression/reproduction,
+    adversarial probe, and full-stack e2e suites live in the AI-maintained
+    dist-ai repo. AGENTS.md is a minimal pointer to that suite plus the
+    ONION_GRATER_REPO invocation; CLAUDE.md defers to it (tirdad/kloak convention).
+
+    Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+    Claude-Session: https://claude.ai/code/session_014Pag3UZHFWciJjKjnUwPWS
+
+commit b8d3644ec564e6f6479ce9637f7c0d2866570158
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Jun 29 15:24:53 2026 +0000
+
+    bumped changelog version
+
 commit 04e18e7be6fd80340e7394fbc72d71eb5a0b7853
 Merge: 02aa5a6 9d78f0b
 Author: Patrick Schleizer <adrelanos@whonix.org>
