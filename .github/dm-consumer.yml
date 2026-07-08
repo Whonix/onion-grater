@@ -1,0 +1,9 @@
+## Copyright (C) 2026 - 2026 ENCRYPTED SUPPORT LLC <adrelanos@whonix.org>
+## See the file COPYING for copying conditions.
+
+## AI-Assisted
+
+## Per-repo parameters for developer-meta-files consumer workflows, read at
+## workflow runtime. Here: extra apt packages the dist-ai test suites need.
+dist-ai-tests:
+  apt-packages: "python3 python3-pytest python3-hypothesis python3-psutil python3-stem python3-yaml"
